@@ -1,0 +1,15 @@
+{
+  "name": "gazetteer",
+  "version": "1.0.0",
+  "description": "worldwide info maps",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "jenny seal",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "leaflet": "^1.7.1"
+  }
+}

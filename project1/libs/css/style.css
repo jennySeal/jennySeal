@@ -1,0 +1,143 @@
+@font-face {
+  font-family: "NotoSans-Regular";
+  src: url("./NotoSans-Regular.ttf");
+}
+
+@font-face {
+  font-family: "NotoSans-Bold";
+  src: url("./NotoSans-Bold.ttf");
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: "NotoSans-Italic";
+  src: url("./NotoSans-Italic.ttf");
+  font-style: italic;
+}
+
+html,
+body,
+#map {
+  font-family: "NotoSans-Regular", sans-serif;
+  font-size: 17px;
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  width: 100vw;
+  --yellow: #ffe642;
+  --black: #141414;
+  --seablue:  #67bfe7;
+  background-color: var(--yellow);
+  color: var(--black);
+}
+
+#map {
+  border-top-right-radius: 40%;
+  height: 51vh;
+  z-index: 1;
+}
+
+h1 {
+  font-size: 2.5rem;
+}
+
+header {
+  background-color: var(--black);
+  color: white;
+  display: inline-flex;
+  justify-content: center;
+  width: 100vw;
+  height: 8vh;
+  text-align: center;
+}
+
+form {
+  width: 100vw;
+  margin: 0;
+  display: flex;
+  justify-content: flex-end;
+}
+
+#info {
+  height: 36vh;
+  width: 100vw;
+  background-color: black;
+  color: var(--yellow);
+  display: grid;
+  grid-template-rows: 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 2fr 1fr;
+  justify-content: flex-end;
+  align-items: flex-end;
+  border-top: 1vw solid var(--yellow);
+  text-align: left;
+  padding-left: 2vw;
+}
+
+#titleCountry {
+  grid-area: 1 / 1 / 1 / 4;
+  color: white;
+}
+
+#titleCapital {
+  grid-area: 2 / 1 / 2 / 1;
+  color: white;
+}
+
+#capital {
+  grid-area: 2 / 2 / 2 / 4;
+}
+
+
+#titlePopulation {
+  grid-area: 3 / 1 / 3 / 1;
+
+  color: white}
+
+#population {
+  grid-area: 3 / 2 / 3 / 4;
+}
+
+#titleCurrency {
+  grid-area: 4 / 1 / 4 / 1;
+  color: white;
+}
+
+#currency {
+  grid-area: 4 / 2 / 4 / 4;
+}
+
+#weatherIcon {
+  grid-area: 1 / 4 / 1 / 5;
+}
+
+#virusIcon {
+  grid-area: 2 / 4 / 2 / 5;
+}
+
+#moneyIcon {
+  grid-area: 3 / 4 / 3 / 5;
+}
+
+#transportIcon {
+  grid-area: 4 / 4 / 4 / 5;
+}
+
+
+button {
+  width: 16vw;
+  height: 95%;
+  background-color: var(--black);
+  box-shadow: 0.5vw 0.5vw  white;
+  border: 0.25vw solid var(--yellow);
+  cursor: pointer;
+}
+
+.infoIcon {
+  height: 5vh;
+}
+
+button:active {
+  background-color: var(--seablue);
+}
+
+

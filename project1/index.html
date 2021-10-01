@@ -1,0 +1,60 @@
+<!DOCTYPE <!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Gazetteer | World Wide Information</title>
+        <meta name="description" content="A worldwide atlas with information about each country on earth.">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    
+        <link href="favicon.ico" rel="icon">
+
+        <link rel="stylesheet" href="./node_modules/leaflet/dist/leaflet.css">
+        <link href="./libs/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="./libs/css/style.css">
+    </head>
+    <body>
+    
+        <header>
+            <h1>The Gazetteer</h1>
+        </header>
+    
+    
+        <form>
+        <select id="countrySelect" name="country">
+            <option>Choose country</option>
+            <option>Afghanistan</option>
+        </select>
+        </form>
+
+
+        <div id="map"></div>
+        
+        <section id="info">
+            <h3 id="titleCountry">Your Country <img src="https://www.countryflags.io/GB/shiny/32.png" id="flag" alt="country flag">
+            </h3>
+            
+            <p id="titleCapital">Capital:</p>
+            <p id="capital">Your capital</p>
+                
+            <p id="titlePopulation">Population:</p>
+            <p id="population">Your population</p>
+            
+            <p id="titleCurrency">Currency:</p>
+            <p id="currency">Your currency</p>
+            
+            <button id="weatherIcon"><img src="./libs/css/cloudsun.png" class="infoIcon" alt="weather icon"></button>
+            <button id="virusIcon"><img src="./libs/css/virus.png" class="infoIcon"  alt="virus icon"></button>
+            <button id="moneyIcon"><img src="./libs/css/banknote.png" class="infoIcon" alt="money icon"></button>
+            <button id="transportIcon"><img src="./libs/css/transport.png" class="infoIcon" alt="transport icon"></button>
+            
+            </section>
+    
+        
+    </div>
+        
+        <script src="./libs/js/jquery-3.6.0.min.js"></script>
+        <script src="./node_modules/leaflet/dist/leaflet-src.js"></script>
+        <script src="./libs/js/bootstrap.bundle.min.js"></script>
+        <script src="./libs/js/app.js" async defer></script>
+    </body>
+</html>

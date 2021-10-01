@@ -1,0 +1,135 @@
+html  {
+  font-size: 14px;
+}
+
+@font-face {
+  font-family: "Inter";
+  src: url("Inter-VariableFont_slnt,wght.ttf");
+}
+
+@font-face {
+  font-family: "Inter";
+  src: url("./Inter-Bold.ttf");
+  font-weight: bold;
+}
+
+* {
+  font-family: "Inter";
+  color: #373738;
+  margin: 0;
+  padding: 0.25vw;
+}
+
+body {
+  background-color: #F5DF4D;
+  
+}
+h1      {
+    text-align: center;
+}
+table {
+  width: 80vw;
+  margin: 0 auto;
+}
+
+table, th, td  {
+    border: 1px solid #939597;
+    border-collapse: collapse;
+    text-align: center;
+
+}
+table, td  {
+  background-color: #F9EB90;
+}
+
+th {
+  background-color: #939597;
+  color: white;
+}
+
+tr:nth-child(even) {
+  background-color: #F5DF4D;
+}
+
+.title {
+  font-weight: bold;
+  font-size:1.1em;
+}
+.apiInput {
+  text-align: left;
+}
+
+
+.apiInput input {
+  margin: 0.5vw;
+  background-color: rgb(211, 252, 238);
+  color: rgb(24, 23, 23);
+  border-radius: 5px;
+  width: 10vw;
+}
+.submit {
+    border-radius: 5px;
+    background-color: white;
+    color:rgb(24, 23, 23);
+
+}
+
+#longitude, #latitude {
+  display: flex;
+}
+
+.results {
+  font-weight: bold;
+  text-align: left;
+  font-style: oblique;
+}
+
+footer  {
+  bottom: 0px;
+  background-color: #939597;
+  color: #F5DF4D;
+  padding: 0;
+  margin: 2vw;
+}
+
+#preloader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9999;
+  overflow: hidden;
+  background: #fff;
+}
+
+#preloader:before 
+  {content: "";
+    position: fixed;
+    top: calc(50% - 30px);
+    left: calc(50% - 30px);
+    border: 6px solid #f2f2f2;
+    border-top: 6px solid #56829e ;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    -webkit-animation: animate-preloader 1s linear infinite;
+    animation: animate-preloader 1s linear infinite;
+  }
+
+
+  @-webkit-keyframes animate-preloader 
+   {0% 
+    {-webkit-transform: rotate(0deg);
+      transform: rotate(0deg);}
+   100% {-webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+    @keyframes animate-preloader
+     {0% {-webkit-transform: rotate(0deg);
+      transform: rotate(0deg);}
+     100% {-webkit-transform: rotate(360deg);
+      transform: rotate(360deg);
+    }
+  }

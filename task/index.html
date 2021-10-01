@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="utf-8">
+        <title>Using GeoNames APIs | IT Career Switch Task</title>
+        <meta name="description" content="Accessing info from APIs using PHP">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+        <link href="favicon.png" rel="icon">
+        <link href="./libs/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="./libs/css/style.css">
+    </head>
+ 
+    <body>
+        <header>
+        <h1>Using GeoNames APIs</h1>
+        </header>
+        <main>
+        <table>
+            <tr>
+                <th>API Name</th>
+                <th class="apiInput">API Description</th>
+                <th></th>
+            </tr>
+            <tr>
+                <td class="title">Oceans</td>
+
+                <td class="apiInput"><strong>Enter longitude and latitude coordinates to find the name of the sea or ocean at that point (if there is one).</strong>
+                    <br><label for="oceanlng">Longitude - between -180 and 180 with up to 5 decimal places</label>
+                    <input type="number" name="longitude" id="oceanlng" min="-180" max="180" aria-label="Longitude Selector" autofocus></label> 
+                    <br><label for="oceanlat">Latitude - between -90 and 90 with up to 5 decimal places</label>
+                    <input type="number" name="latitude" id="oceanlat" min="-90" max="90" aria-label="Latitude Selector">
+                
+                </td>
+                <td><button id="OceanBtn">Submit</button></td>
+            </tr>
+            
+            <tr>
+                <td class="title">Weather Station Observation</td>
+
+                <td class="apiInput"><strong>Enter longitude and latitude coordinates to find the nearest weather station and its latest observations.</strong> 
+                    <br><label for="weatherlng">Longitude - between -180 and 180 with up to 5 decimal places</label>
+                    <input type="number" name="longitude" id="weatherlng" min="-180" max="180" aria-label="Longitude Selector" autofocus>
+                    <br><label for="weatherlat">Latitude - between -90 and 90 with up to 5 decimal places</label>
+                    <input type="number" name="latitude" id="weatherlat" min="-90" max="90" aria-label="Latitude Selector">
+                    
+                </td>
+                <td><button id="WeatherBtn">Submit</button></td> 
+            </tr>
+
+            <tr>
+                <td class="title">Elevation Information</td>
+                <td class="apiInput"><strong>Enter the longitude and latitude coordinates to find its elevation in meters as recorded by the Shuttle Radar Topography Mission.</strong>
+                    <br><label for="neighbourlng">Longitude - between -180 and -180 with up to 5 decimal places</label>
+                    <input type="number" name="longitude" id="elevationlng" min="-180" max="180" aria-label="Longitude Selector" autofocus>
+                    <br><label for="neighbourlat">Latitude - between 60 and -56 with up to 5 decimal places</label>
+                    <input type="number" name="latitude" id="elevationlat" min="-56" max="60" aria-label="Latitude Selector">
+                    
+                </td>
+                <td><button id="ElevationBtn">Submit</button></td>
+            </tr>
+            <tr>
+                <td class="title">Results</td>
+                <td class="results" colspan="2">
+                    <p>Oceans: <span id="oceanName"></span></p>
+                    <p>Weather Station: <span id="weatherInfo"></span></p>
+                    <p>Elevation Information: <span id="elevationData"></span></p>    
+                </td>
+            </tr>
+
+        </table>
+        </main>
+    
+        <div id=”preloader”></div>
+        <script src="./libs/js/jquery-3.6.0.min.js"></script>
+        <script src="./libs/js/bootstrap.bundle.min.js"></script>
+        <script src="./libs/js/app.js" async defer></script>
+    </body>    
+</html>
