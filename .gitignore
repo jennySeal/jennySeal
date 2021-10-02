@@ -1,6 +1,7 @@
 
 
 config.php
+config.js
 # dependencies
 /node_modules
 .env
