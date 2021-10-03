@@ -15,9 +15,7 @@
   font-style: italic;
 }
 
-html,
-body,
-#map {
+html, body{
   font-family: "NotoSans-Regular", sans-serif;
   font-size: 17px;
   padding: 0;
@@ -26,16 +24,17 @@ body,
   width: 100vw;
   --yellow: #ffe642;
   --black: #141414;
-  --seablue:  #67bfe7;
+  --seablue: #67bfe7;
   background-color: var(--yellow);
   color: var(--black);
 }
 
 #map {
   border-top-right-radius: 40%;
-  height: 51vh;
+  height: 72vh;
   z-index: 1;
 }
+
 
 h1 {
   font-size: 2.5rem;
@@ -56,88 +55,144 @@ form {
   margin: 0;
   display: flex;
   justify-content: flex-end;
+  height: 5vh;
+
 }
 
-#info {
-  height: 36vh;
+select {
+  border-bottom-left-radius: 10px;
+  margin-bottom: 1vw;
+  background-color: var(--black);
+  color: silver;
+}
+
+
+#countryTitle {
+  display: inline-flex;
+  background-color: var(--black);
   width: 100vw;
-  background-color: black;
+  z-index: 5;
+  justify-content: space-between;
+}
+
+
+#modal {
+  z-index: 3;
+  display: none;
+  position: fixed;
+  left: 0;
+  top: 55vh;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  }
+
+#infoGrid {
+  height: 30vh;
+  width: 100vw;
+  background-color: var(--black);
   color: var(--yellow);
   display: grid;
+  z-index: 3;
   grid-template-rows: 1fr 1fr 1fr 1fr;
-  grid-template-columns: 1fr 1fr 2fr 1fr;
-  justify-content: flex-end;
-  align-items: flex-end;
+  grid-template-columns: 2fr 1fr 1fr;
   border-top: 1vw solid var(--yellow);
   text-align: left;
-  padding-left: 2vw;
+  line-height: 0.9rem;
+  font-size: 1.2rem;
+
 }
 
 #titleCountry {
-  grid-area: 1 / 1 / 1 / 4;
+  grid-area: 1 / 1 / 1 / 3;
   color: white;
 }
 
+#flag {
+  grid-area: 3 / 3 / 5 / 4;
+  }
+
 #titleCapital {
-  grid-area: 2 / 1 / 2 / 1;
+  grid-area: 2 / 1 / 2 / 2;
   color: white;
 }
 
 #capital {
-  grid-area: 2 / 2 / 2 / 4;
+  grid-area: 2 / 2 / 2 / 3;
 }
 
-
 #titlePopulation {
-  grid-area: 3 / 1 / 3 / 1;
+  grid-area: 3 / 1 / 3 / 2;
 
-  color: white}
+  color: white;
+}
 
 #population {
-  grid-area: 3 / 2 / 3 / 4;
+  grid-area: 3 / 2 / 3 / 3;
 }
 
 #titleCurrency {
-  grid-area: 4 / 1 / 4 / 1;
+  grid-area: 4 / 1 / 4 / 2;
   color: white;
 }
 
 #currency {
-  grid-area: 4 / 2 / 4 / 4;
+  grid-area: 4 / 2 / 4 / 3;
 }
 
-#weatherIcon {
-  grid-area: 1 / 4 / 1 / 5;
+#titleArea {
+  grid-area: 5 / 1 / 5 / 2;
+  color: white;
 }
 
-#virusIcon {
-  grid-area: 2 / 4 / 2 / 5;
+#area {
+  grid-area: 5 / 2 / 5 / 3;
 }
 
-#moneyIcon {
-  grid-area: 3 / 4 / 3 / 5;
+#infoItems {
+  height: 10vh;
+  width: 100vw;
+  background-color: black;
+  display: inline-flex;
+  z-index: 3;
+  justify-content: space-between;
 }
 
-#transportIcon {
-  grid-area: 4 / 4 / 4 / 5;
-}
 
-
-button {
-  width: 16vw;
-  height: 95%;
+.infoButton {
   background-color: var(--black);
-  box-shadow: 0.5vw 0.5vw  white;
-  border: 0.25vw solid var(--yellow);
+  border: 0.25vw solid silver;
   cursor: pointer;
+  width: 19.75vw;
 }
 
 .infoIcon {
   height: 5vh;
 }
 
-button:active {
+#closeModal  {
+  height: 3vh;
+  background-color: var(--black);
+  width: 3vw;
+  border: none;
+  position: absolute;
+  right: 6vw;
+  top: 3vw;
+
+}
+
+#x-button {
+height: 3vh;
+background-color: var(--black);
+padding: 0.5vw;
+border: 0.25vw solid silver;
+
+}
+
+.infoButton:active, #x-button:active {
   background-color: var(--seablue);
 }
 
-
+.infoButton:focus {
+  background-color: var(--seablue);
+}

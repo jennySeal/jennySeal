@@ -28,29 +28,41 @@
 
 
         <div id="map"></div>
-        
-        <section id="info">
-            <h3 id="titleCountry">Your Country <img src="https://www.countryflags.io/GB/shiny/32.png" id="flag" alt="country flag">
-            </h3>
+        <div id="countryTitle">
+        <h3 id="titleCountry">Your Country </h3>            
+        <img src="https://www.countryflags.io/gb/flat/32.png" alt="Country Flag" id="flag" >
+        </div>
+        <section id="modal">
+        <div id="infoGrid">
+            
+
+            <button id="closeModal"><img src="./libs/css/xButton.png" id="x-button" alt="Close info box"></button>
+            
             
             <p id="titleCapital">Capital:</p>
             <p id="capital">Your capital</p>
                 
-            <p id="titlePopulation">Population:</p>
+            <p id="titlePopulation">Population (m):</p>
             <p id="population">Your population</p>
             
             <p id="titleCurrency">Currency:</p>
             <p id="currency">Your currency</p>
+
+            <p id="titleArea">Area in km<sup>2</sup>:</p>
+            <p id="area">Your area</p>
             
-            <button id="weatherIcon"><img src="./libs/css/cloudsun.png" class="infoIcon" alt="weather icon"></button>
-            <button id="virusIcon"><img src="./libs/css/virus.png" class="infoIcon"  alt="virus icon"></button>
-            <button id="moneyIcon"><img src="./libs/css/banknote.png" class="infoIcon" alt="money icon"></button>
-            <button id="transportIcon"><img src="./libs/css/transport.png" class="infoIcon" alt="transport icon"></button>
-            
+        </div>
+    </section> 
+</div>
+            <section id="infoItems">
+            <button id="homebutton" class="infoButton"><img src="./libs/css/home.png" class="infoIcon" alt="Home icon"></button>
+            <button id="weatherIcon" class="infoButton"><img src="./libs/css/cloudsun.png" class="infoIcon" alt="weather icon"></button>
+            <button id="virusIcon" class="infoButton"><img src="./libs/css/virus.png" class="infoIcon"  alt="virus icon"></button>
+            <button id="moneyIcon" class="infoButton"><img src="./libs/css/banknote.png" class="infoIcon" alt="money icon"></button>
+            <button id="transportIcon" class="infoButton"><img src="./libs/css/transport.png" class="infoIcon" alt="transport icon"></button>
             </section>
-    
         
-    </div>
+   
         
         <script src="./libs/js/jquery-3.6.0.min.js"></script>
         <script src="./node_modules/leaflet/dist/leaflet-src.js"></script>
