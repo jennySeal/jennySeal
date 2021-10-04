@@ -17,13 +17,29 @@ let country = {
 	criticalCovidcases: 0,
 	totalCovidCases: 0, 
 	totalCovidDeaths: 0,
+	USDexchange: 0, 
+	EURexchange: 0, 
+	GBPexchange: 0, 
+	JPYexchange: 0,
+	newsTitle: "",
+	newsTitle2: "",
+	newsTitle3: "",
+	newsTitle4: "",
+	newsLink: "",
+	newsLink2: "",
+	newsLink3: "",
+	newsLink4: "",
+	newsImage: "",
+	newsImage2: "",
+	newsImage3: "",
+	newsImage4: "",
 } 
 
 //Set up Leaflet maps
 let map = L.map('map').fitWorld();
 
 //using Jawg Streets
-let mapDesign = L.tileLayer('https://{s}.tile.jawg.io/jawg-sunny/{z}/{x}/{y}{r}.png?access-token={accessToken}', {
+let mapDesign = L.tileLayer('https://tile.jawg.io/jawg-streets/{z}/{x}/{y}{r}.png?access-token={accessToken}', {
 	attribution: '<a href="http://jawg.io" title="Tiles Courtesy of Jawg Maps" target="_blank">&copy; <b>Jawg</b>Maps</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
 	minZoom: 0,
 	maxZoom: 22,
@@ -33,7 +49,8 @@ let mapDesign = L.tileLayer('https://{s}.tile.jawg.io/jawg-sunny/{z}/{x}/{y}{r}.
 });
 
 mapDesign.addTo(map);
-map.locate({setView: true, maxZoom: 4});
+let largeScreenCheck = window.matchMedia( '(min-width: 1000px)' );
+	(largeScreenCheck.matches) ? map.locate({setView: true, maxZoom: 5}) : map.locate({setView: true, maxZoom: 4});
 
 //On load find the user's location
 const onLocationFound = (e) => {
@@ -51,12 +68,14 @@ map.on('locationerror', onLocationError);
 
 // Set up buttons to open and close modal and call Api if necessary
 $('#closeModal').click(function(){
-	$('#modal').hide()
+	$('#modal').slideUp("fast", function() {
+	})
 	});
 
 $('#homebutton').click(function(){
 		displayTopLevel()
-		$('#modal').show()
+		$('#modal').slideDown("slow", function() {
+		})
 });
 
 $('#weatherIcon').click(function(){
@@ -64,24 +83,39 @@ $('#weatherIcon').click(function(){
 		displayWeather()	
 	} else {
 	callApi('getWeather', country.capital, 'metric', getWeatherData)
-	} $('#modal').show()
-});
+	} $('#modal').slideDown("slow", function() {
 
+	})
+});
 
 $('#virusIcon').click(function(){
 	if (country.totalCovidCases) {
 		displayVirus()	
 	} else {
 	callApi('getVirus', country.iso2, false, getVirusData)
-	} $('#modal').show()
+	} $('#modal').slideDown("slow", function() {
+
+	})
 });
 
 $('#moneyIcon').click(function(){
-	$('#modal').show()
+	if (country.USDexchange) {
+		displayMoney()	
+	} else {
+	callApi('getMoney', country.currency, '', getMoneyData)
+	} $('#modal').slideDown("slow", function() {
+
+	})
 });
 
-$('#transportIcon').click(function(){
-	$('#modal').show()
+$('#newsIcon').click(function(){
+	if (country.news) {
+		displayNews()
+	} else {
+		callApi('getNews', country.iso2, country.countryName, getNews)
+	} $('#modal').slideDown("slow", function(){
+
+	})
 });
 
 //Once we have coordinates we can get the country code
@@ -100,7 +134,13 @@ const getBasicData = (data) => {
 	country.countryName = results.countryName;
 	country.currency = results.currencyCode;
 	country.capital = results.capital;
-	country.flag = `https://www.countryflags.io/${country.iso2}/shiny/32.png`;
+	country.flag = `https://www.countryflags.io/${country.iso2}/shiny/48.png`;
+	let screenCheck = window.matchMedia( '(min-width: 400px)' );
+	if (screenCheck.matches) {
+		country.flag = `https://www.countryflags.io/${country.iso2}/shiny/64.png`;
+	}
+	console.log(screenCheck);
+	console.log(country.flag);
 	country.area = Math.round(results.areaInSqKm).toLocaleString("en-US");
 
 	$('#titleCountry').html(country.countryName);
@@ -110,7 +150,8 @@ const getBasicData = (data) => {
 }
 
 const displayTopLevel = () => {
-	$('#item-A').html("The Basics");
+	$('#item-A').html(country.countryName);
+	$('#flag2').attr("src", country.flag);
 
 	$('#item-B').html("Capital:");
 	$('#item-2').html(country.capital);
@@ -134,14 +175,14 @@ const getWeatherData = (data) => {
 }
 	
 const displayWeather = () => {
-	$('#item-A').html("The Weather");
+	$('#item-A').html("The Weather Today");
 
 	$('#item-B').html("Conditions:");
 	$('#item-2').html(country.weatherDescription);
 	$('#item-C').html("Max Temp:");
-	$('#item-3').html(`${country.maxtemp}&#8451;`);
+	$('#item-3').html(`${country.maxtemp}&#176;C`);
 	$('#item-D').html("Min Temp:");
-	$('#item-4').html(`${country.mintemp}&#8451;`);
+	$('#item-4').html(`${country.mintemp}&#176;C`);
 	$('#item-E').html("Wind Speed:");
 	$('#item-5').html(`${country.windspeed} mph`);
 }
@@ -157,7 +198,7 @@ const getVirusData = (data) => {
 }
 
 const displayVirus = () => {
-	$('#item-A').html("Coronavirus Data");
+	$('#item-A').html("Coronavirus Rates");
 
 	$('#item-B').html("Active cases:");
 	$('#item-2').html(country.activeCovidCases);
@@ -167,6 +208,58 @@ const displayVirus = () => {
 	$('#item-4').html(country.totalCovidCases);
 	$('#item-E').html("Total deaths:");
 	$('#item-5').html(country.totalCovidDeaths);
+}
+
+const getMoneyData = (data) => {
+	let results = data.data.conversion_rates;
+	country.USDexchange = results.USD;
+	country.EURexchange = results.EUR;
+	country.GBPexchange = results.GBP;
+	country.JPYexchange = results.JPY;
+	displayMoney()
+}
+
+const displayMoney = () => {
+	$('#item-A').html(`Exchange Rate for ${country.currency}`);
+
+	$('#item-B').html("US Dollars $:");
+	$('#item-2').html(country.USDexchange);
+	$('#item-C').html("Euros &#8364;:");
+	$('#item-3').html(country.EURexchange);
+	$('#item-D').html("GB Pounds £:");
+	$('#item-4').html(country.GBPexchange);
+	$('#item-E').html("JP Yen &#165;:");
+	$('#item-5').html(country.JPYexchange);
+}
+
+const getNews = (data) => {
+    let results = data.data.results;
+	console.log(results)
+	country.newsTitle = results[0].title;
+	country.newsTitle2 = results[1].title;
+	country.newsTitle3 = results[2].title;
+	country.newsTitle4 = results[3].title;
+	country.newsLink = results[0].link;
+	country.newsLink2 = results[1].link;
+	country.newsLink3 = results[2].link;
+	country.newsLink4 = results[3].link;
+	country.newsImage = (results[0].image_url) ? results[0].image_url : './libs/css/news-blue.png';
+	country.newsImage2 = (results[1].image_url) ? results[1].image_url : './libs/css/news-blue.png';
+	country.newsImage3 = (results[2].image_url) ? results[2].image_url : './libs/css/news-blue.png';
+	country.newsImage4 = (results[3].image_url) ? results[3].image_url : './libs/css/news-blue.png';
+	displayNews()
+}
+
+const displayNews = () => {
+	$('#item-A').html(`Latest News`);
+	$('#item-B').html(`<a href=${country.newsLink} target="_blank"><img class="newsImage" src=${country.newsImage}></a>`);
+	$('#item-2').html(country.newsTitle);
+	$('#item-C').html(`<a href=${country.newsLink2} target="_blank"><img class="newsImage" src=${country.newsImage2}></a>`);
+	$('#item-3').html(country.newsTitle2);
+	$('#item-D').html(`<a href=${country.newsLink3} target="_blank"><img class="newsImage" src=${country.newsImage3}></a>`);
+	$('#item-4').html(country.newsTitle3);
+	$('#item-E').html(`<a href=${country.newsLink4} target="_blank"><img class="newsImage" src=${country.newsImage4}></a>`);
+	$('#item-5').html(country.newsTitle4);
 }
 
 //Generic function for API call 

@@ -2,8 +2,11 @@
 
 include('config.php');
 
+ini_set('display_errors', 'On');
+error_reporting(E_ALL);
+
 $executionStartTime = microtime(true);
-$url='https://corona.lmao.ninja/v3/covid-19/countries/' . $_REQUEST['param1'] . '?strict=true';
+$url='https://newsdata.io/api/1/news?apikey=' . $newsKey . '&country=' . $_REQUEST['param1'] . '&category=top';
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);

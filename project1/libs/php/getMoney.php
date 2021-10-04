@@ -3,7 +3,7 @@
 include('config.php');
 
 $executionStartTime = microtime(true);
-$url='https://corona.lmao.ninja/v3/covid-19/countries/' . $_REQUEST['param1'] . '?strict=true';
+$url='https://v6.exchangerate-api.com/v6/' . $exchangeRateKey . '/latest/' . $_REQUEST['param1'];
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
