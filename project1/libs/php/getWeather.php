@@ -3,8 +3,7 @@
 include('config.php');
 
 $executionStartTime = microtime(true);
-
-$url='http://api.geonames.org/countryInfoJSON?formatted=true&lang=' . $_REQUEST['param1'] . '&country=' . $_REQUEST['param2'] . '&username=' . $geonameKey .'&style=full';
+$url='https://api.openweathermap.org/data/2.5/weather?q=' . $_REQUEST['param1'] . '&units=' . $_REQUEST['param2'] . '&appid=' . $weatherKey;
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -19,7 +18,7 @@ $output['status']['code'] = "200";
 $output['status']['name'] = "ok";
 $output['status']['description'] = "success";
 $output['status']['returnedIn'] = intval((microtime(true) - $executionStartTime) * 1000) . " ms";
-$output['data'] = $decode['geonames'];
+$output['data'] = $decode;
 
 
 header('Content-Type: application/json; charset=UTF-8');
