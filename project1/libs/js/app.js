@@ -52,12 +52,13 @@ mapDesign.addTo(map);
 let largeScreenCheck = window.matchMedia( '(min-width: 1000px)' );
 	(largeScreenCheck.matches) ? map.locate({setView: true, maxZoom: 5}) : map.locate({setView: true, maxZoom: 4});
 
+
 //On load find the user's location
 const onLocationFound = (e) => {
     let radius = e.accuracy;
      L.circle(e.latlng, radius).addTo(map);
-	 console.log(e.latlng.lat, e.latlng.lng);
 	 getCountryCode(e.latlng.lat, e.latlng.lng);
+	 getSelectData()
 	 }
 
 map.on('locationfound', onLocationFound);
@@ -65,6 +66,7 @@ function onLocationError(e) {
     alert(e.message);
 }
 map.on('locationerror', onLocationError);
+
 
 // Set up buttons to open and close modal and call Api if necessary
 $('#closeModal').click(function(){
@@ -79,44 +81,54 @@ $('#homebutton').click(function(){
 });
 
 $('#weatherIcon').click(function(){
-	if (country.weatherDescription) {
-		displayWeather()	
-	} else {
 	callApi('getWeather', country.capital, 'metric', getWeatherData)
-	} $('#modal').slideDown("slow", function() {
+	 $('#modal').slideDown("slow", function() {
 
 	})
 });
 
 $('#virusIcon').click(function(){
-	if (country.totalCovidCases) {
-		displayVirus()	
-	} else {
 	callApi('getVirus', country.iso2, false, getVirusData)
-	} $('#modal').slideDown("slow", function() {
+	 $('#modal').slideDown("slow", function() {
 
 	})
 });
 
 $('#moneyIcon').click(function(){
-	if (country.USDexchange) {
-		displayMoney()	
-	} else {
 	callApi('getMoney', country.currency, '', getMoneyData)
-	} $('#modal').slideDown("slow", function() {
+	 $('#modal').slideDown("slow", function() {
 
 	})
 });
 
 $('#newsIcon').click(function(){
-	if (country.news) {
-		displayNews()
-	} else {
-		callApi('getNews', country.iso2, country.countryName, getNews)
-	} $('#modal').slideDown("slow", function(){
-
+callApi('getNews', country.iso2, '', getNews)
+	 $('#modal').slideDown("slow", function(){
 	})
 });
+
+/*Set up the select list from the countryBorders.geo.json - returns an array of arrays with name and iso2
+ of each country.*/
+
+const getSelectData = () => {
+	callApi('getSelectData', '', '', displaySelectData);
+}
+
+const displaySelectData = (data) => {
+	let results = data.data;
+	for (let i=0; i<results.length; i++) {
+		let selectOption = results[i][0];
+		let isoOption = results[i][1];
+	$('#countrySelect').append(`<option value="${isoOption}">${selectOption}</option>`);
+	}
+}
+
+$("#countrySelect").change(function() {
+	country.iso2 = $("#countrySelect option:selected").val();
+	callApi('getCountryInfo', 'en', country.iso2
+	, getBasicData);
+})
+
 
 //Once we have coordinates we can get the country code
 const getCountryCode = (lat, lng) => {
@@ -139,8 +151,6 @@ const getBasicData = (data) => {
 	if (screenCheck.matches) {
 		country.flag = `https://www.countryflags.io/${country.iso2}/shiny/64.png`;
 	}
-	console.log(screenCheck);
-	console.log(country.flag);
 	country.area = Math.round(results.areaInSqKm).toLocaleString("en-US");
 
 	$('#titleCountry').html(country.countryName);
@@ -233,20 +243,20 @@ const displayMoney = () => {
 }
 
 const getNews = (data) => {
-    let results = data.data.results;
-	console.log(results)
-	country.newsTitle = results[0].title;
-	country.newsTitle2 = results[1].title;
-	country.newsTitle3 = results[2].title;
-	country.newsTitle4 = results[3].title;
-	country.newsLink = results[0].link;
-	country.newsLink2 = results[1].link;
-	country.newsLink3 = results[2].link;
-	country.newsLink4 = results[3].link;
-	country.newsImage = (results[0].image_url) ? results[0].image_url : './libs/css/news-blue.png';
-	country.newsImage2 = (results[1].image_url) ? results[1].image_url : './libs/css/news-blue.png';
-	country.newsImage3 = (results[2].image_url) ? results[2].image_url : './libs/css/news-blue.png';
-	country.newsImage4 = (results[3].image_url) ? results[3].image_url : './libs/css/news-blue.png';
+    console.log(data)
+	let results = data.data;
+	country.newsTitle = (results[0][0]) ? results[0][0] : "";
+	country.newsTitle2 = (results[1][0]) ? results[1][0] : "";
+	country.newsTitle3 = (results[2][0]) ? results[2][0] : "";
+	country.newsTitle4 = (results[3][0]) ? results[3][0] : "";
+	country.newsLink = results[0][1];
+	country.newsLink2 = results[1][1];
+	country.newsLink3 = results[2][1];
+	country.newsLink4 = results[3][1];
+	country.newsImage = (results[0][2]) ? results[0][2] : './libs/css/news-blue.png';
+	country.newsImage2 = (results[1][2]) ? results[1][2] : './libs/css/news-blue.png';
+	country.newsImage3 = (results[2][2]) ? results[2][2] : './libs/css/news-blue.png';
+	country.newsImage4 = (results[3][2]) ? results[3][2] : './libs/css/news-blue.png';
 	displayNews()
 }
 
