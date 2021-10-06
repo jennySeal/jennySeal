@@ -53,12 +53,14 @@ let largeScreenCheck = window.matchMedia( '(min-width: 1000px)' );
 	(largeScreenCheck.matches) ? map.locate({setView: true, maxZoom: 5}) : map.locate({setView: true, maxZoom: 4});
 
 
+
 //On load find the user's location
+
 const onLocationFound = (e) => {
+	getSelectData()
     let radius = e.accuracy;
      L.circle(e.latlng, radius).addTo(map);
 	 getCountryCode(e.latlng.lat, e.latlng.lng);
-	 getSelectData()
 	 }
 
 map.on('locationfound', onLocationFound);
@@ -66,7 +68,6 @@ function onLocationError(e) {
     alert(e.message);
 }
 map.on('locationerror', onLocationError);
-
 
 // Set up buttons to open and close modal and call Api if necessary
 $('#closeModal').click(function(){
@@ -129,19 +130,41 @@ $("#countrySelect").change(function() {
 	, getBasicData);
 })
 
+const zoomToCapital = (data) => {
+	console.log(data.data);
+	let results = data.data;
+//	var latlngs = data.data[0];
+//	var polygon = L.polygon(latlngs, {color: 'red'}).addTo(map);
+	// zoom the map to the polygon
+	let lat = results.lat;
+	let lng = results.lng;
+	console.log(`capital is ${country.capital}, lat is ${lat}, and long is ${lng}`);
+	
+	
+	let mapOptions = {
+		lat: lat, 
+		lng: lng,
+		zoom: 8
+	}
+	map.flyTo(mapOptions);
+}
+
 
 //Once we have coordinates we can get the country code
 const getCountryCode = (lat, lng) => {
+	console.log('hello', lat);
 	callApi('getCountryCode', lat, lng, useCountryCode)
 	}
 // and use it to get the name, population, capital, area, currency and flag info
 const useCountryCode = (data) => {
+	console.log('hello2', data);
 	country.iso2 = data.data;
 	callApi('getCountryInfo', 'en', country.iso2, getBasicData);
 }
 
 const getBasicData = (data) => {
-	let results = data.data[0]
+	let results = data.data[0];
+	console.log(data)
 	country.population = parseFloat(results.population / 1000000);
 	country.countryName = results.countryName;
 	country.currency = results.currencyCode;
@@ -155,6 +178,8 @@ const getBasicData = (data) => {
 
 	$('#titleCountry').html(country.countryName);
 	$('#flag').attr("src", country.flag);
+	console.log('hello3', results.countryName);
+	callApi('getCapitalCoords', country.capital, '', zoomToCapital)
 	displayTopLevel()
 
 }
@@ -171,7 +196,8 @@ const displayTopLevel = () => {
 	$('#item-4').html(country.currency);
 	$('#item-E').html("Area:");
 	$('#item-5').html(`${country.area} km2`);
-}
+	console.log('hello4', country.countryName)
+	}
 
 // the first time the weather button is clicked get the weather info
 const getWeatherData = (data) => {
