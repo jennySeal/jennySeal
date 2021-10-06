@@ -39,7 +39,7 @@ let country = {
 let map = L.map('map').fitWorld();
 
 //using Jawg Streets
-let mapDesign = L.tileLayer('https://tile.jawg.io/jawg-streets/{z}/{x}/{y}{r}.png?access-token={accessToken}', {
+let mapDesign = L.tileLayer('https://tile.jawg.io/jawg-sunny/{z}/{x}/{y}{r}.png?access-token={accessToken}', {
 	attribution: '<a href="http://jawg.io" title="Tiles Courtesy of Jawg Maps" target="_blank">&copy; <b>Jawg</b>Maps</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
 	minZoom: 0,
 	maxZoom: 22,
@@ -70,6 +70,7 @@ function onLocationError(e) {
 map.on('locationerror', onLocationError);
 
 // Set up buttons to open and close modal and call Api if necessary
+
 $('#closeModal').click(function(){
 	$('#modal').slideUp("fast", function() {
 	})
@@ -78,7 +79,7 @@ $('#closeModal').click(function(){
 $('#homebutton').click(function(){
 		displayTopLevel()
 		$('#modal').slideDown("slow", function() {
-		})
+			console.log('Hi Jenny3')})
 });
 
 $('#weatherIcon').click(function(){
@@ -126,27 +127,32 @@ const displaySelectData = (data) => {
 
 $("#countrySelect").change(function() {
 	country.iso2 = $("#countrySelect option:selected").val();
-	callApi('getCountryInfo', 'en', country.iso2
-	, getBasicData);
+		callApi('getCountryInfo', 'en', country.iso2, getBasicData);
+	
+
 })
 
 const zoomToCapital = (data) => {
-	console.log(data.data);
 	let results = data.data;
-//	var latlngs = data.data[0];
-//	var polygon = L.polygon(latlngs, {color: 'red'}).addTo(map);
-	// zoom the map to the polygon
 	let lat = results.lat;
 	let lng = results.lng;
-	console.log(`capital is ${country.capital}, lat is ${lat}, and long is ${lng}`);
-	
-	
+	let sunrise = data.sunrise;
+
+
+   let date = new Date(sunrise * 1000); 
+   let hours = date.getUTCHours().toString().padStart(2,0);
+   let minutes = date.getUTCMinutes().toString().padStart(2,0);
+   let seconds = date.getUTCSeconds().toString().padStart(2,0);
+   
+
+
 	let mapOptions = {
 		lat: lat, 
 		lng: lng,
-		zoom: 8
+		zoom: 7
 	}
-	map.flyTo(mapOptions);
+	map.flyTo(mapOptions)
+	L.marker([lat, lng]).addTo(map).bindPopup(`The capital of ${country.countryName} is ${country.capital}. <br>The sun rose at ${hours}:${minutes}:${seconds}`);
 }
 
 
@@ -179,8 +185,8 @@ const getBasicData = (data) => {
 	$('#titleCountry').html(country.countryName);
 	$('#flag').attr("src", country.flag);
 	console.log('hello3', results.countryName);
-	callApi('getCapitalCoords', country.capital, '', zoomToCapital)
-	displayTopLevel()
+		displayTopLevel()
+		callApi('getCapitalCoords', country.capital, '', zoomToCapital)
 
 }
 
@@ -196,7 +202,7 @@ const displayTopLevel = () => {
 	$('#item-4').html(country.currency);
 	$('#item-E').html("Area:");
 	$('#item-5').html(`${country.area} km2`);
-	console.log('hello4', country.countryName)
+		console.log('hello4', country.countryName)
 	}
 
 // the first time the weather button is clicked get the weather info

@@ -22,11 +22,16 @@ html, body{
   margin: 0;
   height: 100%;
   width: 100vw;
-  --yellow: #67bfe7;
-  --black: #00758f;
+  --yellow: #f5df4d;
+  --black: #282d3c;
   --seablue: #212121;
   background-color: var(--yellow);
   color: var(--black);
+}
+
+#formMap {
+  display: flex;
+
 }
 
 #map {
@@ -52,12 +57,10 @@ header {
 }
 
 form {
-  width: 100vw;
   margin: 0;
   display: flex;
   justify-content: flex-end;
   height: 5vh;
-
 }
 
 select {
