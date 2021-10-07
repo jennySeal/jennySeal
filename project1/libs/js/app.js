@@ -39,7 +39,7 @@ let country = {
 let map = L.map('map').fitWorld();
 
 //using Jawg Streets
-let mapDesign = L.tileLayer('https://tile.jawg.io/jawg-sunny/{z}/{x}/{y}{r}.png?access-token={accessToken}', {
+let mapDesign = L.tileLayer('https://tile.jawg.io/jawg-streets/{z}/{x}/{y}{r}.png?access-token={accessToken}', {
 	attribution: '<a href="http://jawg.io" title="Tiles Courtesy of Jawg Maps" target="_blank">&copy; <b>Jawg</b>Maps</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
 	minZoom: 0,
 	maxZoom: 22,
@@ -137,14 +137,21 @@ const zoomToCapital = (data) => {
 	let lat = results.lat;
 	let lng = results.lng;
 	let sunrise = data.sunrise;
+	let timeoffset = data.timeoffset;
 
-
+// present the sunrise in the capital marker
    let date = new Date(sunrise * 1000); 
    let hours = date.getUTCHours().toString().padStart(2,0);
    let minutes = date.getUTCMinutes().toString().padStart(2,0);
    let seconds = date.getUTCSeconds().toString().padStart(2,0);
    
+// and change the local time
+	let currentTime = Date.now();
+	let time = new Date(currentTime + (timeoffset*1000))
+	let currentHours = time.getUTCHours().toString().padStart(2,0);
+   let currentMinutes = time.getUTCMinutes().toString().padStart(2,0);
 
+   $('#timeDisplay').html(`${currentHours}:${currentMinutes}`);
 
 	let mapOptions = {
 		lat: lat, 

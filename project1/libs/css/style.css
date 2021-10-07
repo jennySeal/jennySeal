@@ -22,8 +22,8 @@ html, body{
   margin: 0;
   height: 100%;
   width: 100vw;
-  --yellow: #f5df4d;
-  --black: #282d3c;
+  --yellow: #3500D3;
+  --black: #190061;
   --seablue: #212121;
   background-color: var(--yellow);
   color: var(--black);
@@ -36,6 +36,7 @@ html, body{
 
 #map {
   border-top-right-radius: 30%;
+  border-bottom-left-radius: 30%;
   height: 69vh;
   z-index: 1;
 }
@@ -59,10 +60,19 @@ header {
 form {
   margin: 0;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   height: 5vh;
 }
 
+#clock {
+  color: rgb(255, 230, 66);
+  display: inline-flex;
+  align-items: center;
+  background-color: #212121;  
+  font-family: monospace;
+  padding: 0vh 0.5vw;
+  
+}
 select {
   border-bottom-left-radius: 5px;
   background-color: var(--black);
