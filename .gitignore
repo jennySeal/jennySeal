@@ -5,5 +5,6 @@ config.js
 # dependencies
 /node_modules
 .env
+/project1/node_modules
 
 

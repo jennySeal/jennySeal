@@ -1,15 +1,21 @@
 {
   "name": "gazetteer",
   "version": "1.0.0",
-  "description": "worldwide info maps",
-  "main": "index.js",
+  "description": "presenting information about places around the world",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "jenny seal",
+  "repository": {
+    "type": "git",
+    "url": "github.com/jennySeal/jennySeal"
+  },
+  "keywords": [
+    "gazetteer"
+  ],
+  "author": "Jenny Seal",
   "license": "ISC",
   "dependencies": {
-    "dotenv": "^10.0.0",
     "leaflet": "^1.7.1"
   }
 }
