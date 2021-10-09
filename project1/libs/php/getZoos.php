@@ -9,7 +9,7 @@ $executionStartTime = microtime(true);
 
 $curl = curl_init();
 curl_setopt_array($curl, [
-	CURLOPT_URL => "https://trueway-places.p.rapidapi.com/FindPlacesNearby?location=" . $_REQUEST['param1'] . "," . $_REQUEST['param2'] . "&type=park&radius=100000&language=en",
+	CURLOPT_URL => "https://trueway-places.p.rapidapi.com/FindPlacesNearby?location=" . $_REQUEST['param1'] . "," . $_REQUEST['param2'] . "&type=cafe&radius=100000&language=en",
 	CURLOPT_RETURNTRANSFER => true,
 	CURLOPT_FOLLOWLOCATION => true,
 	CURLOPT_ENCODING => "",

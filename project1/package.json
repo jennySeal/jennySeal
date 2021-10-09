@@ -16,6 +16,7 @@
   "author": "Jenny Seal",
   "license": "ISC",
   "dependencies": {
-    "leaflet": "^1.7.1"
+    "leaflet": "^1.7.1",
+    "leaflet.markercluster": "^1.5.1"
   }
 }

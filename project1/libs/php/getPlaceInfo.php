@@ -20,7 +20,7 @@ $output['status']['code'] = "200";
 $output['status']['name'] = "ok";
 $output['status']['description'] = "success";
 $output['status']['returnedIn'] = intval((microtime(true) - $executionStartTime) * 1000) . " ms";
-$output['data'] = $decode["results"]["0"]["components"]["city"];
+$output['data'] = $decode["results"]["0"]["formatted"];
 $output['sunrise'] = ($decode["results"]["0"]["annotations"]["sun"]["rise"]["apparent"] + $timeoffset);
 $output['timeoffset'] = $timeoffset;
 

@@ -2,7 +2,7 @@
 import { jawgKey } from "./config.js";
 
 //Set up country object with all the info options
-let country = {
+const country = {
   iso2: "",
   population: 0,
   countryName: "",
@@ -39,22 +39,12 @@ let country = {
 
 let clickLocationLat = 0;
 let clickLocationLng = 0;
-let clickLocation;
 let click = false;
-let select = true;
 
+let vh = window.innerHeight * 0.01;
+document.documentElement.style.setProperty('--vh', `${vh}px`);
 
-/*$(document).ready(function() {
-  //Preloader
-  const preloaderFadeOutTime = 5000;
-  const hidePreloader = () => {
-  const preloader = $('.spinner-wrapper');
-  preloader.fadeOut(preloaderFadeOutTime);
-  }
-  hidePreloader();
-
-});
-*/
+//Run pre-loader
 
 $(window).on('load', function () {
   if ($('.spinner-wrapper').length) {
@@ -81,22 +71,16 @@ let mapDesign = L.tileLayer(
   }
 );
 
+//sets zoom level of initial screen depending on screen size
 mapDesign.addTo(map);
-let largeScreenCheck = window.matchMedia("(min-width: 1000px)");
-largeScreenCheck.matches
-  ? map.locate({ setView: true, maxZoom: 5 })
-  : map.locate({ setView: true, maxZoom: 4 });
-
-//On load find the user's location
+ 
+ //On load find the user's location
 
 const onLocationFound = (e) => {
-  getSelectData();
-  let radius = e.accuracy;
-  L.circle(e.latlng, radius).addTo(map);
   clickLocationLat = e.latlng.lat;
   clickLocationLng = e.latlng.lng;
-   getCountryCode(e.latlng.lat, e.latlng.lng);
-
+  getSelectData();
+getCountryCode(e.latlng.lat, e.latlng.lng);
 };
 
 map.on("locationfound", onLocationFound);
@@ -105,14 +89,18 @@ function onLocationError(e) {
 }
 map.on("locationerror", onLocationError);
 
+let largeScreenCheck = window.matchMedia("(min-width: 1000px)");
+largeScreenCheck.matches
+  ? map.locate({ setView: (`{clickLocationLat, clickLocationLng}`), maxZoom: 4 })
+  : map.locate({ setView: (`{clickLocationLat, clickLocationLng}`), maxZoom: 4 });
+ 
+
 map.on("dblclick", function (e) {
   click = true;
-  select = false;
-	getCountryCode(e.latlng.lat, e.latlng.lng);
+  getCountryCode(e.latlng.lat, e.latlng.lng);
 	clickLocationLat = e.latlng.lat;
 	clickLocationLng = e.latlng.lng;
-	clickLocation = e.latlng;
-  });
+	});
   
 
 
@@ -168,13 +156,11 @@ const displaySelectData = (data) => {
 $("#countrySelect").change(function () {
   country.iso2 = $("#countrySelect option:selected").val();
   click = false;
-  select = true;
-  console.log('hello')
   callApi("getCountryInfo", "en", country.iso2, getBasicData);
 });
 
 const zoomToPlace = (data) => {
-  console.log(data);
+  console.log(data)
   let lat = clickLocationLat;
   let lng = clickLocationLng;
   let placeName = data.data;
@@ -187,7 +173,8 @@ const zoomToPlace = (data) => {
   let mapOptions = {
     lat: clickLocationLat,
     lng: clickLocationLng,
-    zoom: 7,
+    zoom: 4,
+    maxZoom: 4,
   };
   map.flyTo(mapOptions);
   L.marker([lat, lng]).addTo(map).bindPopup(
@@ -197,10 +184,9 @@ const zoomToPlace = (data) => {
 
 
 const zoomToCapital = (data) => {
-  console.log(data)
   let results = data.data;
-  let lat = results.lat;
-  let lng = results.lng;
+  clickLocationLat = results.lat;
+  clickLocationLng = results.lng;
   let sunrise = data.sunrise;
   let timeoffset = data.timeoffset;
   let sunriseString = getSunrise(sunrise)
@@ -208,13 +194,15 @@ const zoomToCapital = (data) => {
   setInterval(setCurrentTime(timeoffset), 60000);
 
   let mapOptions = {
-    lat: lat,
-    lng: lng,
-    zoom: 7,
+    lat: clickLocationLat,
+    lng: clickLocationLng,
+    zoom: 4,
+    maxZoom: 4,
+
   };
-  console.log(mapOptions);
+
   map.flyTo(mapOptions);
-  L.marker([lat, lng]).addTo(map).bindPopup(
+  L.marker([clickLocationLat, clickLocationLng]).addTo(map).bindPopup(
       `The capital of ${country.countryName} is ${country.capital}. <br>${sunriseString}`
     );
 };
@@ -268,13 +256,15 @@ const getBasicData = (data) => {
   console.log(click)
 
   if(click === true) {
-    
+    console.log(clickLocationLat, clickLocationLng)
   callApi("getPlaceInfo", clickLocationLat, clickLocationLng, zoomToPlace);
   } else {
     console.log(country.capital)
   callApi("getCapitalCoords", country.capital, "", zoomToCapital);
   }
   console.log(clickLocationLat)
+  
+  console.log(clickLocationLng)
   callApi("getZoos", clickLocationLat, clickLocationLng, displayMarkers);
   
 };
@@ -307,11 +297,10 @@ const getWeatherData = (data) => {
 
 const displayWeather = () => {
   $("#item-A").html("The Weather Today");
-
-  $("#item-B").html("Conditions:");
-  $("#item-2").html(
-    `<img src="http://openweathermap.org/img/wn/${country.weathericon}.png" alt="Weather icon">${country.weatherDescription}`
-  );
+  largeScreenCheck.matches ? 
+  $("#item-B").html(`<img src="http://openweathermap.org/img/wn/${country.weathericon}@2x.png" alt="Weather icon">`) :
+  $("#item-B").html(`<img src="http://openweathermap.org/img/wn/${country.weathericon}.png" alt="Weather icon">`); 
+  $("#item-2").html(country.weatherDescription);
   $("#item-C").html("Max Temp:");
   $("#item-3").html(`${country.maxtemp}&#176;C`);
   $("#item-D").html("Min Temp:");
@@ -410,14 +399,16 @@ const displayNews = () => {
   $("#item-5").html(country.newsTitle4);
 };
 
+
 const displayMarkers = (data) => {
 	let results = data.data;
-	console.log(results)
 
-/*results.map((touristAttraction) => { 
-		L.marker(touristAttraction[1]).addTo(map).bindPopup(touristAttraction[0])
-	})*/
+results.map((touristAttraction) => { 
+		L.marker(touristAttraction[1]).addTo(map).bindPopup(`	&#9749; This is ${touristAttraction[0]}`)
+
+	})
 }
+
 
 
 //Generic function for API call
@@ -435,7 +426,7 @@ const callApi = (phpToCall, parameter1, parameter2, callbackFun) => {
       callbackFun(result);
     },
     error: function (jqXHR, textStatus, errorThrown) {
-      console.log(`ajax call failed ${textStatus}`);
+      console.log(`${apiUrl}: ajax call failed ${textStatus}`);
     },
   });
 };
