@@ -1,3 +1,20 @@
+body{
+  font-family: "NotoSans-Regular", sans-serif;
+  font-size: 17px;
+  padding: 0;
+  margin: 0;
+  height: 100vh;
+  width: 100vw;
+  --yellow: #ffe135;
+  --black: #212121;
+  --seablue: #4e5556;
+  background-color: var(--yellow);
+  color: var(--black);
+}
+
+html {
+  height: 100vh;
+}
 
 .spinner-wrapper {
   position: fixed;
@@ -81,19 +98,7 @@
   font-style: italic;
 }
 
-html, body{
-  font-family: "NotoSans-Regular", sans-serif;
-  font-size: 17px;
-  padding: 0;
-  margin: 0;
-  height: 100%;
-  width: 100vw;
-  --yellow: #ffe135;
-  --black: #212121;
-  --seablue: #4e5556;
-  background-color: var(--yellow);
-  color: var(--black);
-}
+
 
 #formMap {
   display: flex;
@@ -103,7 +108,7 @@ html, body{
 #map {
   border-top-right-radius: 30%;
   border-bottom-left-radius: 30%;
- height: 69vh;
+ height: 63vh;
   z-index: 1;
 }
 
@@ -152,6 +157,7 @@ select {
   background-color: var(--black);
   width: 100vw;
   justify-content: space-around;
+  height: 7vh;
   text-shadow: 0.25vw 0.25vw 0.25vw #212121;
 }
 

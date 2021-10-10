@@ -39,20 +39,18 @@ const country = {
 
 let clickLocationLat = 0;
 let clickLocationLng = 0;
-let click = false;
-
-let vh = window.innerHeight * 0.01;
-document.documentElement.style.setProperty('--vh', `${vh}px`);
+let click = true;
 
 //Run pre-loader
 
-$(window).on('load', function () {
+$(document).ready(function () {
   if ($('.spinner-wrapper').length) {
     $('.spinner-wrapper').delay(2000).fadeOut(3000,function () {
-      $(this).remove();
+      $('.spinner-wrapper').remove();
     });
   }
 });
+
 
 //Set up Leaflet maps
 let map = L.map("map").fitWorld();
@@ -73,26 +71,40 @@ let mapDesign = L.tileLayer(
 
 //sets zoom level of initial screen depending on screen size
 mapDesign.addTo(map);
+
  
- //On load find the user's location
+//On load find the user's location
 
 const onLocationFound = (e) => {
   clickLocationLat = e.latlng.lat;
   clickLocationLng = e.latlng.lng;
+  let radius = e.accuracy / 2;
+  L.popup().setLatLng(e.latlng).setContent(`&#x1F30E You are here`).openOn(map);  
+  L.marker(e.latlng).addTo(map)
+  L.circleMarker(e.latlng, radius).addTo(map);
+
   getSelectData();
-getCountryCode(e.latlng.lat, e.latlng.lng);
+  getCountryCode(clickLocationLat, clickLocationLng);
 };
 
-map.on("locationfound", onLocationFound);
-function onLocationError(e) {
-  alert(e.message);
+const onLocationError = (e) => {
+  click = false;
+  clickLocationLat = 51.50853;
+  clickLocationLng = -0.12574;
+  L.popup().setLatLng(e.latlng).setContent(`&#x1F30E The capital of the United Kingdom is London.`).openOn(map);
+  getSelectData();
+  getCountryCode(clickLocationLat, clickLocationLng);
 }
-map.on("locationerror", onLocationError);
+
+
+  map.on('locationfound', onLocationFound);
+  map.on('locationerror', onLocationError);
+
 
 let largeScreenCheck = window.matchMedia("(min-width: 1000px)");
 largeScreenCheck.matches
-  ? map.locate({ setView: (`{clickLocationLat, clickLocationLng}`), maxZoom: 4 })
-  : map.locate({ setView: (`{clickLocationLat, clickLocationLng}`), maxZoom: 4 });
+  ? map.locate({ setView: (`{clickLocationLat, clickLocationLng}`), maxZoom: 6 })
+  : map.locate({ setView: (`{clickLocationLat, clickLocationLng}`), maxZoom: 5 });
  
 
 map.on("dblclick", function (e) {
@@ -252,9 +264,6 @@ const getBasicData = (data) => {
   $("#flag").attr("src", country.flag);
   displayTopLevel();
   
-  console.log('hello')
-  console.log(click)
-
   if(click === true) {
     console.log(clickLocationLat, clickLocationLng)
   callApi("getPlaceInfo", clickLocationLat, clickLocationLng, zoomToPlace);
