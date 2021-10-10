@@ -1,3 +1,4 @@
+
 body{
   font-family: "NotoSans-Regular", sans-serif;
   font-size: 17px;
@@ -7,7 +8,7 @@ body{
   width: 100vw;
   --yellow: #ffe135;
   --black: #212121;
-  --seablue: #4e5556;
+  --seablue: rgb(19, 109, 100);
   background-color: var(--yellow);
   color: var(--black);
 }
@@ -108,10 +109,9 @@ html {
 #map {
   border-top-right-radius: 30%;
   border-bottom-left-radius: 30%;
- height: 63vh;
+ height: 68vh;
   z-index: 1;
 }
-
 
 h1 {
   font-size: 2.5rem;
@@ -122,18 +122,19 @@ header {
   background-color: var(--black);
   color: white;
   display: inline-flex;
-  justify-content: center;
+  justify-content: space-between;
   width: 100vw;
   height: 8vh;
   text-align: center;
-  align-items: center;
+  align-items: flex-end;
+
 }
 
 form {
   margin: 0;
   display: flex;
   justify-content: space-between;
-  height: 5vh;
+  height: 7vh;
 }
 
 #clock {
@@ -258,21 +259,21 @@ height: 30vh;
 #infoItems {
   height: 10vh;
   width: 100vw;
-  background-color: black;
-  display: inline-flex;
+  background-color: var(--black);
   z-index: 4;
-  justify-content: space-between;
-
+  color: white;
+  text-align: center;
 }
 
 
 .infoButton {
   background-color: var(--black);
-  border: 0.25vw solid silver;
+  border: 0.25vw solid var(--yellow);
   cursor: pointer;
   width: 19.5vw;
+  padding: 1vh 0;
   border: 0.25vw inset silver;
-  box-shadow: 0.25vw 0.25vw 0.1vw silver;}
+  box-shadow: 0.25vw 0.25vw 0.1vw var(--yellow);}
 
 
 .infoIcon {
@@ -309,6 +310,46 @@ padding: 0.5vw;
 
 }
 
+@media screen and (orientation: portrait) and (min-width:400px) {
+  #infoGrid {font-size: 1.1rem;
+             line-height: 1rem;
+           }  
+  #infoGrid h3 {font-size: 1.5rem;}   
+  h1 {font-size: 3rem;}       
+  #titleCountry {
+    font-size: 2rem;
+  }
+ }
+
+@media screen and (orientation: landscape) and (max-height: 520px) {
+  #map {
+    height: 61vh;
+  }
+  #countryTitle {
+    height: 13vh;
+    padding: 1vh;
+  }
+  #infoItems {
+    height: 13vh;
+    font-size: 1rem;
+  }
+  header {
+    height: 10vh;
+  }
+  .infoButton {
+    height: 7vh;
+  }
+
+  #infoItems h1 {
+    font-size: 1.5rem;
+  }
+
+  #titleCountry {
+    font-size: 1.2rem;
+  }
+}
+
+
 @media screen and (min-width:400px) {
  #infoGrid {font-size: 1.1rem;
             line-height: 1rem;
@@ -322,6 +363,8 @@ padding: 0.5vw;
 
 @media screen and (min-width:600px) {
   #modal {width: 75%;}
+  .infoButton {padding: 1vh 0;}
+ 
   #infoGrid {font-size: 1.4rem;
     line-height: 1.4rem;
   }  

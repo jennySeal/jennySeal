@@ -10,6 +10,8 @@
 
 <!--        <link rel="stylesheet" href="./node_modules/leaflet/dist/leaflet.css"> -->
         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="crossorigin=""/>
+        <link rel="stylesheet" href="node_modules/leaflet.markercluster/dist/MarkerCluster.css">
+        <link rel="stylesheet" href="node_modules/leaflet.markercluster/dist/MarkerCluster.Default.css">
         <link href="./libs/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="./libs/css/style.css">
     </head>
@@ -25,7 +27,12 @@
           </div>
         </div>
         <header>
-            <h1>The Gazetteer</h1>
+            <button id="homebutton" class="infoButton"><img src="./libs/css/home.png" class="infoIcon" alt="Home icon"></button>
+            <button id="weatherIcon" class="infoButton"><img src="./libs/css/cloudsun.png" class="infoIcon" alt="weather icon"></button>
+            <button id="virusIcon" class="infoButton"><img src="./libs/css/virus.png" class="infoIcon"  alt="virus icon"></button>
+            <button id="moneyIcon" class="infoButton"><img src="./libs/css/banknote.png" class="infoIcon" alt="money icon"></button>
+            <button id="newsIcon" class="infoButton"><img src="./libs/css/news.png" class="infoIcon" alt="news icon"></button>
+
         </header>
     
         <form>
@@ -63,13 +70,9 @@
         </div>
     </section> 
 </div>
-            <section id="infoItems">
-            <button id="homebutton" class="infoButton"><img src="./libs/css/home.png" class="infoIcon" alt="Home icon"></button>
-            <button id="weatherIcon" class="infoButton"><img src="./libs/css/cloudsun.png" class="infoIcon" alt="weather icon"></button>
-            <button id="virusIcon" class="infoButton"><img src="./libs/css/virus.png" class="infoIcon"  alt="virus icon"></button>
-            <button id="moneyIcon" class="infoButton"><img src="./libs/css/banknote.png" class="infoIcon" alt="money icon"></button>
-            <button id="newsIcon" class="infoButton"><img src="./libs/css/news.png" class="infoIcon" alt="news icon"></button>
-            </section>
+<section id="infoItems">
+    <h1>The Gazetteer</h1>
+</section>            
         
    
         
@@ -77,6 +80,7 @@
     <!--    <script src="./node_modules/leaflet/dist/leaflet-src.js"></script>-->   
         <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
         integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="crossorigin=""></script>
+        <script src="node_modules/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
         <script src="./libs/js/bootstrap.bundle.min.js"></script>
         <script src="./libs/js/app.js" type="module" async defer></script>
     </body>

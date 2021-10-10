@@ -185,14 +185,15 @@ const zoomToPlace = (data) => {
   let mapOptions = {
     lat: clickLocationLat,
     lng: clickLocationLng,
-    zoom: 4,
-    maxZoom: 4,
+    zoom: 5,
+    maxZoom: 5,
   };
-  map.flyTo(mapOptions);
+  map.setZoom(5).flyTo(mapOptions);
   L.marker([lat, lng]).addTo(map).bindPopup(
       `This is ${placeName}. <br>${sunriseString}`
     );
-};
+    callApi("getZoos", clickLocationLat, clickLocationLng, displayMarkers);
+  };
 
 
 const zoomToCapital = (data) => {
@@ -213,11 +214,12 @@ const zoomToCapital = (data) => {
 
   };
 
-  map.flyTo(mapOptions);
+  map.setZoom(4).flyTo(mapOptions);
   L.marker([clickLocationLat, clickLocationLng]).addTo(map).bindPopup(
       `The capital of ${country.countryName} is ${country.capital}. <br>${sunriseString}`
     );
-};
+    callApi("getZoos", clickLocationLat, clickLocationLng, displayMarkers);
+  };
 
   // present the sunrise in the capital marker
   const getSunrise = (sunrise) => {
@@ -271,10 +273,7 @@ const getBasicData = (data) => {
     console.log(country.capital)
   callApi("getCapitalCoords", country.capital, "", zoomToCapital);
   }
-  console.log(clickLocationLat)
-  
-  console.log(clickLocationLng)
-  callApi("getZoos", clickLocationLat, clickLocationLng, displayMarkers);
+
   
 };
 
@@ -410,12 +409,18 @@ const displayNews = () => {
 
 
 const displayMarkers = (data) => {
+  console.log(`hello did you get here ${data.data}`)
 	let results = data.data;
+  let markers = L.markerClusterGroup();
 
 results.map((touristAttraction) => { 
-		L.marker(touristAttraction[1]).addTo(map).bindPopup(`	&#9749; This is ${touristAttraction[0]}`)
+		let cafeMarker = L.marker(touristAttraction[1]).addTo(map).bindPopup(`	&#9749; This is ${touristAttraction[0]}`)
+    markers.addLayer(cafeMarker);
 
 	})
+
+  console.log(markers)
+  map.addLayer(markers);
 }
 
 
