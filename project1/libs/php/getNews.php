@@ -2,12 +2,9 @@
 
 include('config.php');
 
-ini_set('display_errors', 'On');
-error_reporting(E_ALL);
-
 $executionStartTime = microtime(true);
 
-$url='https://newsdata.io/api/1/news?apikey=' . $newsKey . '&country=' . $_REQUEST['param1'] . '&category=top&language=en&page=1';
+$url='https://newsdata.io/api/1/news?apikey=' . $newsKey . '&country=' . $_REQUEST['param1'] . '&category=top&language=en';
 $decode = curlNewsData($url);
 
 
@@ -25,12 +22,12 @@ return $decode;
 }
 
 if ($decode['status'] == 'error') {
-    $url='https://newsdata.io/api/1/news?apikey=' . $newsKey . '&q=' . $_REQUEST['param2'] . '&category=top&language=en&page=1';
+    $url='https://newsdata.io/api/1/news?apikey=' . $newsKey . '&q=' . $_REQUEST['param2'] . '&category=top&language=en';
     $decode = curlNewsData($url);
 }
 
 if ($decode['totalResults'] == 0) {
-    $url='https://newsdata.io/api/1/news?apikey=' . $newsKey . '&category=top&language=en&page=1';
+    $url='https://newsdata.io/api/1/news?apikey=' . $newsKey . '&category=top&language=en';
     $decode = curlNewsData($url);
 }
 
