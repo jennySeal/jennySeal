@@ -1,4 +1,3 @@
-
 import { jawgKey } from "./config.js";
 
 //Set up country object with all the info options
@@ -35,17 +34,30 @@ const country = {
   newsImage2: "",
   newsImage3: "",
   newsImage4: "",
+  officialName: "",
+  demonym: "",
+  currencyName: "",
+  currencySymbol: "",
+  languages: [],
 };
 
 let clickLocationLat = 0;
 let clickLocationLng = 0;
-let click = true;
+let getCapital = false;
+let placeName = "";
+const iconOptions = {
+  iconUrl: './libs/css/marker-yellow.png',
+  iconSize: [30,30],
+ }
+ let geoJsonFeature = {}
+ let markers = L.markerClusterGroup();
+ 
 
 //Run pre-loader
 
 $(document).ready(function () {
   if ($('.spinner-wrapper').length) {
-    $('.spinner-wrapper').delay(2000).fadeOut(3000,function () {
+    $('.spinner-wrapper').delay(3000).fadeOut(3000, function () {
       $('.spinner-wrapper').remove();
     });
   }
@@ -71,6 +83,7 @@ let mapDesign = L.tileLayer(
 
 //sets zoom level of initial screen depending on screen size
 mapDesign.addTo(map);
+let redIcon = L.icon(iconOptions);  
 
  
 //On load find the user's location
@@ -79,8 +92,9 @@ const onLocationFound = (e) => {
   clickLocationLat = e.latlng.lat;
   clickLocationLng = e.latlng.lng;
   let radius = e.accuracy / 2;
-  L.popup().setLatLng(e.latlng).setContent(`&#x1F30E You are here`).openOn(map);  
-  L.marker(e.latlng).addTo(map)
+  let yellowMarker = L.marker(e.latlng, {icon: redIcon,   clickable: true, zIndexOffset: 200, 
+  });
+  yellowMarker.bindPopup(`&#x1F30E You are here`).openPopup().addTo(map);
   L.circleMarker(e.latlng, radius).addTo(map);
 
   getSelectData();
@@ -88,7 +102,6 @@ const onLocationFound = (e) => {
 };
 
 const onLocationError = (e) => {
-  click = false;
   clickLocationLat = 51.50853;
   clickLocationLng = -0.12574;
   L.popup().setLatLng(e.latlng).setContent(`&#x1F30E The capital of the United Kingdom is London.`).openOn(map);
@@ -103,12 +116,12 @@ const onLocationError = (e) => {
 
 let largeScreenCheck = window.matchMedia("(min-width: 1000px)");
 largeScreenCheck.matches
-  ? map.locate({ setView: (`{clickLocationLat, clickLocationLng}`), maxZoom: 6 })
-  : map.locate({ setView: (`{clickLocationLat, clickLocationLng}`), maxZoom: 5 });
+  ? map.locate({ setView: (`{clickLocationLat, clickLocationLng}`), maxZoom: 8 })
+  : map.locate({ setView: (`{clickLocationLat, clickLocationLng}`), maxZoom: 7 });
  
 
 map.on("dblclick", function (e) {
-  click = true;
+  getCapital = false;
   getCountryCode(e.latlng.lat, e.latlng.lng);
 	clickLocationLat = e.latlng.lat;
 	clickLocationLng = e.latlng.lng;
@@ -166,62 +179,51 @@ const displaySelectData = (data) => {
 };
 
 $("#countrySelect").change(function () {
+  console.log('did you get here?')
   country.iso2 = $("#countrySelect option:selected").val();
-  click = false;
+  getCapital = true;
   callApi("getCountryInfo", "en", country.iso2, getBasicData);
+  callApi("getPolygon", country.iso2, '', displayPolygon)
 });
 
 const zoomToPlace = (data) => {
-  console.log(data)
-  let lat = clickLocationLat;
-  let lng = clickLocationLng;
-  let placeName = data.data;
+  if (getCapital) {
+    clickLocationLat = data.data.lat;
+    clickLocationLng = data.data.lng;
+    placeName = country.capital;
+  }
+  else {
+    placeName = data.data;
+  }
   let sunrise = data.sunrise;
   let timeoffset = data.timeoffset;
   let sunriseString = getSunrise(sunrise)
   setCurrentTime(timeoffset);
   setInterval(setCurrentTime(timeoffset), 60000);
-
+  
   let mapOptions = {
     lat: clickLocationLat,
     lng: clickLocationLng,
-    zoom: 5,
-    maxZoom: 5,
+    zoom: 4
   };
-  map.setZoom(5).flyTo(mapOptions);
-  L.marker([lat, lng]).addTo(map).bindPopup(
-      `This is ${placeName}. <br>${sunriseString}`
-    );
-    callApi("getZoos", clickLocationLat, clickLocationLng, displayMarkers);
-  };
-
-
-const zoomToCapital = (data) => {
-  let results = data.data;
-  clickLocationLat = results.lat;
-  clickLocationLng = results.lng;
-  let sunrise = data.sunrise;
-  let timeoffset = data.timeoffset;
-  let sunriseString = getSunrise(sunrise)
-  setCurrentTime(timeoffset);
-  setInterval(setCurrentTime(timeoffset), 60000);
-
-  let mapOptions = {
-    lat: clickLocationLat,
-    lng: clickLocationLng,
-    zoom: 4,
-    maxZoom: 4,
-
-  };
-
   map.setZoom(4).flyTo(mapOptions);
-  L.marker([clickLocationLat, clickLocationLng]).addTo(map).bindPopup(
+  let yellowMarker = L.marker([clickLocationLat, clickLocationLng], {icon: redIcon, clickable: true, ZindexOffset: 200, opacity: 0.8});
+  if (getCapital) {
+    yellowMarker.addTo(map).bindPopup(
       `The capital of ${country.countryName} is ${country.capital}. <br>${sunriseString}`
     );
+  } else {
+  yellowMarker.addTo(map).bindPopup(
+      `This is ${placeName}. <br>${sunriseString}`
+    );
+  }
+  
     callApi("getZoos", clickLocationLat, clickLocationLng, displayMarkers);
   };
 
-  // present the sunrise in the capital marker
+
+
+  // present the sunrise in the marker
   const getSunrise = (sunrise) => {
   let date = new Date(sunrise * 1000);
   let hours = date.getUTCHours().toString().padStart(2, 0);
@@ -247,6 +249,7 @@ const getCountryCode = (lat, lng) => {
 const useCountryCode = (data) => {
   country.iso2 = data.data;
   callApi("getCountryInfo", "en", country.iso2, getBasicData);
+  callApi("getPolygon", country.iso2, '', displayPolygon)
 };
 
 const getBasicData = (data) => {
@@ -255,40 +258,87 @@ const getBasicData = (data) => {
   country.countryName = results.countryName;
   country.currency = results.currencyCode;
   country.capital = results.capital;
-  country.flag = `https://www.countryflags.io/${country.iso2}/shiny/48.png`;
+  
   let screenCheck = window.matchMedia("(min-width: 400px)");
   if (screenCheck.matches) {
     country.flag = `https://www.countryflags.io/${country.iso2}/shiny/64.png`;
+  } else {
+    country.flag = `https://www.countryflags.io/${country.iso2}/shiny/48.png`;
   }
   country.area = Math.round(results.areaInSqKm).toLocaleString("en-US");
 
   $("#titleCountry").html(country.countryName);
   $("#flag").attr("src", country.flag);
-  displayTopLevel();
-  
-  if(click === true) {
-    console.log(clickLocationLat, clickLocationLng)
+  callApi('getMoreCountryInfo', country.iso2, country.currency, saveMoreBasicData);
+
+  if(getCapital === false) {
   callApi("getPlaceInfo", clickLocationLat, clickLocationLng, zoomToPlace);
   } else {
-    console.log(country.capital)
-  callApi("getCapitalCoords", country.capital, "", zoomToCapital);
+  callApi("getCapitalCoords", country.capital, "", zoomToPlace);
   }
-
-  
 };
 
+const saveMoreBasicData = (data) => {
+  console.log(data);
+  country.officialName = data.officialName;
+  country.demonym = data.demonym;
+  country.currencyName = data.currencies.name;
+  country.currencySymbol = data.currencies.symbol;
+  country.languages = data.languages;
+
+  displayTopLevel()
+}
+
+
+const displayPolygon = (data) => {
+  if (data.data.length > 1) {
+  geoJsonFeature = {
+    "type": "Feature",    
+    "geometry": {
+     "type": "MultiPolygon",
+     "coordinates": data.data
+   }
+  }
+} else {
+  geoJsonFeature = {
+    "type": "Feature",    
+    "geometry": {
+     "type": "Polygon",
+     "coordinates": data.data
+   }
+  }
+}
+
+   L.geoJson(geoJsonFeature, {style: {"color":"#ffe135", "opacity": "0.9"}}).addTo(map);
+  }
+
+
+
 const displayTopLevel = () => {
-  $("#item-A").html(country.countryName);
+  $("#item-A").html(country.officialName);
   $("#flag2").attr("src", country.flag);
 
   $("#item-B").html("Capital:");
   $("#item-2").html(country.capital);
   $("#item-C").html("Population:");
   $("#item-3").html(country.population.toFixed(2) + "m");
-  $("#item-D").html("Currency:");
-  $("#item-4").html(country.currency);
-  $("#item-E").html("Area:");
-  $("#item-5").html(`${country.area} km2`);
+  $("#item-D").html("Inhabitants:");
+  $("#item-D").append("<br>Area:");
+  $("#item-4").html(country.demonym);
+  $("#item-4").append(`<br>${country.area} km2`);
+  $("#item-E").html("Languages:")
+  const languages = Object.values(country.languages);
+  console.log(languages)
+    $("#item-5").html(`${languages[0]}`);
+    if (languages.length > 1) {
+      for (let i=1; i<languages.length; i++) {
+        $("#item-5").append(`<br>${languages[i]}`);
+      }
+    }
+
+  
+
+  
 };
 
 // the first time the weather button is clicked get the weather info
@@ -306,8 +356,8 @@ const getWeatherData = (data) => {
 const displayWeather = () => {
   $("#item-A").html("The Weather Today");
   largeScreenCheck.matches ? 
-  $("#item-B").html(`<img src="http://openweathermap.org/img/wn/${country.weathericon}@2x.png" alt="Weather icon">`) :
-  $("#item-B").html(`<img src="http://openweathermap.org/img/wn/${country.weathericon}.png" alt="Weather icon">`); 
+  $("#item-B").html(`<img src="http://openweathermap.org/img/wn/${country.weathericon}@2x.png" alt="Weather conditions:">`) :
+  $("#item-B").html(`<img src="http://openweathermap.org/img/wn/${country.weathericon}.png" alt="Weather conditions:">`); 
   $("#item-2").html(country.weatherDescription);
   $("#item-C").html("Max Temp:");
   $("#item-3").html(`${country.maxtemp}&#176;C`);
@@ -344,22 +394,21 @@ const getMoneyData = (data) => {
   let results = data.data.conversion_rates;
   country.USDexchange = results.USD;
   country.EURexchange = results.EUR;
-  country.GBPexchange = results.GBP;
-  country.JPYexchange = results.JPY;
   displayMoney();
 };
 
 const displayMoney = () => {
-  $("#item-A").html(`Exchange Rate for ${country.currency}`);
+  $("#item-A").html(`Currency (${country.currency})`);
 
-  $("#item-B").html("US Dollars $:");
-  $("#item-2").html(country.USDexchange);
-  $("#item-C").html("Euros &#8364;:");
-  $("#item-3").html(country.EURexchange);
-  $("#item-D").html("GB Pounds £:");
-  $("#item-4").html(country.GBPexchange);
-  $("#item-E").html("JP Yen &#165;:");
-  $("#item-5").html(country.JPYexchange);
+  $("#item-B").html("Money:");
+  $("#item-2").html(country.currencyName);
+  $("#item-C").html("Symbol:");
+  $("#item-3").html(country.currencySymbol);
+  $("#item-D").html("Exchange Rate with US $:");
+  $("#item-4").html(country.USDexchange);
+  $("#item-E").html("Exchange Rate with Euros &#8364;:");
+  $("#item-5").html(country.EURexchange);
+  
 };
 
 const getNews = (data) => {
@@ -407,22 +456,39 @@ const displayNews = () => {
   $("#item-5").html(country.newsTitle4);
 };
 
+let displayMarkers = (data) => {
+  let results = data.data;
+      results.map((touristAttraction) => {
+        let cafeMarker = L.marker(touristAttraction[1]).bindPopup(`	&#9749; This is ${touristAttraction[0]}`)
+        markers.addLayer(cafeMarker);  
+       })
+       }
+      
+     
 
-const displayMarkers = (data) => {
-  console.log(`hello did you get here ${data.data}`)
-	let results = data.data;
-  let markers = L.markerClusterGroup();
+   let toggleMarkers = L.easyButton({
 
-results.map((touristAttraction) => { 
-		let cafeMarker = L.marker(touristAttraction[1]).addTo(map).bindPopup(`	&#9749; This is ${touristAttraction[0]}`)
-    markers.addLayer(cafeMarker);
-
-	})
-
-  console.log(markers)
-  map.addLayer(markers);
-}
-
+     states: [{
+      stateName: 'add-markers', 
+      icon: '<img src="./libs/css/coffee.png">',
+      title: 'Show Cafes',       
+      onClick: function(btn, map) {
+        markers.addTo(map);
+        btn.state('remove-markers');
+     }
+   }, {
+    stateName:'remove-markers', 
+    icon: '<img src="./libs/css/blackCoffee.png">',
+    title: 'Hide Cafes',
+    onClick: function(btn, map) {
+      map.removeLayer(markers);
+     btn.state('add-markers');
+     }
+    } ]
+  }); 
+   
+  toggleMarkers.addTo(map);    
+  
 
 
 //Generic function for API call
