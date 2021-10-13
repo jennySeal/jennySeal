@@ -19,7 +19,7 @@ html {
 a {
   text-decoration: none;
   color: rgb(19, 109, 100);
-  font-size: 1rem;
+  font-size: .6rem;
 }
 
 .spinner-wrapper {
@@ -138,6 +138,8 @@ hr {
   z-index: 1;
 }
 
+
+
 h1 {
   font-size: 2rem;
   text-shadow: 0.5vw 0.25vw 0.25vw #212121;
@@ -217,6 +219,10 @@ select:first-child {
   line-height: 1rem;
   font-size: 0.9rem;
   padding-left: 2vw;
+}
+
+#infoGrid a {
+  font-size: 1rem;
 }
 
 #titleCountry {
@@ -373,7 +379,7 @@ select:first-child {
     height: 10vh;
   }
   .infoButton {
-    height: 7vh;
+    height: 10vh;
   }
 
   #titleCountry {
