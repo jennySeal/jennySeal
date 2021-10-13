@@ -97,7 +97,6 @@ const onLocationFound = (e) => {
   });
   redMarker.bindPopup(`&#x1F30E You are here!`).openPopup().addTo(map);
   L.circleMarker(e.latlng, radius).addTo(map);
-
   //populate the drop down list with countries
   getSelectData();
   //find out iso2 code
@@ -121,6 +120,11 @@ map.on("locationfound", onLocationFound);
 map.on("locationerror", onLocationError);
 
 map.locate({ setView: `{clickLocationLat, clickLocationLng}`, maxZoom: 5 })
+
+
+L.easyButton('<img src="./libs/css/marker-red-small.png">', function() {
+  map.setView([clickLocationLat, clickLocationLng], 5)
+}).addTo(map);
 
 // When the user clicks on the map go to clicked location rather than capital
 map.on("dblclick", function (e) {
@@ -500,33 +504,34 @@ const displayMarkers = (data) => {
       `	&#9749; This is ${touristAttraction[0]}`
     );
     markers.addLayer(cafeMarker);
-  });
+  })
+  markers.addTo(map);
 };
 
 //use easyButton to switch cafe markers on and off
 const toggleMarkers = L.easyButton({
   states: [
-    {
-      stateName: "add-markers",
+    {stateName: "remove-markers",
+        icon: '<img src="./libs/css/blackCoffee.png">',
+        title: "Hide Cafes",
+        onClick: function (btn, map) {
+          map.removeLayer(markers);
+          btn.state("add-markers");
+        },
+      },
+      {stateName: "add-markers",
       icon: '<img src="./libs/css/coffee.png">',
       title: "Show Cafes",
       onClick: function (btn, map) {
         markers.addTo(map);
         btn.state("remove-markers");
       },
-    },
-    {
-      stateName: "remove-markers",
-      icon: '<img src="./libs/css/blackCoffee.png">',
-      title: "Hide Cafes",
-      onClick: function (btn, map) {
-        map.removeLayer(markers);
-        btn.state("add-markers");
-      },
-    },
+    }
   ],
 });
 toggleMarkers.addTo(map);
+
+
 
 //Generic function for API call
 const callApi = (phpToCall, parameter1, parameter2, callbackFun) => {
