@@ -53,6 +53,8 @@ let timeoffset = 0;
 let polyGonLayer;
 let markerLayer;
 let redMarker;
+let youAreHereMarker;
+let circleMarker;
 
 let screenCheck = window.matchMedia("(min-width: 400px)");
 let geoJsonFeature = {type: "loading"};
@@ -94,13 +96,13 @@ const onLocationFound = (e) => {
   clickLocationLat = e.latlng.lat;
   clickLocationLng = e.latlng.lng;
   const radius = e.accuracy / 2;
-  redMarker = L.marker(e.latlng, {
+  youAreHereMarker = L.marker(e.latlng, {
     icon: redIcon,
     clickable: true,
     zIndexOffset: 200,
   });
-  redMarker.bindPopup(`&#x1F30E You are here!`).openPopup().addTo(map);
-  L.circleMarker(e.latlng, radius).addTo(map);
+  youAreHereMarker.bindPopup(`&#x1F30E You are here!`).openPopup().addTo(map);
+  circleMarker = L.circleMarker(e.latlng, radius).addTo(map);
   initialiseMaps(clickLocationLat, clickLocationLng)
 };
 
@@ -148,12 +150,9 @@ const initialiseMaps = (clickLocationLat, clickLocationLng) => {
 const getData = () => {
   //remove previous polygon and features 
 if (geoJsonFeature.type !== 'loading') {
-  map.removeLayer(polyGonLayer)
-  markerLayer.clearLayers()   
-  redMarker.remove()
+  resetMap()
 }
-
-   callApi("getCountryInfo", "en", country.iso2, getBasicData);
+  callApi("getCountryInfo", "en", country.iso2, getBasicData);
   callApi("getPolygon", country.iso2, "", displayPolygon);
 }
 //Once we have coordinates we can get the country code
@@ -224,6 +223,18 @@ const displaySelectData = (data) => {
 // get countryname, currency, capital, flag, area
 const getBasicData = (data) => {
   const results = data.data[0];
+  console.log(results)
+
+  let centerOnLat = (results.north + results.south) / 2;
+  let centerOnLong = (results.east + results.west) / 2;
+
+  const mapOptions = {
+    lat: centerOnLat,
+    lng: centerOnLong,
+    zoom: 5,
+  };
+  map.setZoom(5).flyTo(mapOptions);
+
   country.population = parseFloat(results.population / 1000000);
   country.countryName = results.countryName;
   country.currency = results.currencyCode;
@@ -241,12 +252,7 @@ const getBasicData = (data) => {
   $("#titleCountry").html(country.countryName);
   $("#flag").attr("src", country.flag);
 
-  callApi(
-    "getMoreCountryInfo",
-    country.iso2,
-    country.currency,
-    saveMoreBasicData
-  );
+  callApi("getMoreCountryInfo", country.iso2, country.currency, saveMoreBasicData);
 
   //either zoom to capital or clicked place/users location
   if (getCapital === false) {
@@ -285,12 +291,7 @@ const zoomToPlace = (data) => {
   const sunriseString = getSunrise(sunrise);
   setCurrentTime(timeoffset);
 
-  const mapOptions = {
-    lat: clickLocationLat,
-    lng: clickLocationLng,
-    zoom: 5,
-  };
-  map.setZoom(5).flyTo(mapOptions);
+
   redMarker = L.marker([clickLocationLat, clickLocationLng], {
     icon: redIcon,
     clickable: true,
@@ -554,6 +555,13 @@ const toggleMarkers = L.easyButton({
 });
 toggleMarkers.addTo(map);
 
+const resetMap = () => {
+  map.removeLayer(polyGonLayer)
+  markerLayer.clearLayers()   
+  redMarker.remove()
+  youAreHereMarker.remove()
+  circleMarker.remove()
+}
 
 
 //Generic function for API call

@@ -127,7 +127,7 @@ hr {
 }
 
 h1 {
-  font-size: 2rem;
+  font-size: 1.75rem;
   padding: 1vw;
 }
 
@@ -242,6 +242,9 @@ select {
     font-size: 1.25rem;
   }
 
+  h1 {
+    font-size: 2rem;
+  }
   header {
     right: 4vw;
   }
