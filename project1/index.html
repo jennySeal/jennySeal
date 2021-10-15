@@ -27,52 +27,61 @@
           </div>
         </div>
         <header>
-            <button id="homebutton" class="infoButton"><img src="./libs/css/home.png" class="infoIcon" alt="Home icon"></button>
-            <button id="weatherIcon" class="infoButton"><img src="./libs/css/cloudsun.png" class="infoIcon" alt="weather icon"></button>
-            <button id="virusIcon" class="infoButton"><img src="./libs/css/virus.png" class="infoIcon"  alt="virus icon"></button>
-            <button id="moneyIcon" class="infoButton"><img src="./libs/css/banknote.png" class="infoIcon" alt="money icon"></button>
-            <button id="newsIcon" class="infoButton"><img src="./libs/css/news.png" class="infoIcon" alt="news icon"></button>
+        <h1 id="webTitle">The Gazetteer</h1>
+        <form>
+            <select id="countrySelect" name="country">
+            <option value="none"></option>      
+            </select>
+        </form>
 
         </header>
+        <div id="map">
+        </div>
     
-        <form>
-        <div id="clock">Time: &nbsp; <span id="timeDisplay">00:00</span></div>
-        <select id="countrySelect" name="country">
-            <option value="none">Choose country</option>      
-        </select>
-        </form>
-        
-        <div id="map"></div>
-        <div id="countryTitle">
-        <h3 id="titleCountry">Your Country </h3>            
-        <img src="https://www.countryflags.io/gb/flat/64.png" alt="Country Flag" id="flag" >
-        </div>
-        <section id="modal">
-        <div id="infoGrid">
-            
+                <section class="modal" tabindex="-1" role="dialog">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="item-A"></h5>   
+                          <p id="item-1">
+                              <img src="https://www.countryflags.io/gb/flat/32.png" alt="Country Flag" id="flag2">
+                          </p>  
+                           </div>
+                        <div class="modal-body">              
+                            <table class="table table-light">
+                            <tr>
+                                <td id="item-B"></td>
+                                <td id="item-2"></td>
+                            </tr>                                
+                            <tr>
+                                <td id="item-C"></td>
+                                <td id="item-3"></td>
+                            </tr>
+                            <tr>
+                                <td id="item-D"></td>
+                                <td id="item-4"></td>
+                            </tr>
+                            <tr>
+                                <td id="item-E"></td>
+                                <td id="item-5"></td>
+                            </tr>   
+                            
+                            <tr>
+                                <td id="item-F"></td>
+                                <td id="item-6"></td>
+                            </tr>   
+                        </table>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" id="closeModal" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                    </div>
+                </section>
 
-            <button id="closeModal"><img src="./libs/css/xButton.png" id="x-button" alt="Close info box"></button>
-                        
-            <h3 id="item-A"></h3>
-            <p id="item-1"><img src="https://www.countryflags.io/gb/flat/32.png" alt="Country Flag" id="flag2"></p>
 
-            <p id="item-B"></p>
-            <p id="item-2"></p>
-
-            <p id="item-C"></p>
-            <p id="item-3"></p>
-            
-            <p id="item-D"></p>
-            <p id="item-4"></p>
-
-            <p id="item-E"></p>
-            <p id="item-5"></p>
-        </div>
-    </section> 
 </div>
-<section id="theGazetteer">
-    <h1>The Gazetteer</h1>
-</section>             
+      
         
         <script src="./libs/js/jquery-3.6.0.min.js"></script>
         <script src="./libs/leaflet/leaflet.js"></script>   
