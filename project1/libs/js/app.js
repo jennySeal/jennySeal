@@ -4,16 +4,20 @@ import { jawgKey } from "./config.js";
 //Set up country object with all the info options
 const country = {
   iso2: "",
+  iso3: "",
   population: 0,
   countryName: "",
   currency: "",
   capital: "",
   flag: "",
   area: 0,
+  currentHours: 0,
+  currentMinutes: 0,
   mintemp: 0,
   maxtemp: 0,
   windspeed: 0,
   weathericon: "",
+  humidity: 0,
   weatherDescription: "",
   activeCovidCases: 0,
   criticalCovidcases: 0,
@@ -38,6 +42,8 @@ const country = {
   currencyName: "",
   currencySymbol: "",
   languages: [],
+  worldBankRating: "",
+  lifeExpectancy: "",
 };
 
 const iconOptions = {
@@ -55,6 +61,9 @@ let markerLayer;
 let redMarker;
 let youAreHereMarker;
 let circleMarker;
+let mapOptions;
+let centerOnLat;
+let centerOnLong;
 
 let screenCheck = window.matchMedia("(min-width: 400px)");
 let geoJsonFeature = {type: "loading"};
@@ -119,8 +128,8 @@ map.on("locationerror", onLocationError);
 
 map.locate({ setView: `{clickLocationLat, clickLocationLng}`, maxZoom: 5 })
 
-L.easyButton('<img src="./libs/css/marker-red-small.png">', function() {
-  map.setView([clickLocationLat, clickLocationLng], 5)
+L.easyButton('fas fa-map-pin', function() {
+  map.setView([centerOnLat, centerOnLong], 5)
 }).addTo(map);
 
 // When the user clicks on the map go to clicked location rather than capital
@@ -133,7 +142,6 @@ map.on("dblclick", function (e) {
 
 //when select is opted for zoom to capital
 $("#countrySelect").change(function () {
-  console.log('hello')
   country.iso2 = $("#countrySelect option:selected").val();
   getCapital = true;
   getData()
@@ -171,37 +179,37 @@ $("#closeModal").click(function () {
   $(".modal").slideUp("slow", function () {});
 });
 
-L.easyButton('<p id="homebutton">H</p>', function() {
-  resetModal()  
+L.easyButton('far fa-flag', function() {
+  resetModal()
+  $(".modal").slideUp("slow", function () {});    
     displayTopLevel();
-  $(".modal").slideDown("slow", function () {});}).addTo(map);
-$("#homebutton").click(function () {
-    
-});
+  $(".modal").slideDown("slow", function () {});})
+  .addTo(map);
 
-$("#weatherIcon").click(function () { 
+
+  L.easyButton('fas fa-rainbow', function () { 
   resetModal()
   callApi("getWeather", country.capital, "metric", getWeatherData);
-  $("#modal").slideDown("slow", function () {});
-});
+  $(".modal").slideDown("slow", function () {});
+}).addTo(map);
 
-$("#virusIcon").click(function () {
+L.easyButton('fas fa-heartbeat fa', function () {
   resetModal()
-  callApi("getVirus", country.iso2, false, getVirusData);
-  $("#modal").slideDown("slow", function () {});
-});
+  callApi("getVirus", country.iso2, '', getVirusData);
+  $(".modal").slideDown("slow", function () {});
+}).addTo(map);
 
-$("#moneyIcon").click(function () {
+L.easyButton('fas fa-money-bill-alt', function () {
   resetModal()
   callApi("getMoney", country.currency, "", getMoneyData);
-  $("#modal").slideDown("slow", function () {});
-});
+  $(".modal").slideDown("slow", function () {});
+}).addTo(map);
 
-$("#newsIcon").click(function () {
+L.easyButton('far fa-newspaper', function () {
   resetModal()
   callApi("getNews", country.iso2, country.demonym, getNews);
-  $("#modal").slideDown("slow", function () {});
-});
+  $(".modal").slideDown("slow", function () {});
+}).addTo(map);
 
 /*Set up the select list from the countryBorders.geo.json - returns an array of arrays with name and iso2 of each country.*/
 const getSelectData = () => {
@@ -223,22 +231,21 @@ const displaySelectData = (data) => {
 // get countryname, currency, capital, flag, area
 const getBasicData = (data) => {
   const results = data.data[0];
-  console.log(results)
+  centerOnLat = (results.north + results.south) / 2;
+  centerOnLong = (results.east + results.west) / 2;
 
-  let centerOnLat = (results.north + results.south) / 2;
-  let centerOnLong = (results.east + results.west) / 2;
-
-  const mapOptions = {
+  mapOptions = {
     lat: centerOnLat,
     lng: centerOnLong,
     zoom: 5,
   };
-  map.setZoom(5).flyTo(mapOptions);
-
+  
+  map.fitBounds(polyGonLayer.getBounds()).panTo(mapOptions);
   country.population = parseFloat(results.population / 1000000);
   country.countryName = results.countryName;
   country.currency = results.currencyCode;
   country.capital = results.capital;
+  country.iso3 = results.isoAlpha3;
 
   
   if (screenCheck.matches) {
@@ -274,8 +281,19 @@ const saveMoreBasicData = (data) => {
   country.currencyName = data.currencies.name;
   country.currencySymbol = data.currencies.symbol;
   country.languages = data.languages;
+  callApi("getWhoData", country.iso3, "", saveWhoData);
+ };
+
+const saveWhoData = (data) => {
+  data.data.dimension[4].code[0].attr.forEach(element => {
+    if (element.category === "WORLD_BANK_INCOME_GROUP") {
+      country.worldBankRating = element.value;  
+    }  
+   });
+
+  country.lifeExpectancy = data.data.fact[11].value.display;
   displayTopLevel()
-};
+}
 
 // populate the marker with the sunrise, plus clock, plus go to location
 const zoomToPlace = (data) => {
@@ -325,9 +343,9 @@ const getSunrise = (sunrise) => {
 const setCurrentTime = (timeoffset) => {
   const currentTime = Date.now();
   const time = new Date(currentTime + timeoffset * 1000);
-  const currentHours = time.getUTCHours().toString().padStart(2, 0);
-  const currentMinutes = time.getUTCMinutes().toString().padStart(2, 0);
-  $("#timeDisplay").html(`${currentHours}:${currentMinutes}`);
+  country.currentHours = time.getUTCHours().toString();
+  country.currentMinutes = time.getUTCMinutes().toString().padStart(2, 0);
+
 };
 
 // put a polygon or multi-polygon around selected country
@@ -353,7 +371,9 @@ const displayPolygon = (data) => {
 
 polyGonLayer = L.geoJson(geoJsonFeature, {
     style: { color: "#ffe135", opacity: "0.7", weight: "2" },
-  }).addTo(map);
+  })
+  polyGonLayer.addTo(map);
+
 
 };
 
@@ -363,31 +383,36 @@ polyGonLayer = L.geoJson(geoJsonFeature, {
 const displayTopLevel = () => {
   $("#item-A").html(country.officialName);
   $("#flag2").attr("src", country.flag);
-
-  $("#item-B").html("Capital:");
+  $("#item-B").html("Capital");
   $("#item-2").html(country.capital);
-  $("#item-C").html("Population:");
+  $("#item-C").html("Population");
   $("#item-3").html(country.population.toFixed(2) + "m");
-  $("#item-D").html("Inhabitants:");
-  $("#item-D").append("<br>Area:");
+  $("#item-D").html("Inhabitants");
   $("#item-4").html(country.demonym);
-  $("#item-4").append(`<br>${country.area} km2`);
-  $("#item-E").html("Languages:");
+  $("#item-E").html("Area");
+  $("#item-5").html(`${country.area} km&sup2;`);
+  $("#item-F").html("Local time");
+    let amOrPm = (country.currentHours <= 12) ? 'am' : 'pm';
+    if (country.currentHours > 12) {
+      country.currentHours = country.currentHours - 12;
+    }  
+  $("#item-6").html(`${country.currentHours}:${country.currentMinutes}${amOrPm}`);
+  $("#item-G").html("Languages");
   const languages = Object.values(country.languages);
 
-  $("#item-5").html(`${languages[0]}`);
+  $("#item-7").html(`${languages[0]}`);
   if (languages.length > 1) {
     for (let i = 1; i < languages.length; i++) {
-      $("#item-5").append(`<br>${languages[i]}`);
+      $("#item-7").append(`<br>${languages[i]}`);
     }
   }
+
 };
 
 
 const resetModal = () => {
-  $("#item-A").html("");
-  
-
+    $("#item-A").html("");
+    $("#flag2").attr("src", country.flag);
   $("#item-B").html("");
   $("#item-2").html("");
   $("#item-C").html("");
@@ -396,59 +421,64 @@ const resetModal = () => {
   $("#item-4").html("");
   $("#item-E").html("");
   $("#item-5").html("");
+  $("#item-F").html("");
+  $("#item-6").html("");
+  $("#item-G").html("");
+  $("#item-7").html("");
     }
 
 // populate weather info and display it
 const getWeatherData = (data) => {
   const results = data.data;
   country.weatherDescription = results.weather[0].description;
-  country.maxtemp = results.main.temp_max;
-  country.mintemp = results.main.temp_min;
+  country.maxtemp = Math.round(results.main.temp_max);
+  country.mintemp = Math.round(results.main.temp_min);
   country.windspeed = parseFloat(results.wind.speed);
-  country.windspeed = (2.23694 * country.windspeed).toFixed(2);
+  country.windspeed = (2.23694 * country.windspeed).toFixed(0);
   country.weathericon = results.weather[0].icon;
+  country.humidity = results.main.humidity;
   displayWeather();
 };
 
 const displayWeather = () => {
-  $("#item-A").html("The Weather Today");
-  screenCheck.matches 
-    ? $("#item-B").html(
-        `<img src="http://openweathermap.org/img/wn/${country.weathericon}@2x.png" alt="Weather conditions:">`
-      )
-    : $("#item-B").html(
-        `<img src="http://openweathermap.org/img/wn/${country.weathericon}.png" alt="Weather conditions:">`
+  $("#item-A").html(`The Weather in ${country.capital}`);
+  $("#flag2").attr("src", 
+  screenCheck.matches ? 
+            `https://openweathermap.org/img/wn/${country.weathericon}@2x.png`
+    : `https://openweathermap.org/img/wn/${country.weathericon}.png`
       );
   $("#item-2").html(country.weatherDescription);
-  $("#item-C").html("Max Temp:");
+  $("#item-C").html("Max");
   $("#item-3").html(`${country.maxtemp}&#176;C`);
-  $("#item-D").html("Min Temp:");
+  $("#item-D").html("Min");
   $("#item-4").html(`${country.mintemp}&#176;C`);
-  $("#item-E").html("Wind Speed:");
+  $("#item-E").html("Wind");
   $("#item-5").html(`${country.windspeed} mph`);
+  $("#item-E").html("Humidity");
+  $("#item-5").html(`${country.humidity}%`);  
 };
 
 // populate virus modal and display it
 const getVirusData = (data) => {
-  const results = data.data;
-  country.activeCovidCases = results.active.toLocaleString("en-US");
+  const results = data[0];
+  console.log(results)
+  country.confirmedCovidCases = results.confirmed.toLocaleString("en-US");
   country.criticalCovidcases = results.critical.toLocaleString("en-US");
-  country.totalCovidCases = results.cases.toLocaleString("en-US");
   country.totalCovidDeaths = results.deaths.toLocaleString("en-US");
   displayVirus();
 };
 
 const displayVirus = () => {
-  $("#item-A").html("Coronavirus Rates");
-
-  $("#item-B").html("Active cases:");
-  $("#item-2").html(country.activeCovidCases);
-  $("#item-C").html("Critical cases:");
+  $("#item-A").html(`Health in ${country.countryName}`);
+  $("#item-B").html("Total Covid cases");
+  $("#item-2").html(country.confirmedCovidCases);
+  $("#item-C").html("Current critical Covid cases");
   $("#item-3").html(country.criticalCovidcases);
-  $("#item-D").html("Total cases:");
-  $("#item-4").html(country.totalCovidCases);
-  $("#item-E").html("Total deaths:");
-  $("#item-5").html(country.totalCovidDeaths);
+   $("#item-D").html("Total deaths due to Covid");
+  $("#item-4").html(country.totalCovidDeaths);
+$("#item-E").html("Life expectancy");
+  $("#item-5").html(`${country.lifeExpectancy} years*`);
+$("#item-G").html("* courtesy of World Health Organization");
 };
 
 //populate money modal and display it
@@ -460,16 +490,18 @@ const getMoneyData = (data) => {
 };
 
 const displayMoney = () => {
-  $("#item-A").html(`Currency (${country.currency})`);
+  $("#item-A").html(`${country.demonym} currency (${country.currency})`);
 
-  $("#item-B").html("Money:");
+  $("#item-B").html("Money");
   $("#item-2").html(country.currencyName);
-  $("#item-C").html("Symbol:");
+  $("#item-C").html("Symbol");
   $("#item-3").html(country.currencySymbol);
-  $("#item-D").html("Exchange Rate with US $:");
-  $("#item-4").html(country.USDexchange);
-  $("#item-E").html("Exchange Rate with Euros &#8364;:");
-  $("#item-5").html(country.EURexchange);
+  $("#item-D").html("World Bank rating");
+  $("#item-4").html(country.worldBankRating);
+  $("#item-E").html("Exchange Rate with US $");
+  $("#item-5").html(country.USDexchange);
+  $("#item-F").html("Exchange Rate with Euros &#8364;");
+  $("#item-6").html(country.EURexchange);
 };
 
 //populate news modal and display it
@@ -520,7 +552,6 @@ const displayNews = () => {
 
 //populate cafe markers
 const displayMarkers = (data) => {
-  console.log(markers)
   const results = data.data;
   results.map((touristAttraction) => {
     let cafeMarker = L.marker(touristAttraction[1]).bindPopup(
@@ -529,14 +560,13 @@ const displayMarkers = (data) => {
     markers.addLayer(cafeMarker);
   })
   markerLayer = markers.addTo(map);
-  console.log(markerLayer)
 };
 
 //use easyButton to switch cafe markers on and off
 const toggleMarkers = L.easyButton({
   states: [
     {stateName: "remove-markers",
-        icon: '<img src="./libs/css/blackCoffee.png">',
+        icon: 'fas fa-coffee',
         title: "Hide Cafes",
         onClick: function (btn, map) {
           map.removeLayer(markers);
@@ -544,7 +574,7 @@ const toggleMarkers = L.easyButton({
         },
       },
       {stateName: "add-markers",
-      icon: '<img src="./libs/css/coffee.png">',
+      icon: 'fas fa-coffee',
       title: "Show Cafes",
       onClick: function (btn, map) {
         markers.addTo(map);

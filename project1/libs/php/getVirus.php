@@ -2,27 +2,36 @@
 
 include('config.php');
 
-$executionStartTime = microtime(true);
-$url='https://corona.lmao.ninja/v3/covid-19/countries/' . $_REQUEST['param1'] . '?strict=true';
-$ch = curl_init();
-curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_URL,$url);
-
-$result=curl_exec($ch);
-curl_close($ch);
-
-$decode = json_decode($result, true);
-
-$output['status']['code'] = "200";
-$output['status']['name'] = "ok";
-$output['status']['description'] = "success";
-$output['status']['returnedIn'] = intval((microtime(true) - $executionStartTime) * 1000) . " ms";
-$output['data'] = $decode;
+ini_set('display_errors', 'On');
+error_reporting(E_ALL);
 
 
-header('Content-Type: application/json; charset=UTF-8');
+$curl = curl_init();
 
-echo json_encode($output);
+curl_setopt_array($curl, [
+	CURLOPT_URL => "https://covid-19-data.p.rapidapi.com/country/code?code=" . $_REQUEST['param1'],
+	CURLOPT_RETURNTRANSFER => true,
+	CURLOPT_FOLLOWLOCATION => true,
+	CURLOPT_ENCODING => "",
+	CURLOPT_MAXREDIRS => 10,
+	CURLOPT_TIMEOUT => 30,
+	CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+	CURLOPT_CUSTOMREQUEST => "GET",
+	CURLOPT_HTTPHEADER => [
+		"x-rapidapi-host: covid-19-data.p.rapidapi.com",
+		"x-rapidapi-key: $truewayKey"
+	],
+]);
+
+$response = curl_exec($curl);
+$err = curl_error($curl);
+
+curl_close($curl);
+
+if ($err) {
+	echo "cURL Error #:" . $err;
+} else {
+	echo $response;
+}
 
 ?>
