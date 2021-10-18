@@ -44,6 +44,10 @@ const country = {
   languages: [],
   worldBankRating: "",
   lifeExpectancy: "",
+  north: 0,
+  south: 0,
+  east: 0,
+  west: 0
 };
 
 const iconOptions = {
@@ -61,6 +65,7 @@ let markerLayer;
 let redMarker;
 let youAreHereMarker;
 let circleMarker;
+let quakeMarker;
 let mapOptions;
 let centerOnLat;
 let centerOnLong;
@@ -160,6 +165,7 @@ const getData = () => {
 if (geoJsonFeature.type !== 'loading') {
   resetMap()
 }
+console.log(country.iso2)
   callApi("getCountryInfo", "en", country.iso2, getBasicData);
   callApi("getPolygon", country.iso2, "", displayPolygon);
 }
@@ -231,6 +237,11 @@ const displaySelectData = (data) => {
 // get countryname, currency, capital, flag, area
 const getBasicData = (data) => {
   const results = data.data[0];
+  country.north = results.north;
+  country.south = results.south;
+  country.east = results.east;
+  country.west = results.west;
+  console.log(results)
   centerOnLat = (results.north + results.south) / 2;
   centerOnLong = (results.east + results.west) / 2;
 
@@ -328,7 +339,8 @@ const zoomToPlace = (data) => {
       .bindPopup(`This is ${placeName}. <br>${sunriseString}`);
   }
 
-  callApi("getCafes", clickLocationLat, clickLocationLng, displayMarkers);
+//callApi("getCities", centerOnLat, centerOnLong, displayMarkers);
+callApi("getEarthquakes", country.north, country.south, displayEarthquakes, country.east, country.west);
 };
 
 // present the sunrise in the marker
@@ -550,14 +562,44 @@ const displayNews = () => {
   );
 };
 
-//populate cafe markers
-const displayMarkers = (data) => {
-  const results = data.data;
-  results.map((touristAttraction) => {
-    let cafeMarker = L.marker(touristAttraction[1]).bindPopup(
-      `	&#9749; This is ${touristAttraction[0]}`
+//populate markers
+const displayEarthquakes = (data) => {
+  const results = data.data.earthquakes;
+  console.log(results)
+  let severity; let markerColor;
+  results.map((earthquake) => {
+  switch (true) {
+  case (earthquake.magnitude < 4):
+  severity = 'Minor';
+  markerColor = 'green';
+  break;
+  case (earthquake.magnitude < 6):
+  severity = 'Moderate';
+  markerColor = 'orange';
+  break;
+  case (earthquake.magnitude < 8):
+  severity = 'Major';
+  markerColor = 'red';
+  break;
+  case (earthquake.magnitude < 10):
+  severity = 'Catastrophic';
+  markerColor = 'black';
+  break;
+  default:
+  severity = 'Recorded'
+  break;
+  }
+  let earthquakeDate = new Date(earthquake.datetime);
+  quakeMarker = L.ExtraMarkers.icon({
+    icon: 'fa-compress-alt',
+    markerColor: markerColor,
+    shape: 'penta',
+    prefix: 'fa'
+  })
+  let earthquakeMarker = L.marker([earthquake.lat, earthquake.lng], {icon: quakeMarker}).bindPopup(
+      `${severity} earthquake in ${earthquakeDate.getFullYear()} - magnitude ${earthquake.magnitude}`
     );
-    markers.addLayer(cafeMarker);
+    markers.addLayer(earthquakeMarker);
   })
   markerLayer = markers.addTo(map);
 };
@@ -595,7 +637,7 @@ const resetMap = () => {
 
 
 //Generic function for API call
-const callApi = (phpToCall, parameter1, parameter2, callbackFun) => {
+const callApi = (phpToCall, parameter1, parameter2, callbackFun, parameter3, parameter4) => {
   const apiUrl = `libs/php/${phpToCall}.php`;
   $.ajax({
     url: apiUrl,
@@ -604,6 +646,8 @@ const callApi = (phpToCall, parameter1, parameter2, callbackFun) => {
     data: {
       param1: parameter1,
       param2: parameter2,
+      param3: parameter3,
+      param4: parameter4,
     },
     success: function (result) {
       callbackFun(result);
