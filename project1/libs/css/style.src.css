@@ -133,6 +133,7 @@ h1 {
 }
 
 header {
+  position: sticky;
   height: 8vh;
   width: 100vw;
   display: flex;
@@ -207,23 +208,5 @@ select {
 }
 
 .newsImage {
-  max-width: 80%;
-}
-
-@media screen and (min-width: 700px) {
-  form {
-    left: 4vw;
-    }
-  
-  select {
-    font-size: 1.25rem;
-  }
-
-  h1 {
-    font-size: 2rem;
-  }
-  header {
-    right: 4vw;
-  }
-     
+  max-width: 60%;
 }

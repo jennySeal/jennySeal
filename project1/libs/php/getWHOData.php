@@ -2,9 +2,6 @@
 
 include('config.php');
 
-ini_set('display_errors', 'On');
-error_reporting(E_ALL);
-
 $executionStartTime = microtime(true);
 $url='https://apps.who.int/gho/athena/api/GHO/WHOSIS_000001.json?filter=country:' . $_REQUEST['param1'];
 $ch = curl_init();
@@ -24,7 +21,5 @@ $output['data'] = $decode;
 
 
 header('Content-Type: application/json; charset=UTF-8');
-
 echo json_encode($output);
-
 ?>
