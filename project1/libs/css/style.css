@@ -5,10 +5,10 @@ body {
   margin: 0;
   height: 100vh;
   width: 100vw;
-  --yellow: #3aafd0;
-  --black: #212121;
-  --seablue: rgb(19, 109, 100);
-  color: var(--black);
+  --yellow: #f6df4c;
+  --dark: #363945;
+  --blue: #1879e0;
+  color: white;
 }
 
 html {
@@ -17,7 +17,7 @@ html {
 
 a {
   text-decoration: none;
-  color: rgb(19, 109, 100);
+  color: var(--dark);
   font-size: .6rem;
 }
 
@@ -27,7 +27,7 @@ a {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: var(--yellow);
+  background-color: var(--dark);
   text-align: left;
   z-index: 999999;
 }
@@ -39,12 +39,12 @@ a {
   height: 40px;
   text-align: left;
 
-  -webkit-animation: sk-rotate 2s infinite linear;
-  animation: sk-rotate 2s infinite linear;
+  -webkit-animation: sk-rotate 4s infinite linear;
+  animation: sk-rotate 4s infinite linear;
 }
 
 hr {
-  color: whitesmoke;
+  color: var(--yellow);
 }
 
 .spinner-wrapper h2,
@@ -120,11 +120,6 @@ hr {
   font-weight: bold;
 }
 
-@font-face {
-  font-family: "NotoSans-Italic";
-  src: url("./NotoSans-Italic.ttf");
-  font-style: italic;
-}
 
 h1 {
   font-size: 1.75rem;
@@ -144,41 +139,39 @@ header {
   text-align: center;
   align-items: center;
   justify-content: space-between;
-  background-color: white;
-  color: var(--black);
-  box-shadow: 0.25vw 0.25vw 0.25vw var(--black);
+  background-color: var(--dark);
+  color: var(--white);
+  box-shadow: 0.25vw 0.25vw 0.25vw var(--dark);
+  border-bottom: 0.25vw solid var(--blue);
 }
 
 form {
-  width: fit-content;
-  border-radius: 5px;
- background-color: white;
+ background-color: whitesmoke;
+ border-radius: 5px;
+ margin-right: 1vw;
   }
 
 select {
-  border-radius: 5px;
   background-color: var(--white);
-  color: var(--black);
   text-align: center;
   font-size: 1rem;
-  margin: 0vh 2vw;
   font-family: "NotoSans-Regular";
-  border: 0.1vw solid #3aafd0;
 }
 
-select:active {
-  border: 0.1vw solid #3aafd0;
+.marker-cluster-small div {
+  background-color: var(--blue);
 }
-
 .far, .fas {
-  color: rgb(59, 91, 152);
+  color: var(--blue);
 }
 
 .modal-footer {
   justify-content: space-between;
   align-items: center;
 }
-
+.table {
+  --bs-table-striped-bg: rgba(246, 223, 76, 0.5);
+}
 
 #item-A {
   font-weight: bold;
@@ -193,8 +186,8 @@ select:active {
 }
 
 #item-B {
-  font-weight: bold;
-  border-top: 0.25vw solid var(--black);
+  border-top: 0.25vw solid var(--dark);
+  
 }
 
 #item-2 {
@@ -202,18 +195,17 @@ select:active {
   padding-top: 0.25vw;
   text-align: right;
   justify-content: flex-start;
-  border-top: 0.25vw solid var(--black);
+  border-top: 0.25vw solid var(--dark);
 }
 
-#item-C, #item-D, #item-E, #item-F, #item-G {
-  font-weight: bold;
-}
 
 #item-3, #item-4, #item-5, #item-6, #item-7 {
   text-align: right;
-
 }
 
+#item-7 {
+  text-transform: capitalize;
+}
 
 .newsImage {
   max-width: 80%;

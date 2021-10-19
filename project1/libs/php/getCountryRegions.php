@@ -2,13 +2,9 @@
 
 include('config.php');
 
-ini_set('display_errors', 'On');
-error_reporting(E_ALL);
-
-
 $executionStartTime = microtime(true);
 
-$url='http://api.geonames.org/earthquakesJSON?north=' . $_REQUEST['param1'] . '&south=' . $_REQUEST['param2'] . '&east=' . $_REQUEST['param3'] . '&west=' . $_REQUEST['param4'] . '&maxRows=10&username='  . $geonameKey;
+$url='http://api.geonames.org/childrenJSON?geonameId=' . $_REQUEST['param1'] . '&username=' . $geonameKey . '&hierarchy=tourism';
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -23,10 +19,8 @@ $output['status']['code'] = "200";
 $output['status']['name'] = "ok";
 $output['status']['description'] = "success";
 $output['status']['returnedIn'] = intval((microtime(true) - $executionStartTime) * 1000) . " ms";
-$output['data'] = $decode;
-
-print_r(json_encode($output));
+$output['data'] = $decode['geonames'];
 
 header('Content-Type: application/json; charset=UTF-8');
-
+echo json_encode($output);
 ?>

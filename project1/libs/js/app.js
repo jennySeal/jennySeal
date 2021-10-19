@@ -9,6 +9,7 @@ const country = {
   countryName: "",
   currency: "",
   capital: "",
+  geonameId: 0,
   flag: "",
   area: 0,
   currentHours: 0,
@@ -61,19 +62,23 @@ let getCapital = false;
 let placeName = "";
 let timeoffset = 0;
 let polyGonLayer;
-let markerLayer;
+let wikiMarkerLayer;
+let earthquakeMarkerLayer;
+let regionMarkerLayer;
 let redMarker;
 let youAreHereMarker;
 let circleMarker;
 let quakeMarker;
+let aWikiMarker;
 let mapOptions;
 let centerOnLat;
 let centerOnLong;
 
 let screenCheck = window.matchMedia("(min-width: 400px)");
 let geoJsonFeature = {type: "loading"};
-const markers = L.markerClusterGroup();
-
+const earthquakeMarkers = L.markerClusterGroup();
+const wikiMarkers = L.markerClusterGroup();
+const regionMarkers = L.markerClusterGroup();
 //Run pre-loader
 $(document).ready(function () {
   if ($(".spinner-wrapper").length) {
@@ -90,7 +95,7 @@ const map = L.map("map").fitWorld();
 
 //using Jawg Streets
 const mapDesign = L.tileLayer(
-  "https://tile.jawg.io/jawg-streets/{z}/{x}/{y}{r}.png?access-token={accessToken}",
+  "https://tile.jawg.io/jawg-sunny/{z}/{x}/{y}{r}.png?access-token={accessToken}",
   {
     attribution:
       '<a href="http://jawg.io" title="Tiles by  Jawg Maps" target="_blank">&copy; <b>Jawg</b>Maps</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
@@ -110,11 +115,13 @@ const onLocationFound = (e) => {
   clickLocationLat = e.latlng.lat;
   clickLocationLng = e.latlng.lng;
   const radius = e.accuracy / 2;
-  youAreHereMarker = L.marker(e.latlng, {
-    icon: redIcon,
-    clickable: true,
-    zIndexOffset: 200,
+  let youAreHereIcon = L.ExtraMarkers.icon({
+    icon: 'fa-map-pin',
+    markerColor: 'red',
+    shape: 'circle',
+    prefix: 'fa'
   });
+  youAreHereMarker = L.marker(e.latlng, {icon: youAreHereIcon});
   youAreHereMarker.bindPopup(`&#x1F30E You are here!`).openPopup().addTo(map);
   circleMarker = L.circleMarker(e.latlng, radius).addTo(map);
   initialiseMaps(clickLocationLat, clickLocationLng)
@@ -133,7 +140,7 @@ map.on("locationerror", onLocationError);
 
 map.locate({ setView: `{clickLocationLat, clickLocationLng}`, maxZoom: 5 })
 
-L.easyButton('fas fa-map-pin', function() {
+L.easyButton('fas fa-search-minus', function() {
   map.setView([centerOnLat, centerOnLong], 5)
 }).addTo(map);
 
@@ -187,7 +194,7 @@ $("#closeModal").click(function () {
 
 L.easyButton('far fa-flag', function() {
   resetModal()
-  $(".modal").slideUp("slow", function () {});    
+
     displayTopLevel();
   $(".modal").slideDown("slow", function () {});})
   .addTo(map);
@@ -241,6 +248,7 @@ const getBasicData = (data) => {
   country.south = results.south;
   country.east = results.east;
   country.west = results.west;
+  country.geonameId = results.geonameId;
   console.log(results)
   centerOnLat = (results.north + results.south) / 2;
   centerOnLong = (results.east + results.west) / 2;
@@ -320,13 +328,13 @@ const zoomToPlace = (data) => {
   const sunriseString = getSunrise(sunrise);
   setCurrentTime(timeoffset);
 
-
-  redMarker = L.marker([clickLocationLat, clickLocationLng], {
-    icon: redIcon,
-    clickable: true,
-    ZindexOffset: 200,
-    opacity: 0.8,
-  });
+  let capitalMarker = L.ExtraMarkers.icon({
+    icon: 'fa-star-half-alt',
+    markerColor: 'yellow',
+    shape: 'star',
+    prefix: 'fa',
+  })
+  redMarker = L.marker([clickLocationLat, clickLocationLng], {icon: capitalMarker});
   if (getCapital) {
     redMarker
       .addTo(map)
@@ -339,7 +347,6 @@ const zoomToPlace = (data) => {
       .bindPopup(`This is ${placeName}. <br>${sunriseString}`);
   }
 
-//callApi("getCities", centerOnLat, centerOnLong, displayMarkers);
 callApi("getEarthquakes", country.north, country.south, displayEarthquakes, country.east, country.west);
 };
 
@@ -395,21 +402,21 @@ polyGonLayer = L.geoJson(geoJsonFeature, {
 const displayTopLevel = () => {
   $("#item-A").html(country.officialName);
   $("#flag2").attr("src", country.flag);
-  $("#item-B").html("Capital");
-  $("#item-2").html(country.capital);
-  $("#item-C").html("Population");
-  $("#item-3").html(country.population.toFixed(2) + "m");
-  $("#item-D").html("Inhabitants");
-  $("#item-4").html(country.demonym);
-  $("#item-E").html("Area");
-  $("#item-5").html(`${country.area} km&sup2;`);
-  $("#item-F").html("Local time");
+  $("#item-B").html("Local time");
     let amOrPm = (country.currentHours <= 12) ? 'am' : 'pm';
     if (country.currentHours > 12) {
       country.currentHours = country.currentHours - 12;
     }  
-  $("#item-6").html(`${country.currentHours}:${country.currentMinutes}${amOrPm}`);
-  $("#item-G").html("Languages");
+  $("#item-2").html(`${country.currentHours}:${country.currentMinutes}${amOrPm}`);
+  $("#item-C").html("Capital");
+  $("#item-3").html(country.capital);
+  $("#item-D").html("Population");
+  $("#item-4").html(country.population.toFixed(2) + "m");
+  $("#item-E").html("Area");
+  $("#item-5").html(`${country.area} km&sup2;`);
+  $("#item-F").html("Inhabitants");
+  $("#item-6").html(country.demonym);
+    $("#item-G").html("Languages");
   const languages = Object.values(country.languages);
 
   $("#item-7").html(`${languages[0]}`);
@@ -454,20 +461,22 @@ const getWeatherData = (data) => {
 
 const displayWeather = () => {
   $("#item-A").html(`The Weather in ${country.capital}`);
-  $("#flag2").attr("src", 
-  screenCheck.matches ? 
+  let weather = (screenCheck.matches) ? 
             `https://openweathermap.org/img/wn/${country.weathericon}@2x.png`
-    : `https://openweathermap.org/img/wn/${country.weathericon}.png`
-      );
-  $("#item-2").html(country.weatherDescription);
+    : `https://openweathermap.org/img/wn/${country.weathericon}.png`;
+    console.log(weather)
+    $("#item-2").html(`<img src="${weather}" alt="Weather conditions">`)  
+  
   $("#item-C").html("Max");
   $("#item-3").html(`${country.maxtemp}&#176;C`);
   $("#item-D").html("Min");
   $("#item-4").html(`${country.mintemp}&#176;C`);
   $("#item-E").html("Wind");
   $("#item-5").html(`${country.windspeed} mph`);
-  $("#item-E").html("Humidity");
-  $("#item-5").html(`${country.humidity}%`);  
+  $("#item-F").html("Humidity");
+  $("#item-6").html(`${country.humidity}%`);
+  $("#item-7").html(country.weatherDescription);
+   
 };
 
 // populate virus modal and display it
@@ -482,15 +491,15 @@ const getVirusData = (data) => {
 
 const displayVirus = () => {
   $("#item-A").html(`Health in ${country.countryName}`);
-  $("#item-B").html("Total Covid cases");
-  $("#item-2").html(country.confirmedCovidCases);
-  $("#item-C").html("Current critical Covid cases");
-  $("#item-3").html(country.criticalCovidcases);
-   $("#item-D").html("Total deaths due to Covid");
-  $("#item-4").html(country.totalCovidDeaths);
-$("#item-E").html("Life expectancy");
-  $("#item-5").html(`${country.lifeExpectancy} years*`);
-$("#item-G").html("* courtesy of World Health Organization");
+  $("#item-B").html("Life expectancy");
+  $("#item-2").html(`${country.lifeExpectancy} years*`);
+  $("#item-C").html("Total Covid cases");
+  $("#item-3").html(country.confirmedCovidCases);
+  $("#item-D").html("Current critical Covid cases");
+  $("#item-4").html(country.criticalCovidcases);
+   $("#item-E").html("Total deaths due to Covid");
+  $("#item-5").html(country.totalCovidDeaths);
+$("#item-F").html("* courtesy of World Health Organization");
 };
 
 //populate money modal and display it
@@ -598,41 +607,62 @@ const displayEarthquakes = (data) => {
   })
   let earthquakeMarker = L.marker([earthquake.lat, earthquake.lng], {icon: quakeMarker}).bindPopup(
       `${severity} earthquake in ${earthquakeDate.getFullYear()} - magnitude ${earthquake.magnitude}`
-    );
-    markers.addLayer(earthquakeMarker);
+);
+    earthquakeMarkers.addLayer(earthquakeMarker);
   })
-  markerLayer = markers.addTo(map);
+  earthquakeMarkerLayer = earthquakeMarkers.addTo(map);
+  callApi("getWiki", country.north, country.south, displayWiki, country.east, country.west);
+ 
 };
 
-//use easyButton to switch cafe markers on and off
-const toggleMarkers = L.easyButton({
-  states: [
-    {stateName: "remove-markers",
-        icon: 'fas fa-coffee',
-        title: "Hide Cafes",
-        onClick: function (btn, map) {
-          map.removeLayer(markers);
-          btn.state("add-markers");
-        },
-      },
-      {stateName: "add-markers",
-      icon: 'fas fa-coffee',
-      title: "Show Cafes",
-      onClick: function (btn, map) {
-        markers.addTo(map);
-        btn.state("remove-markers");
-      },
-    }
-  ],
-});
-toggleMarkers.addTo(map);
+
+const displayWiki = (data) => {
+  console.log(data)
+  const results = data.data.geonames;
+   results.map((wikiEntry) => {
+    aWikiMarker = L.ExtraMarkers.icon({
+    icon: 'fa-info-circle',
+    markerColor: 'cyan',
+    shape: 'square',
+    prefix: 'fa'
+  })
+  let wikiMarker = L.marker([wikiEntry.lat, wikiEntry.lng], {icon: aWikiMarker}).bindPopup(`<strong>${wikiEntry.title}</strong><br>${wikiEntry.summary}<br><a href=${wikiEntry.wikipediaUrl}>Wiki Link</a>`);
+    wikiMarkers.addLayer(wikiMarker);
+  })
+  wikiMarkerLayer = wikiMarkers.addTo(map);
+  console.log(country.geonameId);
+  callApi("getCountryRegions", country.geonameId, '', displayRegions);
+};
+
+
+const displayRegions = (data) => {
+  console.log(data)
+  const results = data.data;
+   results.map((region) => {
+    let aRegionMarker = L.ExtraMarkers.icon({
+    icon: 'fa-map-marked-alt',
+    markerColor: 'dark-orange',
+    shape: 'penta',
+    prefix: 'fa'
+  })
+  let regionMarker = L.marker([region.lat, region.lng], {icon: aRegionMarker}).bindPopup(`<strong>${region.adminName1}</strong><br>population ${region.population.toLocaleString("en-US")}`);
+    regionMarkers.addLayer(regionMarker);
+  })
+  regionMarkerLayer = regionMarkers.addTo(map);
+ };
+
 
 const resetMap = () => {
   map.removeLayer(polyGonLayer)
-  markerLayer.clearLayers()   
+  wikiMarkerLayer.clearLayers()   
+  regionMarkerLayer.clearLayers()   
+  earthquakeMarkerLayer.clearLayers()
   redMarker.remove()
   youAreHereMarker.remove()
   circleMarker.remove()
+  wikiMarkers.remove()
+  earthquakeMarkers.remove()
+  regionMarkers.remove()
 }
 
 
