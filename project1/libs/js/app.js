@@ -20,9 +20,8 @@ const country = {
   weathericon: "",
   humidity: 0,
   weatherDescription: "",
-  activeCovidCases: 0,
+  confirmedCovidCases: 0,
   criticalCovidcases: 0,
-  totalCovidCases: 0,
   totalCovidDeaths: 0,
   USDexchange: 0,
   EURexchange: 0,
@@ -51,25 +50,18 @@ const country = {
   west: 0
 };
 
-const iconOptions = {
-  iconUrl: "./libs/css/marker-red.png",
-  iconSize: [30, 30],
-};
 
 let clickLocationLat = 0;
 let clickLocationLng = 0;
-let getCapital = false;
-let placeName = "";
+
 let timeoffset = 0;
 let polyGonLayer;
 let wikiMarkerLayer;
 let earthquakeMarkerLayer;
 let regionMarkerLayer;
-let redMarker;
+let capitalMarker;
 let youAreHereMarker;
 let circleMarker;
-let quakeMarker;
-let aWikiMarker;
 let mapOptions;
 let centerOnLat;
 let centerOnLong;
@@ -108,7 +100,6 @@ const mapDesign = L.tileLayer(
 );
 
 mapDesign.addTo(map);
-const redIcon = L.icon(iconOptions);
 
 //On load find the user's location and add a marker
 const onLocationFound = (e) => {
@@ -131,7 +122,6 @@ const onLocationFound = (e) => {
 const onLocationError = (e) => {
   clickLocationLat = 51.50853;
   clickLocationLng = -0.12574;
-  getCapital = true;
   initialiseMaps(clickLocationLat, clickLocationLng)
 };
 
@@ -140,13 +130,10 @@ map.on("locationerror", onLocationError);
 
 map.locate({ setView: `{clickLocationLat, clickLocationLng}`, maxZoom: 5 })
 
-L.easyButton('fas fa-search-minus', function() {
-  map.setView([centerOnLat, centerOnLong], 5)
-}).addTo(map);
+
 
 // When the user clicks on the map go to clicked location rather than capital
 map.on("dblclick", function (e) {
-  getCapital = false;
   clickLocationLat = e.latlng.lat;
   clickLocationLng = e.latlng.lng;
   initialiseMaps(clickLocationLat, clickLocationLng)
@@ -155,7 +142,6 @@ map.on("dblclick", function (e) {
 //when select is opted for zoom to capital
 $("#countrySelect").change(function () {
   country.iso2 = $("#countrySelect option:selected").val();
-  getCapital = true;
   getData()
 });
 
@@ -172,7 +158,7 @@ const getData = () => {
 if (geoJsonFeature.type !== 'loading') {
   resetMap()
 }
-console.log(country.iso2)
+
   callApi("getCountryInfo", "en", country.iso2, getBasicData);
   callApi("getPolygon", country.iso2, "", displayPolygon);
 }
@@ -224,6 +210,10 @@ L.easyButton('far fa-newspaper', function () {
   $(".modal").slideDown("slow", function () {});
 }).addTo(map);
 
+L.easyButton('fas fa-search-minus', function() {
+  map.setView([centerOnLat, centerOnLong], 5)
+}).addTo(map);
+
 /*Set up the select list from the countryBorders.geo.json - returns an array of arrays with name and iso2 of each country.*/
 const getSelectData = () => {
   callApi("getSelectData", "", "", displaySelectData);
@@ -249,7 +239,7 @@ const getBasicData = (data) => {
   country.east = results.east;
   country.west = results.west;
   country.geonameId = results.geonameId;
-  console.log(results)
+  
   centerOnLat = (results.north + results.south) / 2;
   centerOnLong = (results.east + results.west) / 2;
 
@@ -281,16 +271,14 @@ const getBasicData = (data) => {
   callApi("getMoreCountryInfo", country.iso2, country.currency, saveMoreBasicData);
 
   //either zoom to capital or clicked place/users location
-  if (getCapital === false) {
-    callApi("getPlaceInfo", clickLocationLat, clickLocationLng, zoomToPlace);
-  } else {
+  
     let countryCapitalMinusSpaces = country.capital.split(" ").join("_");
     //New_Delhi points to an Indian restauarant in Vietnam!
     if (countryCapitalMinusSpaces === "New_Delhi") {
       countryCapitalMinusSpaces = "Delhi";
     }
     callApi("getCapitalCoords", countryCapitalMinusSpaces, "", zoomToPlace);
-  }
+  
 };
 
 //get the extra top level info and call the display
@@ -316,38 +304,29 @@ const saveWhoData = (data) => {
 
 // populate the marker with the sunrise, plus clock, plus go to location
 const zoomToPlace = (data) => {
-  if (getCapital) {
+  
     clickLocationLat = data.data.lat;
     clickLocationLng = data.data.lng;
-    placeName = country.capital;
-  } else {
-    placeName = data.data;
-  }
+    
+  
   const sunrise = data.sunrise;
   timeoffset = data.timeoffset;
   const sunriseString = getSunrise(sunrise);
   setCurrentTime(timeoffset);
 
-  let capitalMarker = L.ExtraMarkers.icon({
+  let landmarkMarker = L.ExtraMarkers.icon({
     icon: 'fa-star-half-alt',
     markerColor: 'yellow',
     shape: 'star',
     prefix: 'fa',
   })
-  redMarker = L.marker([clickLocationLat, clickLocationLng], {icon: capitalMarker});
-  if (getCapital) {
-    redMarker
-      .addTo(map)
-      .bindPopup(
-        `The capital of ${country.countryName} is ${country.capital}. <br>${sunriseString}`
-      );
-  } else {
-    redMarker
-      .addTo(map)
-      .bindPopup(`This is ${placeName}. <br>${sunriseString}`);
-  }
+  capitalMarker = L.marker([clickLocationLat, clickLocationLng], {icon: landmarkMarker}).addTo(map).bindPopup(
+        `The capital of ${country.countryName} is ${country.capital}. <br>${sunriseString}`);
 
 callApi("getEarthquakes", country.north, country.south, displayEarthquakes, country.east, country.west);
+callApi("getWiki", country.north, country.south, displayWiki, country.east, country.west);
+callApi("getCountryRegions", country.geonameId, '', displayRegions);
+
 };
 
 // present the sunrise in the marker
@@ -403,7 +382,7 @@ const displayTopLevel = () => {
   $("#item-A").html(country.officialName);
   $("#flag2").attr("src", country.flag);
   $("#item-B").html("Local time");
-    let amOrPm = (country.currentHours <= 12) ? 'am' : 'pm';
+    let amOrPm = (country.currentHours < 12) ? 'am' : 'pm';
     if (country.currentHours > 12) {
       country.currentHours = country.currentHours - 12;
     }  
@@ -464,7 +443,7 @@ const displayWeather = () => {
   let weather = (screenCheck.matches) ? 
             `https://openweathermap.org/img/wn/${country.weathericon}@2x.png`
     : `https://openweathermap.org/img/wn/${country.weathericon}.png`;
-    console.log(weather)
+    
     $("#item-2").html(`<img src="${weather}" alt="Weather conditions">`)  
   
   $("#item-C").html("Max");
@@ -482,7 +461,7 @@ const displayWeather = () => {
 // populate virus modal and display it
 const getVirusData = (data) => {
   const results = data[0];
-  console.log(results)
+  
   country.confirmedCovidCases = results.confirmed.toLocaleString("en-US");
   country.criticalCovidcases = results.critical.toLocaleString("en-US");
   country.totalCovidDeaths = results.deaths.toLocaleString("en-US");
@@ -574,7 +553,7 @@ const displayNews = () => {
 //populate markers
 const displayEarthquakes = (data) => {
   const results = data.data.earthquakes;
-  console.log(results)
+  
   let severity; let markerColor;
   results.map((earthquake) => {
   switch (true) {
@@ -599,7 +578,7 @@ const displayEarthquakes = (data) => {
   break;
   }
   let earthquakeDate = new Date(earthquake.datetime);
-  quakeMarker = L.ExtraMarkers.icon({
+  let quakeMarker = L.ExtraMarkers.icon({
     icon: 'fa-compress-alt',
     markerColor: markerColor,
     shape: 'penta',
@@ -611,16 +590,15 @@ const displayEarthquakes = (data) => {
     earthquakeMarkers.addLayer(earthquakeMarker);
   })
   earthquakeMarkerLayer = earthquakeMarkers.addTo(map);
-  callApi("getWiki", country.north, country.south, displayWiki, country.east, country.west);
+  
  
 };
 
 
 const displayWiki = (data) => {
-  console.log(data)
   const results = data.data.geonames;
    results.map((wikiEntry) => {
-    aWikiMarker = L.ExtraMarkers.icon({
+    let aWikiMarker = L.ExtraMarkers.icon({
     icon: 'fa-info-circle',
     markerColor: 'cyan',
     shape: 'square',
@@ -630,13 +608,12 @@ const displayWiki = (data) => {
     wikiMarkers.addLayer(wikiMarker);
   })
   wikiMarkerLayer = wikiMarkers.addTo(map);
-  console.log(country.geonameId);
-  callApi("getCountryRegions", country.geonameId, '', displayRegions);
+  
 };
 
 
 const displayRegions = (data) => {
-  console.log(data)
+  
   const results = data.data;
    results.map((region) => {
     let aRegionMarker = L.ExtraMarkers.icon({
@@ -657,7 +634,7 @@ const resetMap = () => {
   wikiMarkerLayer.clearLayers()   
   regionMarkerLayer.clearLayers()   
   earthquakeMarkerLayer.clearLayers()
-  redMarker.remove()
+  capitalMarker.remove()
   youAreHereMarker.remove()
   circleMarker.remove()
   wikiMarkers.remove()

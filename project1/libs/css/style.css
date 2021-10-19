@@ -191,7 +191,6 @@ select {
 }
 
 #item-2 {
-  text-transform: capitalize;
   padding-top: 0.25vw;
   text-align: right;
   justify-content: flex-start;
