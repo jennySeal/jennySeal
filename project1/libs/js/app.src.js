@@ -85,7 +85,7 @@ $(document).ready(function () {
 });
 
 //Set up Leaflet maps
-const map = L.map("map").fitWorld();
+const map = L.map("map", {dragging: !L.Browser.mobile, tap: !L.Browser.mobile}).fitWorld();
 
 //using Jawg Streets
 const mapDesign = L.tileLayer(
@@ -560,7 +560,7 @@ const displayEarthquakes = (data) => {
   severity = 'Recorded'
   break;
   }
-  let earthquakeDate = new Date(earthquake.datetime);
+ 
   let quakeMarker = L.ExtraMarkers.icon({
     icon: 'fa-compress-alt',
     markerColor: markerColor,
@@ -568,7 +568,7 @@ const displayEarthquakes = (data) => {
     prefix: 'fa'
   })
   let earthquakeMarker = L.marker([earthquake.lat, earthquake.lng], {icon: quakeMarker}).bindPopup(
-      `${severity} earthquake in ${earthquakeDate.getFullYear()} - magnitude ${earthquake.magnitude}`
+      `${severity} earthquake on ${earthquake.datetime} - magnitude ${earthquake.magnitude}`
 );
     earthquakeMarkers.addLayer(earthquakeMarker);
   })
