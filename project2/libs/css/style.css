@@ -1,0 +1,122 @@
+:root {
+  --red: #fd3b44;
+  --lightgray: #d3d1d1;
+  --darkgray: #494949;
+}
+header  {
+  font-size: 80%;
+  display: inline-flex;
+  align-items: center;
+  background-color: var(--lightgray);
+  border-bottom: 0.25vw solid whitesmoke;
+  width: 100%;
+  box-shadow: 0.2vw 0.2vw 0.2vw var(--darkgray);
+}
+
+
+.table>:not(caption)>*>* {
+  padding: .15rem 0.15rem;
+  background-color: transparent;
+}
+button {
+    margin: 0.15vw;
+};
+
+.webTitle {
+  padding: 1vw;
+}
+
+.btn-primary {
+  background-color: var(--red);
+  float: right;
+
+}
+.btn-light {
+  background-color: var(--darkgray);
+}
+
+.circle {
+  border-radius: 50%;
+  padding: 0.4vw;
+  border: 0.15vw solid var(--red);
+  margin: 0vh 1vw;
+}
+
+
+form {
+  margin: 5vh 5vw;
+  display: inline-flex;
+  }
+
+.table {
+  margin: 5vh auto;
+  width: 90vw;
+  border: 0.15vw solid var(--darkgray);
+
+}
+
+tr {
+  padding: 0.15vw;
+}
+
+p {
+  margin: 0 1vw;
+}
+
+.card {
+width: 87%;
+line-height: 0.9rem;
+border: none;
+}
+
+#buttons {
+  display: flex;
+  flex-direction: column;
+  width: 15%;
+  justify-content: flex-end;
+}
+
+#card-flex, th {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+#disappearingButtons {
+  visibility: hidden;
+}
+
+.page-link {
+  color: var(--darkgray);
+}
+
+
+@media screen and (min-width: 400px) {
+  h1 {font-size: 100%;
+}
+
+.card {
+  flex-direction: row;
+  justify-content: space-between;
+
+}
+
+.form-control {
+  width: 25%;
+  margin: 0 0.25rem;
+}
+
+
+#buttons {
+  flex-direction: row;
+ }
+
+#card-flex {
+  flex-direction: row ;
+}
+
+#disappearingButtons {
+visibility: visible;
+}
+
+}
