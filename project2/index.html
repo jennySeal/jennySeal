@@ -22,7 +22,7 @@
             <div id="disappearingButtons">
                 <button class="btn btn-secondary" id="addLoc">Add Location</button>
                 <button class="btn btn-outline-dark" id="addDept">Add Department</button>
-            <button class="btn btn-primary">Add Employee</button>
+            <button class="btn btn-primary" id="addStaff">Add Employee</button>
         </div>
             <button class="btn btn-primary bt-lg" id="hidingButton">Add</button>
         </form>
@@ -40,23 +40,8 @@
                     </tr>
                     </thead>
                     <tbody id="firstRow">
-                      <tr >
-                        <td>
-                           <div id="card-flex">
-                           <div class="card">
-                                <p id="nameData">Jenny Seal </p>
-                                <p id="departmentData">Services</p>
-                                <p id="locationData">New York</p>
-                                
-                            </div>
-                            <div id="buttons">
-                                <button class="btn btn-secondary"><i class="far fa-eye"></i></button>
-                                <button class="btn btn-outline-dark"><i class="far fa-edit"></i></button>
-                                <button class="btn btn-primary"><i class="far fa-trash-alt"></i></button>
-                            </div>
-                            </div>
-                        </td>
-                                            </tbody>
+        
+                    </tbody>
                 </table>
                 
                 <nav>
@@ -72,17 +57,18 @@
                   </nav>
                   
                   
-                  <section class="modal" tabindex="-1" role="dialog">
+                  <section class="modal" tabindex="-1" role="dialog" id="extraInfo">
                     <div class="modal-dialog" role="document">
                       <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">Add Employee</h5>   
+                            <h5 class="modal-title"><i class="fas fa-users-cog fa-2x circle"></i></h5>   
                             <p id="item-1">
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="closeModal">
                                     <span aria-hidden="true">&times;</span>
                                   </button>
                            </div>
                         <div class="modal-body">              
+                            
                         </div>
                      </div>
                     </div>

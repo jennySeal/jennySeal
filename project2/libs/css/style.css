@@ -104,12 +104,17 @@ tr {
 
 p {
   margin: 0 1rem;
-  font-size: 1.2rem;  
+  font-size: 1.3rem;  
+}
+
+td {
+  text-align: center;
 }
 
 .card {
 width: 80%;
 border: none;
+justify-content: flex-start;
 }
 
 #buttons {
@@ -147,6 +152,11 @@ display:none;
     margin: 0 0.25rem;
   }
 
+#email {
+  font-weight: lighter;
+  font-style: italic;
+}
+
 }
 @media screen and (min-width: 600px) {
   
@@ -162,9 +172,30 @@ header {
 
 }
 
+#nameData {
+  margin-left: 10vw;
+}
+
+#locData {
+  margin-right: 10vw;
+}
+
 .form-control {
   width: 28%;
   margin: 0 0.5rem;
+}
+
+.modal-header {
+  background-color: var(--lightgray);
+  border-bottom: 0.25rem solid whitesmoke;
+  box-shadow: 0.2rem 0.2rem 0.2rem var(--darkgray);
+}
+.modal-dialog {
+  background-color: var(--lightgray);
+  border: 0.25rem solid var(--darkgray);
+}
+.modal-body {
+  background-color: whitesmoke;
 }
 
 
@@ -195,4 +226,9 @@ thead {
   display: inherit;
   width: 100%;
 }
+
+
+
+
+
 }

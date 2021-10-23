@@ -1,10 +1,11 @@
 
 const buttons = `<div id="buttons">
-                 <button class="btn btn-secondary"><i class="far fa-eye"></i></button>
-                 <button class="btn btn-outline-dark"><i class="far fa-edit"></i></button>
-                 <button class="btn btn-primary"><i class="far fa-trash-alt"></i></button>
+                 <button class="btn btn-secondary" id="view"><i class="far fa-eye"></i></button>
+                 <button class="btn btn-outline-dark" id="edit"><i class="far fa-edit"></i></button>
+                 <button class="btn btn-primary" id="delete"><i class="far fa-trash-alt"></i></button>
                  </div>`;
     
+let results;
 
 
 
@@ -31,9 +32,9 @@ const callApi = (phpToCall, apiMethod, callbackFun, parameter1, parameter2, para
   };
   
 const getAllData = (data) => {
-    const results = data.data;
-    results.forEach(employee => {
-        $("#firstRow").append(`<tr><td>
+    results = data.data;
+    results.forEach(function callback(employee, index) {
+        $("#firstRow").append(`<tr key=${index}><td>
         <div id="card-flex">
         <div class="card">
              <p id="nameData">${employee.firstName} ${employee.lastName}</p>
@@ -41,12 +42,47 @@ const getAllData = (data) => {
              <p id="locationData">${employee.location}</p>
              
          </div>
-         ${buttons}
+         <div id="buttons">
+                 <button class="btn btn-secondary" type="button" id="view${index}" name="${index}")"><i class="far fa-eye"></i></button>
+                 <button class="btn btn-outline-dark" id="edit${index}""><i class="far fa-edit" value=${index}></i></button>
+                 <button class="btn btn-primary" id="delete${index}" ><i class="far fa-trash-alt"></i></button>
+                 </div>
          </div>
      </td>
-     </tr>`)        
+     </tr>`)
+     $("#firstRow").on("click", `#view${index}`, function(){
+        viewStaff(index);
+    });        
     });
 };
 
-  
-callApi("getAll", "GET", getAllData);
+$(document).ready(function() {
+    callApi("getAll", "GET", getAllData);
+    
+    })
+
+$("#closeModal").click(function () {
+    $("#extraInfo").modal('hide');
+  });
+
+$("#hidingButton").click(function (event) {
+   event.preventDefault()
+   $("#extraInfo").modal('show');
+  });
+
+
+
+const viewStaff = (index) => {
+    console.log(results[index])
+    $(".modal-body").html(`<h3><strong>${results[index].firstName} ${results[index].lastName}</strong></h3>
+    <p>${results[index].department} department</p><p>The ${results[index].location} Office</p><p id="email">${results[index].email}</p>`)
+    $("#extraInfo").modal('show');
+}
+
+
+
+  $("#addStaff").click(function (event) {
+    event.preventDefault()
+    $("#extraInfo").modal('show');
+   });
+
