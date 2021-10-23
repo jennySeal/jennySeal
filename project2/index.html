@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <title>Company Directo</title>
+        <title>Company Directory</title>
         <meta name="description" content="A full stack project to keep track of personnel.">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     
@@ -15,18 +15,18 @@
     <body>            
          <header>
          <i class="fas fa-users-cog fa-2x circle"></i>
-         <h1 id="webTitle" class="display-5">Company Director</h1>
+         <h1 id="webTitle">Company Directory</h1>
          </header>
 
         <form id="addButtons">
             <div id="disappearingButtons">
                 <button class="btn btn-secondary" id="addLoc">Add Location</button>
                 <button class="btn btn-outline-dark" id="addDept">Add Department</button>
-            </div>
             <button class="btn btn-primary">Add Employee</button>
+        </div>
+            <button class="btn btn-primary bt-lg" id="hidingButton">Add</button>
         </form>
-
-            <table class="table">
+        <table class="table">
                 <thead class="thead-dark">
                   <tr>
                     <th>
@@ -36,18 +36,18 @@
                             <option>Services</option>
                         </select>
                         <select class="form-control"><option>Search Location</option></select>
-                        <p>Employeee ID</p>
-                      </tr>
+                    </th>
+                    </tr>
                     </thead>
-                    <tbody>
-                      <tr>
+                    <tbody id="firstRow">
+                      <tr >
                         <td>
                            <div id="card-flex">
                            <div class="card">
-                                <p id="nameData">Jenny Seal</p>
+                                <p id="nameData">Jenny Seal </p>
                                 <p id="departmentData">Services</p>
                                 <p id="locationData">New York</p>
-                                <p id="Employee_IdData">0001</p>
+                                
                             </div>
                             <div id="buttons">
                                 <button class="btn btn-secondary"><i class="far fa-eye"></i></button>
@@ -55,9 +55,8 @@
                                 <button class="btn btn-primary"><i class="far fa-trash-alt"></i></button>
                             </div>
                             </div>
-                    </td>
-                      </tr>
-                    </tbody>
+                        </td>
+                                            </tbody>
                 </table>
                 
                 <nav>

@@ -1,29 +1,64 @@
 :root {
   --red: #fd3b44;
   --lightgray: #d3d1d1;
-  --darkgray: #494949;
+  --darkgray: hsl(0, 0%, 29%);
+ }
+
+ @font-face {
+   font-family: 'Mukta';
+   src: url(./Mukta-Regular.ttf);
+ }
+
+ @font-face {
+  font-family: 'Mukta';
+  src: url(./Mukta-Light.ttf);
+  font-weight: light;
 }
+
+@font-face {
+  font-family: 'Mukta';
+  src: url(./Mukta-Bold.ttf);
+  font-weight: bold;
+}
+
+*, button, select, input {
+  font-family: 'Mukta';
+}
+
+button, select, input, .form-control, .btn {
+  font-weight: bold;
+}
+
+body {
+  background-color: whitesmoke;
+}
+h1 {
+  font-weight: lighter;
+  font-size: calc(1.425rem + 2.1vw);
+  margin-bottom: 0;
+}
+
 header  {
-  font-size: 80%;
   display: inline-flex;
   align-items: center;
   background-color: var(--lightgray);
-  border-bottom: 0.25vw solid whitesmoke;
+  border-bottom: 0.25rem solid whitesmoke;
   width: 100%;
-  box-shadow: 0.2vw 0.2vw 0.2vw var(--darkgray);
+  box-shadow: 0.2rem 0.2rem 0.2rem var(--darkgray);
+  justify-content: center;
 }
 
 
 .table>:not(caption)>*>* {
   padding: .15rem 0.15rem;
-  background-color: transparent;
+  background-color: white;
 }
 button {
-    margin: 0.15vw;
+    margin: 0.15rem;
 };
 
 .webTitle {
-  padding: 1vw;
+  padding: 1rem;
 }
 
 .btn-primary {
@@ -37,42 +72,50 @@ button {
 
 .circle {
   border-radius: 50%;
-  padding: 0.4vw;
-  border: 0.15vw solid var(--red);
-  margin: 0vh 1vw;
+  padding: 0.4rem;
+  border: 0.15rem solid var(--red);
+  margin: 0vh 1rem;
 }
 
 
 form {
-  margin: 5vh 5vw;
+  margin: 1vh 5rem;
+  margin-top: 2vh;
   display: inline-flex;
   }
 
 .table {
-  margin: 5vh auto;
+  margin: 1vh auto;
   width: 90vw;
-  border: 0.15vw solid var(--darkgray);
+  border: 0.15rem solid var(--darkgray);
 
+}
+
+td {
+  border-bottom: 0.25rem solid var(--darkgray);
+}
+thead {
+  display: none;
 }
 
 tr {
-  padding: 0.15vw;
+  padding: 0.15rem;
 }
 
 p {
-  margin: 0 1vw;
+  margin: 0 1rem;
+  font-size: 1.2rem;  
 }
 
 .card {
-width: 87%;
-line-height: 0.9rem;
+width: 80%;
 border: none;
 }
 
 #buttons {
   display: flex;
   flex-direction: column;
-  width: 15%;
+  width: 20%;
   justify-content: flex-end;
 }
 
@@ -83,18 +126,36 @@ border: none;
 }
 
 #disappearingButtons {
-  visibility: hidden;
+display:none;
 }
+
+#hidingButtons {
+  display: inherit;
+  }
 
 .page-link {
   color: var(--darkgray);
 }
 
+@media screen and (min-width: 500px) {
+  #buttons {
+    width: 25%;
+  }
 
-@media screen and (min-width: 400px) {
-  h1 {font-size: 100%;
+  .form-control {
+    width: 25%;
+    margin: 0 0.25rem;
+  }
+
 }
-
+@media screen and (min-width: 600px) {
+  
+header {
+  justify-content: flex-start;  
+  align-items: center;
+  border-bottom: 0.25rem solid whitesmoke;
+  box-shadow: 0.2rem 0.2rem 0.2rem var(--darkgray);
+}
 .card {
   flex-direction: row;
   justify-content: space-between;
@@ -102,8 +163,8 @@ border: none;
 }
 
 .form-control {
-  width: 25%;
-  margin: 0 0.25rem;
+  width: 28%;
+  margin: 0 0.5rem;
 }
 
 
@@ -115,8 +176,23 @@ border: none;
   flex-direction: row ;
 }
 
+#hidingButton {
+  display: none;
+  }
+ 
 #disappearingButtons {
-visibility: visible;
+  display: inherit;
+    }
+
+form {
+  margin: 5vh 5rem;
 }
 
+table {
+  margin: 5vh auto;
+}
+thead {
+  display: inherit;
+  width: 100%;
+}
 }
