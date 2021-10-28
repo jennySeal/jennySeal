@@ -81,7 +81,11 @@ button {
   margin: 0vh 1rem;
 }
 
-input,
+input {
+  text-align: left;
+}
+
+
 select {
   text-align: center;
 }
@@ -159,6 +163,11 @@ p {
   border-bottom: 0.25rem solid whitesmoke;
   box-shadow: 0.2rem 0.2rem 0.2rem var(--darkgray);
 }
+
+#modal-start {
+  margin-bottom: 4vh;
+  font-weight: bolder;
+}
 .modal-dialog {
   background-color: var(--lightgray);
   border: 0.25rem solid var(--darkgray);
@@ -225,6 +234,7 @@ p {
 
   thead {
     display: table-header-group;
+    background-color: var(--lightgray);
   }
 
   .bigger {

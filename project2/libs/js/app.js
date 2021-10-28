@@ -1,7 +1,7 @@
-
+// Build add/edit employee modal form
 const buildForm = (employee, verb, commit) => {
                  $(".modal-body").html(`<form id="editModal">
-                 <p>${verb} the employee details and save.</p>
+                 <p id="modal-start">${verb} the employee details and save.</p>
                  <div class="row-flex">
                  <label for="forename"><p>First Name</p></label>
                  <input type="text" class="form-control" placeholder="${employee.firstName}" id="forename" required minlength="2" maxlength="15" pattern="(^[A-Za-z' -]+$)" autofocus>
@@ -14,17 +14,15 @@ const buildForm = (employee, verb, commit) => {
        
                  <div class="row-flex">
                  <label for="department"><p>Department</p></label>
-                 <select name="department" class="form-control" id="department">
-                 <option value=${employee.department} selected>${employee.department}</option>
-                 <option value="Legal"}>Legal</option>
+                 <select class="form-control" id="modalSelectDept">
+                 <option value="reset"></option>
                  </select>
                  </div><br>
        
                  <div class="row-flex">
                  <label for="location"><p>Location</p></label>
-                 <select name="location" class="select" id="department">
-                 <option value=${employee.location} selected>${employee.location}</option>
-                 <option value="Paris"}>Paris</option>
+                 <select class="select" id="modalSelectLoc">
+                 <option value="reset"></option>
                  </select>
                  </div><br>
                
@@ -37,6 +35,51 @@ const buildForm = (employee, verb, commit) => {
                  <button type="submit" class="btn btn-primary">${commit}</button>
                  <p id="right-align"><sub>Employee id ${employee.id}</sub></p>
                  </form>`);
+
+                 locations.forEach((location) => {
+                  $("#modalSelectLoc").append(
+                    `<option value="${location.id}">${location.name}</option>`
+                  )})
+                 departments.forEach((department) => {
+                    $("#modalSelectDept").append(
+                      `<option value="${department.id}">${department.name}</option>`
+                    )})
+
+                $("#modalSelectDept").change(function(e) {
+                      let selectedDept = e.currentTarget.value;
+                      if (selectedDept !== "reset" && selectedDept !== "resetSubset") {
+                      let locationHunt = departments.find(department => department.id === selectedDept)
+                      $("#modalSelectLoc").val(locationHunt.locationID);
+                    } else if (selectedDept === "reset") {
+                      $("#modalSelectLoc").val("reset");
+                    }
+                  
+                  })
+
+                $("#modalSelectLoc").change(function(e) {
+                      let selectedLoc = e.currentTarget.value;
+                      if (selectedLoc === "reset") {
+                        departments.forEach((department) => {
+                          $("#modalSelectDept").append(
+                            `<option value="${department.id}">${department.name}</option>`
+                          )})
+      
+                      } else {
+                      departmentOptions = departments.filter(department => department.locationID === selectedLoc)
+                      $("#modalSelectDept").html("")
+                      if (departmentOptions.length > 1) {
+                        $("#modalSelectDept").append(
+                      `<option value="resetSubset">Choose department</option>`)
+                        }
+                      departmentOptions.forEach((departmentAtLocation) => {
+                      $("#modalSelectDept").append(
+                        `<option value="${departmentAtLocation.id}">${departmentAtLocation.name}</option>`
+                      )
+                    })}
+                    })
+                      
+                    
+              
 }
 
 const blankEmployee = {
@@ -48,11 +91,20 @@ const blankEmployee = {
   id: "not assigned",
 }
 
-
-
-
-let results;
+//full Data set
 let staticResults;
+
+// temporary results based on filters
+let results = [];
+let locations = [];
+let departments = []
+let departmentOptions = []
+
+
+//the search terms selected in the dropdown lists
+let searchDept;
+let searchLoc;
+
 
 //Generic function for API call
 const callApi = (
@@ -83,6 +135,7 @@ const callApi = (
     },
   });
 };
+
 
 const getAllData = (data) => {
   if (data.data) {
@@ -127,16 +180,19 @@ const getAllData = (data) => {
 
 
 const getDepartmentData = (data) => {
-  data.data.forEach((department) => {
+  departments = data.data;
+  console.log(departments)
+  departments.forEach((department) => {
     $("#selectDept").append(
       `<option value="${department.id}">${department.name}</option>`
     )
   })
 }
 
-
 const getLocationData = (data) => {
-  data.data.forEach((location) => {
+  locations = data.data;
+  console.log(locations)
+  locations.forEach((location) => {
     $("#selectLoc").append(
       `<option value="${location.name}">${location.name}</option>`
     )
@@ -149,6 +205,7 @@ $(document).ready(function () {
   callApi("getAllLocations", "GET", getLocationData);
   });
 
+//show and hide commands
 
 $(".close").click(function (e) {
   $(".modal").modal("hide");
@@ -163,12 +220,11 @@ $("#hidingAddButton").click(function () {
 });
 
 $("#hidingSearchButton").click(function () {
-  $(".thead-dark").toggle();
+  $(".thead-light").toggle();
 });
 
 
-
-
+//opens modal to view a staff record
 const viewStaff = (id) => {
   let result = results.filter((result) => result.id === id);
   $(".modal-body")
@@ -177,13 +233,21 @@ const viewStaff = (id) => {
   $("#extraInfo").modal("show");
 };
 
+//opens modal to edit a staff record
 const editStaff = (id) => {
   let result = results.filter((result) => result.id === id)
   buildForm(result[0], "Edit", "Save Changes")
+    
+    $("#modalSelectLoc").val(result[0].location)
+    $("#modalSelectDept").val(result[0].department)
+
   $("#extraInfo").modal("show");
 };
 
 
+
+
+//opens modal to delete a staff record
 const deleteStaff = (id) => {
   viewStaff(id);
   $(".modal-body")
@@ -195,13 +259,14 @@ const deleteStaff = (id) => {
   });
 }
 
+//opens modal to add a staff record
 $("#addStaff").click(function (event) {
   event.preventDefault();
   buildForm(blankEmployee, 'Add', "Add Employee")
   $("#extraInfo").modal("show");
 });
 
-
+//opens modal to add a department
 $("#addDept").click(function (event) {
   event.preventDefault();
   $(".modal-body").html(`<form id="addDeptForm">
@@ -220,7 +285,7 @@ $("#addDept").click(function (event) {
 })
 });
 
-
+//opens modal to add a location
 $("#addLoc").click(function (event) {
   event.preventDefault();
   $(".modal-body").html(`<form id="addLocForm">
@@ -238,40 +303,44 @@ $("#addLoc").click(function (event) {
   });
 });
 
+
+
+// Data filters 
+// On whole name 
+
 $("#searchNames").on('input', function(e) {
-  let nameToSearch = e.currentTarget.value.toLowerCase();
-  let searchData = ($("#selectDept").val() === "reset" || $("#selectLoc").val() === "reset") ? staticResults : results; 
+  let lettersToSearch = e.currentTarget.value.toLowerCase();
+
+  let searchData = ($("#selectDept").val() === "reset" && $("#selectLoc").val() === "reset") ? staticResults : results; 
   
 
-  let newResults = searchData.filter((result) => {
+  results = searchData.filter((result) => {
   result.wholeName = result.firstName.toLowerCase() + result.lastName.toLowerCase();
-  return result.wholeName.includes(nameToSearch)
- 
-  
+  return result.wholeName.includes(lettersToSearch)  
   })
-  getAllData(newResults)
-  
+  getAllData(results)
 })
 
+
 $("#selectDept").on('change', function(e) {
-  let searchTerm = e.currentTarget.value;
-  if (searchTerm === 'reset') {
+  searchDept = e.currentTarget.value;
+  if (searchDept === 'reset') {
     resetData() 
   } else {
   const searchData = results;
-  results = searchData.filter(result => result.departmentID === searchTerm)
+  results = searchData.filter(result => result.departmentID === searchDept)
   getAllData(results);
   }
 })
 
 
 $("#selectLoc").on('change', function(e) {
-  let LocToSearch = e.currentTarget.value;
-  if (LocToSearch === 'reset') {
+  searchLoc = e.currentTarget.value;
+  if (searchLoc === 'reset') {
     resetData()
   } else {
   const searchData = results;
-  results = searchData.filter(result => result.location === LocToSearch)
+  results = searchData.filter(result => result.location === searchLoc)
   getAllData(results);
   }
 })
