@@ -1,28 +1,28 @@
 // Build add/edit employee modal form
 const buildForm = (employee, verb, commit) => {
                  $(".modal-body").html(`<form id="editModal">
-                 <p id="modal-start">${verb} the employee details and save.</p>
+                 <p id="modal-start">${verb} employee details and save.</p>
                  <div class="row-flex">
                  <label for="forename"><p>First Name</p></label>
-                 <input type="text" class="form-control" placeholder="${employee.firstName}" id="forename" required minlength="2" maxlength="15" pattern="(^[A-Za-z' -]+$)" autofocus>
+                 <input type="text" class="form-control" placeholder="${employee.firstName}" id="forename" required minlength="2" maxlength="15" pattern="(^[A-Za-z' -]+$)" autofocus autocapitalize>
                  </div><br> 
        
                  <div class="row-flex">
                  <label for="surname"><p>Surname</p></label>
-                 <input type="text" class="form-control" placeholder="${employee.lastName}" id="surname" required minlength="2" maxlength="25" pattern="(^[A-Za-z -]+$)">
+                 <input type="text" class="form-control" placeholder="${employee.lastName}" id="surname" required minlength="2" maxlength="25" pattern="(^[A-Za-z -]+$)" autocapitalize>
                  </div><br>
        
                  <div class="row-flex">
                  <label for="department"><p>Department</p></label>
                  <select class="form-control" id="modalSelectDept">
-                 <option value="reset"></option>
+                 <option value="reset">Choose department</option>
                  </select>
                  </div><br>
        
                  <div class="row-flex">
                  <label for="location"><p>Location</p></label>
                  <select class="select" id="modalSelectLoc">
-                 <option value="reset"></option>
+                 <option value="reset">Choose location</option>
                  </select>
                  </div><br>
                
@@ -32,7 +32,7 @@ const buildForm = (employee, verb, commit) => {
                  </div><br>
        
        
-                 <button type="submit" class="btn btn-primary">${commit}</button>
+                 <button type="submit" class="btn btn-primary" id="addOrEditStaff">${commit}</button>
                  <p id="right-align"><sub>Employee id ${employee.id}</sub></p>
                  </form>`);
 
@@ -78,11 +78,16 @@ const buildForm = (employee, verb, commit) => {
                     })}
                     })
                       
-                    
+                    $("#addOrEditStaff").click(function(e) {
+                        e.preventDefault()
+                        addOrEditStaff(e)      
+                        
+ 
+                    })
               
 }
 
-const blankEmployee = {
+const newEmployee = {
   firstName: "",
   lastName: "",
   department: "",
@@ -131,7 +136,7 @@ const callApi = (
       callbackFun(result);
     },
     error: function (jqXHR, textStatus, errorThrown) {
-      console.log(`${apiUrl}: ajax call failed ${textStatus}`);
+      console.log(`${apiUrl}: ajax call failed ${textStatus}. ${errorThrown}. ${jqXHR}`);
     },
   });
 };
@@ -181,7 +186,7 @@ const getAllData = (data) => {
 
 const getDepartmentData = (data) => {
   departments = data.data;
-  console.log(departments)
+  
   departments.forEach((department) => {
     $("#selectDept").append(
       `<option value="${department.id}">${department.name}</option>`
@@ -191,7 +196,7 @@ const getDepartmentData = (data) => {
 
 const getLocationData = (data) => {
   locations = data.data;
-  console.log(locations)
+  
   locations.forEach((location) => {
     $("#selectLoc").append(
       `<option value="${location.name}">${location.name}</option>`
@@ -252,17 +257,33 @@ const deleteStaff = (id) => {
   viewStaff(id);
   $(".modal-body")
   .append(`<p><strong>Are you sure you want to delete this employee?</strong></p>
-  <button class="btn btn-primary">Delete</button>
+  <button class="btn btn-primary" id="confirmDelete">Delete</button>
   <button class="btn btn-outline-dark close">Cancel</button>`);
   $(".modal-body").on("click", `.close`, function () {
     closeModal();
   });
+  $("#confirmDelete").on("click", function () {
+    
+    resetData()
+    callApi("deletePersonnelByID", "GET", deleteConfirmation, id)
+  });  
+
 }
 
+const deleteConfirmation = (data) => {
+  callApi("getAll", "GET", getAllData); 
+ 
+  $(".modal-body").html("")
+  $(".modal-body").append(`<p><strong>Employee successfully deleted</strong></p>
+  <button class="btn btn-outline-dark close">Close</button>`);
+  $(".modal-body").on("click", `.close`, function () {
+    closeModal();
+})
+}
 //opens modal to add a staff record
 $("#addStaff").click(function (event) {
   event.preventDefault();
-  buildForm(blankEmployee, 'Add', "Add Employee")
+  buildForm(newEmployee, 'Add', "Add Employee")
   $("#extraInfo").modal("show");
 });
 
@@ -356,5 +377,20 @@ $('#resetButton').click(function(){
   resetData()
 })
 
+//need to make the department an integer!!!
+const addOrEditStaff = () => {
+  let firstName = $('#forename').val()
+  let lastName = $('#surname').val()
+  let department = $('#modalSelectDept').val()
+  let location = $('#modalSelectLoc').val()  
+  let email = $('#email').val()
+  callApi("insertEmployee", "POST", getAddEditConfirmation, firstName, lastName, email, department);
+}
+
+const getAddEditConfirmation = (data) => {
+  callApi("getAll", "GET", getAllData); 
+  buildForm(newEmployee, `${data.data[0]} <br><br>Continue to add `, "Add Another Employee")
+  $("#extraInfo").modal("show");
+};
 
 

@@ -165,8 +165,9 @@ p {
 }
 
 #modal-start {
-  margin-bottom: 4vh;
+  margin-bottom: 3vh;
   font-weight: bolder;
+  line-height: 1.5rem;
 }
 .modal-dialog {
   background-color: var(--lightgray);
