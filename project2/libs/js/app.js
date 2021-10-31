@@ -4,25 +4,25 @@ const buildForm = (employee, verb, commit) => {
                  <p id="modal-start">${verb} employee details and save.</p>
                  <div class="row-flex">
                  <label for="forename"><p>First Name</p></label>
-                 <input type="text" class="form-control" placeholder="${employee.firstName}" id="forename" required minlength="2" maxlength="15" pattern="(^[A-Za-z' -]+$)" autofocus autocapitalize>
+                 <input type="text" class="form-control" placeholder="${employee.firstName}" id="forename" required minlength="2" maxlength="15" pattern="(^[A-Za-z' -]+$)" autocomplete="off" autocapitalize>
                  </div><br> 
        
                  <div class="row-flex">
                  <label for="surname"><p>Surname</p></label>
-                 <input type="text" class="form-control" placeholder="${employee.lastName}" id="surname" required minlength="2" maxlength="25" pattern="(^[A-Za-z -]+$)" autocapitalize>
+                 <input type="text" class="form-control" placeholder="${employee.lastName}" id="surname" required minlength="2" maxlength="25" pattern="(^[A-Za-z -]+$)" autocapitalize autocomplete="off">
                  </div><br>
        
                  <div class="row-flex">
                  <label for="department"><p>Department</p></label>
-                 <select class="form-control" id="modalSelectDept">
-                 <option value="reset">Choose department</option>
+                 <select class="select" id="modalSelectDept">
+                 <option value="reset" selected>Choose department</option>
                  </select>
                  </div><br>
        
                  <div class="row-flex">
                  <label for="location"><p>Location</p></label>
                  <select class="select" id="modalSelectLoc">
-                 <option value="reset">Choose location</option>
+                 <option value="reset" selected>Choose location</option>
                  </select>
                  </div><br>
                
@@ -90,8 +90,8 @@ const buildForm = (employee, verb, commit) => {
 const newEmployee = {
   firstName: "",
   lastName: "",
-  department: "",
-  location: "",
+  department: "reset",
+  location: "reset",
   email: "",
   id: "not assigned",
 }
@@ -204,10 +204,15 @@ const getLocationData = (data) => {
   })
 }
 
-$(document).ready(function () {
+const initialiseData = () => {
   callApi("getAll", "GET", getAllData);
   callApi("getAllDepartments", "GET", getDepartmentData);
   callApi("getAllLocations", "GET", getLocationData);
+}
+
+
+$(document).ready(function () {
+  initialiseData()
   });
 
 //show and hide commands
@@ -290,40 +295,64 @@ $("#addStaff").click(function (event) {
 //opens modal to add a department
 $("#addDept").click(function (event) {
   event.preventDefault();
-  $(".modal-body").html(`<form id="addDeptForm">
+  $(".modal-body").html(`
                  
-                 <label for="newDept"><p>Name of new department</p></label>
-                 <input type="text" class="form-control" id="newDept" minlength="2" maxlength="20" autofocus>
+                 <label for="newDept"><p>Name of new department</p></label><br>
+                 <input type="text" class="form-control" id="newDept" minlength="2" maxlength="20" autocomplete="off">
                  <br>
+                 <label for="location"><p>Which office is this department part of? </p></label><br>
+                 <select class="select" id="modalSelectLoc">
+                 <option value="reset" selected>Choose location</option>
+                 </select>
+                 <br><br>
                  <button type="button" class="close btn btn-outline-dark" aria-label="Close">Cancel</button>
-                 <button type="submit" class="btn btn-primary">Add New Department</button>
+                 <button class="btn btn-primary">Add New Department</button>
+                 `);
+
+                 locations.forEach((location) => {
+                  $("#modalSelectLoc").append(
+                    `<option value="${location.id}">${location.name}</option>`
+                  )})
                  
-                 </form>`);
                          
   $("#extraInfo").modal("show")
   $(".modal-body").on("click", `.close`, function () {
     closeModal();
+
 })
 });
 
 //opens modal to add a location
 $("#addLoc").click(function (event) {
-  event.preventDefault();
-  $(".modal-body").html(`<form id="addLocForm">
-                 
+  event.preventDefault()               
+  $(".modal-body").html(`
+ 
                  <label for="newLoc"><p>Name of new business location</p></label>
-                 <input type="text" class="form-control" id="newLocation" minlength="2" maxlength="20" autofocus>
+                 <input type="text" class="form-control" id="newLocation" required minlength="2" maxlength="20" pattern="(^[A-Za-z' -]+$)" autocomplete="off" autocapitalize>
                  <br>
                  <button type="button" class="close btn btn-outline-dark" aria-label="Close">Cancel</button>
-                 <button type="submit" class="btn btn-primary">Add New Location</button>
+                 <button class="btn btn-primary" id="addNewLocation">Add New Location</button>
                  
-                 </form>`);
+                 `);
   $("#extraInfo").modal("show");
   $(".modal-body").on("click", `.close`, function () {
     closeModal();
   });
+  $("#addNewLocation").on("click", function () {
+    let locationName = $("#newLocation").val()
+    callApi("insertLocation", "GET", getNewLocConfirmation, locationName);  
+  });
 });
 
+
+const getNewLocConfirmation = (data) => {
+  initialiseData()
+  $(".modal-body").html(`<p><strong>${data.data}</strong></p>
+  <button class="btn btn-outline-dark close">Close</button>`);
+  $(".modal-body").on("click", `.close`, function () {
+    closeModal();
+  })
+}
 
 
 // Data filters 
