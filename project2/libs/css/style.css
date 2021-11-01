@@ -96,6 +96,20 @@ select {
   margin: 2vh 1vw;
 }
 
+#resetHidingButton {
+  display: none;
+}
+
+
+#resetButton {
+  display: none;
+}
+
+#newLocation, #newDepartment {
+  width: 100%;
+}
+
+
 table {
   margin: 2vh 5vw;
   width: 90vw;
@@ -114,10 +128,6 @@ th {
   border-bottom: 0.1rem solid var(--lightgray);
 }
 
-
-#resetButton {
-  float: right;
-}
 
 
 .smaller,
@@ -164,7 +174,7 @@ p {
   margin-top: 2vh;
 }
 
-#right-align {
+.right-align {
   text-align: right;
   font-size: 1rem;
 }
@@ -189,6 +199,10 @@ p {
 }
 
 .modal-body p {
+  font-size: 1.1rem;
+}
+
+#employeeid {
   font-size: 0.9rem;
 }
 
@@ -211,7 +225,7 @@ p {
 }
 
 .form-control, select {
-  width: 50vw;
+  width: 48vw;
 }
 
 .form-control.search {
@@ -277,6 +291,7 @@ p {
   }
 
   #resetButton {
+    display: block;
     float: right;
   }
 
@@ -300,6 +315,10 @@ p {
 
 #email {
   font-size: 1rem;
+}
+
+#employeeid {
+  font-size: 0.9rem;
 }
 
 

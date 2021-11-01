@@ -1,5 +1,6 @@
 // Build add/edit employee modal form
 const buildForm = (employee, verb, commit) => {
+                  console.log(employee)
                  $(".modal-body").html(`<form id="editModal">
                  <p id="modal-start">${verb} employee details and save.</p>
                  <div class="row-flex">
@@ -15,14 +16,14 @@ const buildForm = (employee, verb, commit) => {
                  <div class="row-flex">
                  <label for="department"><p>Department</p></label>
                  <select class="select" id="modalSelectDept">
-                 <option value="reset" selected>Choose department</option>
+                 <option value="reset">Choose Department</option>
                  </select>
                  </div><br>
        
                  <div class="row-flex">
                  <label for="location"><p>Location</p></label>
                  <select class="select" id="modalSelectLoc">
-                 <option value="reset" selected>Choose location</option>
+                 <option value="reset">Choose Location</option>
                  </select>
                  </div><br>
                
@@ -33,19 +34,20 @@ const buildForm = (employee, verb, commit) => {
        
        
                  <button type="submit" class="btn btn-primary" id="addOrEditStaff">${commit}</button>
-                 <p id="right-align"><sub>Employee id ${employee.id}</sub></p>
+                 <p class="right-align" id="employeeid"><sub>Employee ID ${employee.id}</sub></p>
                  </form>`);
 
                  locations.forEach((location) => {
                   $("#modalSelectLoc").append(
                     `<option value="${location.id}">${location.name}</option>`
                   )})
+
                  departments.forEach((department) => {
                     $("#modalSelectDept").append(
                       `<option value="${department.id}">${department.name}</option>`
                     )})
-
-                $("#modalSelectDept").change(function(e) {
+                
+                    $("#modalSelectDept").change(function(e) {
                       let selectedDept = e.currentTarget.value;
                       if (selectedDept !== "reset" && selectedDept !== "resetSubset") {
                       let locationHunt = departments.find(department => department.id === selectedDept)
@@ -55,6 +57,7 @@ const buildForm = (employee, verb, commit) => {
                     }
                   
                   })
+                  
 
                 $("#modalSelectLoc").change(function(e) {
                       let selectedLoc = e.currentTarget.value;
@@ -90,8 +93,10 @@ const buildForm = (employee, verb, commit) => {
 const newEmployee = {
   firstName: "",
   lastName: "",
-  department: "reset",
-  location: "reset",
+  department: "Choose Department",
+  departmentID: "reset",
+  location: "Choose Location",
+  locationID: "reset",
   email: "",
   id: "not assigned",
 }
@@ -231,6 +236,7 @@ $("#hidingAddButton").click(function () {
 
 $("#hidingSearchButton").click(function () {
   $(".thead-light").toggle();
+  $("#resetHidingButton").toggle()
 });
 
 
@@ -239,17 +245,20 @@ const viewStaff = (id) => {
   let result = results.filter((result) => result.id === id);
   $(".modal-body")
     .html(`<h3><strong>${result[0].firstName} ${result[0].lastName}</strong></h3>
-        <p>${result[0].department} department</p><p>The ${result[0].location} Office</p><p id="email">${result[0].email}</p><p id="right-align">Staff #${result[0].id}`);
+        <p>${result[0].department} department</p><p>The ${result[0].location} Office</p><p id="email">${result[0].email}</p><p class="right-align" id="employeeid">Employee ID ${result[0].id}`);
   $("#extraInfo").modal("show");
 };
 
 //opens modal to edit a staff record
 const editStaff = (id) => {
   let result = results.filter((result) => result.id === id)
+  let employeeLocation = locations.find(location => location.name === result[0].location);
+  result[0].locationID = employeeLocation.id;
+  console.log(result[0])
   buildForm(result[0], "Edit", "Save Changes")
     
-    $("#modalSelectLoc").val(result[0].location)
-    $("#modalSelectDept").val(result[0].department)
+  $("#modalSelectLoc").val(result[0].locationID)
+  $("#modalSelectDept").val(result[0].departmentID)
 
   $("#extraInfo").modal("show");
 };
@@ -297,20 +306,20 @@ $("#addDept").click(function (event) {
   event.preventDefault();
   $(".modal-body").html(`
                  
-                 <label for="newDept"><p>Name of new department</p></label><br>
-                 <input type="text" class="form-control" id="newDept" minlength="2" maxlength="20" autocomplete="off">
+                 <label for="newDepartment"><p>Name of new department</p></label><br>
+                 <input type="text" class="form-control" id="newDepartment" minlength="2" maxlength="20" autocomplete="off">
                  <br>
                  <label for="location"><p>Which office is this department part of? </p></label><br>
-                 <select class="select" id="modalSelectLoc">
+                 <select class="select" id="selectLoc">
                  <option value="reset" selected>Choose location</option>
                  </select>
                  <br><br>
                  <button type="button" class="close btn btn-outline-dark" aria-label="Close">Cancel</button>
-                 <button class="btn btn-primary">Add New Department</button>
+                 <button class="btn btn-primary" id="addNewDepartment">Add New Department</button>
                  `);
 
                  locations.forEach((location) => {
-                  $("#modalSelectLoc").append(
+                  $("#selectLoc").append(
                     `<option value="${location.id}">${location.name}</option>`
                   )})
                  
@@ -320,6 +329,12 @@ $("#addDept").click(function (event) {
     closeModal();
 
 })
+
+$("#addNewDepartment").on("click", function () {
+  let departmentName = $("#newDepartment").val()
+  let locationName = $('')
+  callApi("insertDepartment", "GET", getNewLocConfirmation, locationName);  
+});
 });
 
 //opens modal to add a location
@@ -403,6 +418,10 @@ $('#selectLoc').val("reset");
 }
 
 $('#resetButton').click(function(){
+  resetData()
+})
+
+$('#resetHidingButton').click(function(){
   resetData()
 })
 
