@@ -25,7 +25,7 @@
 button,
 select,
 input {
-  font-family: "Mukta";
+  font-family: "Mukta", sans-serif;
 }
 
 button,
@@ -100,6 +100,9 @@ select {
   display: none;
 }
 
+#forename, #surname, #newDepartment, #newLocation {
+  text-transform: capitalize;
+}
 
 #resetButton {
   display: none;

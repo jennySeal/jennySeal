@@ -37,7 +37,7 @@
 
 	$query = $conn->prepare('INSERT INTO department (name, locationID) VALUES(?,?)');
 
-	$query->bind_param("si", $_REQUEST['name'], $_REQUEST['locationID']);
+	$query->bind_param("si", $_REQUEST['param1'], $_REQUEST['param2']);
 
 	$query->execute();
 	
@@ -60,7 +60,7 @@
 	$output['status']['name'] = "ok";
 	$output['status']['description'] = "success";
 	$output['status']['returnedIn'] = (microtime(true) - $executionStartTime) / 1000 . " ms";
-	$output['data'] = [];
+	$output['data'] = ["The " . $_REQUEST['param1'] . " department in the " . $_REQUEST['param3'] . " office has successfully been added to the Company Directory"];
 	
 	mysqli_close($conn);
 
