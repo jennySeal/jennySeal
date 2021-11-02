@@ -1,8 +1,5 @@
 <?php
 
-	// example use from browser
-	// http://localhost/companydirectory/libs/php/insertDepartment.php?name=New%20Department&locationID=<id>
-
 	// remove next two lines for production
 	
 	ini_set('display_errors', 'On');
@@ -34,11 +31,8 @@
 
 	// SQL statement accepts parameters and so is prepared to avoid SQL injection.
 	// $_REQUEST used for development / debugging. Remember to change to $_POST for production
-
-	$query = $conn->prepare('INSERT INTO department (name, locationID) VALUES(?,?)');
-
-	$query->bind_param("si", $_REQUEST['param1'], $_REQUEST['param2']);
-
+	$query = $conn->prepare('UPDATE personnel SET firstName=?, lastName=?, email=?, departmentID=? WHERE id=?');
+	$query->bind_param('sssii', $_REQUEST['param1'], $_REQUEST['param2'], $_REQUEST['param3'], $_REQUEST['param4'], $_REQUEST['param5']);
 	$query->execute();
 	
 	if (false === $query) {
@@ -60,7 +54,7 @@
 	$output['status']['name'] = "ok";
 	$output['status']['description'] = "success";
 	$output['status']['returnedIn'] = (microtime(true) - $executionStartTime) / 1000 . " ms";
-	$output['data'] = ["The " . $_REQUEST['param1'] . " department in " . $_REQUEST['param3'] . " has successfully been added to the Company Directory"];
+	$output['data'] = [$_REQUEST['param5']];
 	
 	mysqli_close($conn);
 

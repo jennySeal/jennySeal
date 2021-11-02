@@ -4,12 +4,12 @@ const buildForm = (employee, verb, commit) => {
                  <p id="modal-start">${verb} employee details and save.</p>
                  <div class="row-flex">
                  <label for="forename"><p>First Name</p></label>
-                 <input type="text" class="form-control" placeholder="${employee.firstName}" id="forename" required minlength="2" maxlength="15" autocapitalize pattern="(^[A-Za-z' -]+$)" autocomplete="off" />
+                 <input type="text" class="form-control" id="forename" autocomplete="off">
                  </div><br> 
        
                  <div class="row-flex">
                  <label for="surname"><p>Surname</p></label>
-                 <input type="text" class="form-control" placeholder="${employee.lastName}" id="surname" required minlength="2" maxlength="25" pattern="(^[A-Za-z -]+$)" autocapitalize autocomplete="off"/>
+                 <input type="text" class="form-control" autocapitalize id="surname" autocomplete="off">
                  </div><br>
        
                  <div class="row-flex">
@@ -28,7 +28,7 @@ const buildForm = (employee, verb, commit) => {
                
                  <div class="row-flex">
                  <label for="email"><p>Email</p></label>
-                 <input type="email" class="form-control" placeholder="${employee.email}" id="email" maxlength="30" autocomplete="off" required>
+                 <input type="email" class="form-control" id="email">
                  </div><br>
        
        
@@ -38,15 +38,11 @@ const buildForm = (employee, verb, commit) => {
 
   locations.forEach((location) => {
     $("#modalSelectLoc").append(
-      `<option value="${location.id}">${location.name}</option>`
-    );
-  });
+      `<option value="${location.id}">${location.name}</option>`)});
 
   departments.forEach((department) => {
     $("#modalSelectDept").append(
-      `<option value="${department.id}">${department.name}</option>`
-    );
-  });
+      `<option value="${department.id}">${department.name}</option>`);});
 
   $("#modalSelectDept").change(function (e) {
     let selectedDept = e.currentTarget.value;
@@ -92,7 +88,7 @@ const buildForm = (employee, verb, commit) => {
   });
 };
 
-const newEmployee = {
+let newEmployee = {
   firstName: "",
   lastName: "",
   department: "Choose Department",
@@ -126,8 +122,10 @@ const callApi = (
   parameter1,
   parameter2,
   parameter3,
-  parameter4
+  parameter4,
+  parameter5,
 ) => {
+  $("#validation-text").html("");
   const apiUrl = `libs/php/${phpToCall}.php`;
   $.ajax({
     url: apiUrl,
@@ -138,6 +136,7 @@ const callApi = (
       param2: parameter2,
       param3: parameter3,
       param4: parameter4,
+      param5: parameter5,
     },
     crossOrigin: "",
     success: function (result) {
@@ -231,10 +230,11 @@ $(document).ready(function () {
 //show and hide commands
 
 $(".close").click(function (e) {
-  $(".modal").modal("hide");
+  closeModal()
 });
 
 const closeModal = () => {
+  $("#validation-text").html("");
   $(".modal").modal("hide");
 };
 
@@ -249,10 +249,12 @@ $("#hidingSearchButton").click(function () {
 
 //opens modal to VIEW a staff record. This is also used in the DELETE command to view before deleting
 const viewStaff = (id) => {
-  let result = results.filter((result) => result.id === id);
+
+  let result = staticResults.filter((result) => result.id === id);
+  console.log(result)
   $(".modal-body")
     .html(`<h3><strong>${result[0].firstName} ${result[0].lastName}</strong></h3>
-        <p>${result[0].department} department</p><p>The ${result[0].location} Office</p><p id="email">${result[0].email}</p><p class="right-align" id="employeeid">Employee ID ${result[0].id}`);
+        <p>${result[0].department} department</p><p>The ${result[0].location} Office</p><p id="emailFont">${result[0].email}</p><p class="right-align" id="employeeid">Employee ID ${result[0].id}`);
   $("#extraInfo").modal("show");
 };
 
@@ -263,12 +265,15 @@ const editStaff = (id) => {
     (location) => location.name === result[0].location
   );
   result[0].locationID = employeeLocation.id;
-  console.log(result[0]);
   buildForm(result[0], "Edit", "Save Changes");
 
+  $("#forename").val(result[0].firstName);
+  $("#surname").val(result[0].lastName);
   $("#modalSelectLoc").val(result[0].locationID);
   $("#modalSelectDept").val(result[0].departmentID);
-
+  $("#email").val(result[0].email);
+  newEmployee.id = result[0].id;
+    
   $("#extraInfo").modal("show");
 };
 
@@ -308,7 +313,6 @@ $("#addStaff").click(function (event) {
 //opens modal to add a department
 $("#addDept").click(function (event) {
   event.preventDefault();
-  console.log('hello')
   $(".modal-body").html(`
                  
                  <label for="newDepartment"><p>Name of new department</p></label><br>
@@ -330,32 +334,31 @@ $("#addDept").click(function (event) {
   });
 
   $(".modal-body").on("click", `.close`, function () {
-    closeModal();
+     closeModal();
   });
   $("#extraInfo").modal("show");
 
   $("#addNewDepartment").on("click", function () {
-    let departmentName = $("#newDepartment").val().toLowerCase();
-    departmentName = departmentName.replace(/(\b[a-z](?!\s))/g, function(x){return x.toUpperCase()})
-    console.log(departmentName)
+    let departmentName = $("#newDepartment").val().toLowerCase().replace(/(\b[a-z](?!\s))/g, function(x){return x.toUpperCase()});
+    
     validateField("new department", departmentName, 2, 20, lastDepartmentCheck)
   })
 })
 
   const lastDepartmentCheck = (departmentName) => {
     let locationID = $("#selectDeptLocation").val();
+    if (locationID === "reset") {
+      validateString = "The new department must be associated with a location"
+      validationWarning(validateString);
+    } else if (departments.find((department) => department.name === departmentName)) {
+        validateString = `${departmentName} already exists within Company Directory. Duplicates are not allowed.`;
+        validationWarning(validateString); 
+    } else {
     let location = locations.find((location) => location.id === locationID);
     let locationName = location.name;
-    callApi(
-      "insertDepartment",
-      "GET",
-      getNewLocConfirmation,
-      departmentName,
-      locationID,
-      locationName
-    );
+    callApi("insertDepartment", "GET", getNewLocConfirmation, departmentName, locationID, locationName);
 }
-
+  }
 
 //opens modal to add a location
 $("#addLoc").click(function (event) {
@@ -370,12 +373,10 @@ $("#addLoc").click(function (event) {
                  `);
   $("#extraInfo").modal("show");
   $(".modal-body").on("click", `.close`, function () {
-    $("#validation-text").html("");
     closeModal();
   });
   $("#addNewLocation").on("click", function () {
-    let location = $("#newLocation").val().toLowerCase();
-    location = location.replace(/(\b[a-z](?!\s))/g, function(x){return x.toUpperCase()})
+    let location = $("#newLocation").val().toLowerCase().replace(/(\b[a-z](?!\s))/g, function(x){return x.toUpperCase()});
     validateField("new location", location, 2, 20, lastLocationCheck);
   }
   )})
@@ -386,7 +387,6 @@ $("#addLoc").click(function (event) {
       validationWarning(validateString); 
      }
      else {
-      $("#validation-text").html("");
       callApi("insertLocation", "GET", getNewLocConfirmation, location);
     }
   }
@@ -455,6 +455,17 @@ const resetData = () => {
   $("#searchNames").val("");
   $("#selectDept").val("reset");
   $("#selectLoc").val("reset");
+  newEmployee = {
+    firstName: "",
+    lastName: "",
+    department: "Choose Department",
+    departmentID: "reset",
+    location: "Choose Location",
+    locationID: "reset",
+    email: "",
+    id: "not assigned",
+  };
+  
 };
 
 $("#resetButton").click(function () {
@@ -465,49 +476,82 @@ $("#resetHidingButton").click(function () {
   resetData();
 });
 
-//need to make the department an integer!!!
 const addOrEditStaff = () => {
-  let firstName = $("#forename").val();
-  let lastName = $("#surname").val();
-  let department = $("#modalSelectDept").val();
-  let location = $("#modalSelectLoc").val();
-  let email = $("#email").val();
-  callApi(
-    "insertEmployee",
-    "POST",
-    getAddEditConfirmation,
-    firstName,
-    lastName,
-    email,
-    department
-  );
+  newEmployee.firstName = $("#forename").val().toLowerCase().replace(/(\b[a-z](?!\s))/g, function(x){return x.toUpperCase()})  
+
+    validateField("employee's first name", newEmployee.firstName, 2, 15, lastNameCheck)
+}
+const lastNameCheck = (firstName) => {
+  newEmployee.lastName = $("#surname").val().toLowerCase().replace(/(\b[a-z](?!\s))/g, function(x){return x.toUpperCase()}) ;
+    validateField("employee's last name", newEmployee.lastName, 2, 20, departmentCheck)
+}
+const departmentCheck = () => {
+newEmployee.departmentID = $("#modalSelectDept").val();
+newEmployee.locationID = $("#modalSelectLoc").val();
+
+if (newEmployee.departmentID !== "reset" && newEmployee.locationID !== "reset") {
+    newEmployee.email = $("#email").val().toLowerCase();
+
+    (newEmployee.id !== "not assigned") ? validateField("email", newEmployee.email, 6, 30, updatePersonnel) :
+    validateField("email", newEmployee.email, 6, 30, emailDuplicationCheck);
+} else { 
+  validateString = "The employee must be associated with a location and a department"
+  validationWarning(validateString);
+}
+}
+
+const emailDuplicationCheck = () => {
+  if (staticResults.find((staff) => staff.email === newEmployee.email)) {
+    validateString = "There is already an employee with this email address in the Company Directory. Duplicates are not allowed";
+    validationWarning(validateString);
+  } else {callApi("insertEmployee", "POST", getAddConfirmation, newEmployee.firstName, newEmployee.lastName,
+    newEmployee.email, newEmployee.departmentID);
+} 
+}
+
+
+const updatePersonnel = () => {
+  callApi("updateEmployee", "GET", getEditConfirmation, newEmployee.firstName, newEmployee.lastName,
+    newEmployee.email, newEmployee.departmentID, newEmployee.id);
+}
+
+const getAddConfirmation = (data) => {
+  resetData()
+  buildForm(newEmployee, `${data.data[0]} <br><br>Continue to add `, "Add Another Employee");
+  $("#extraInfo").modal("show");
 };
 
-const getAddEditConfirmation = (data) => {
-  callApi("getAll", "GET", getAllData);
-  buildForm(
-    newEmployee,
-    `${data.data[0]} <br><br>Continue to add `,
-    "Add Another Employee"
-  );
-  $("#extraInfo").modal("show");
+const getEditConfirmation = (data) => {
+  closeModal()
+  initialiseData()
 };
 
 
 const validateField = (field, fieldInput, min, max, lastCheckCallback) => {
+
 if (fieldInput.length > max || fieldInput.length < min) {
-  validateString =
-    `The ${field} must be between 2 and 20 characters.`;
+  validateString = `The ${field} must be between ${min} and ${max} characters.`;
   validationWarning(validateString)
 } else {
   validatePattern(field, fieldInput, lastCheckCallback)
-}}
-
+}
+}
 const validatePattern = (field, fieldInput, lastCheckCallback) => {
+  if (field === "email") {
+    if (!fieldInput.match(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    )) {
+      validateString = `${fieldInput} does not seem to be a regularly formatted email address.`;
+      validationWarning(validateString);
+     } else {
+      lastCheckCallback(fieldInput)
+     }
+  } else {
   
- if (!fieldInput.match(/^[A-Za-z -]+$/)) {
+  if (!fieldInput.match(/^[A-Za-z -]+$/)) {
   validateString = `The ${field} must not contain any unusual characters.`;
   validationWarning(validateString);
  } else {
   lastCheckCallback(fieldInput)
- }}
+ }
+}
+}
