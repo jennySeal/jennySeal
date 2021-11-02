@@ -87,7 +87,10 @@ const displayStaffData = (data) => {
 
 const getDepartmentData = (data) => {
   departments = data.data;
+  $("#selectDept").html(
+    `<option value="reset" selected>Search department</option>`) 
   departments.forEach((department) => {
+
     $("#selectDept").append(
       `<option value="${department.id}">${department.name}</option>`
     );
@@ -96,6 +99,8 @@ const getDepartmentData = (data) => {
 
 const getLocationData = (data) => {
   locations = data.data;
+  $("#selectLoc").html(
+    `<option value="reset" selected>Search location</option>`) 
   locations.forEach((location) => {
     $("#selectLoc").append(
       `<option value="${location.name}">${location.name}</option>`
@@ -192,7 +197,9 @@ const deleteStaff = (id) => {
   <strong>Are you sure you want to delete this employee?</strong><br>
   <button class="btn btn-primary" id="confirmDelete">Delete</button>
   <button class="btn btn-outline-dark close">Cancel</button>`);
-  
+  $(".close").on("click", function() {
+    closeModal()
+  })
   $("#confirmDelete").on("click", function () {
     resetData();
     callApi("deletePersonnelByID", "GET", deleteConfirmation, id);
@@ -200,10 +207,8 @@ const deleteStaff = (id) => {
 };
 
 const deleteConfirmation = (data) => {
-  closeModal()
   initialiseData()
-  $("#viewDepartment").hide()
-  $("#viewLocation").hide()
+
   $("#validation-text").html(`<div class="alert alert-success">
   <strong>Employee successfully deleted</strong><br>`)
   $("#extraInfo").modal("show");
@@ -219,6 +224,7 @@ $("#addStaff").click(function (event) {
   $("#modalSelectDept").val("reset");
   $("#email").val(" ");
   $("#staffid").val("Not assigned");
+  newEmployee.id = "not assigned";
 
   buildForm(newEmployee, "Add", "Add Employee");
   $(".addEditForm").show()
@@ -437,10 +443,10 @@ const lastNameCheck = (firstName) => {
 const departmentCheck = () => {
 newEmployee.departmentID = $("#modalSelectDept").val();
 newEmployee.locationID = $("#modalSelectLoc").val();
+console.log(newEmployee)
 
 if (newEmployee.departmentID !== "reset" && newEmployee.locationID !== "reset") {
     newEmployee.email = $("#email").val().toLowerCase();
-
     (newEmployee.id !== "not assigned") ? validateField("email", newEmployee.email, 6, 40, updatePersonnel) :
     validateField("email", newEmployee.email, 6, 40, emailDuplicationCheck);
 } else { 
@@ -454,8 +460,6 @@ const emailDuplicationCheck = () => {
     validateString = "There is already an employee with this email address in the Company Directory. Duplicates are not allowed";
     validationWarning(validateString);
   } else {
-    console.log('submitting data')
-    console.log(newEmployee)
     callApi("insertEmployee", "POST", getAddConfirmation, newEmployee.firstName, newEmployee.lastName,
     newEmployee.email, newEmployee.departmentID);
 } 
