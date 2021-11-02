@@ -212,13 +212,13 @@ const deleteConfirmation = (data) => {
 
 //opens modal to add a staff record - same form as edit employee
 $("#addStaff").click(function (event) {
+  event.preventDefault()
   $("#forename").val(" ");
   $("#surname").val(" ");
   $("#modalSelectLoc").val("reset");
   $("#modalSelectDept").val("reset");
   $("#email").val(" ");
   $("#staffid").val("Not assigned");
-  event.preventDefault();
 
   buildForm(newEmployee, "Add", "Add Employee");
   $(".addEditForm").show()
@@ -227,7 +227,7 @@ $("#addStaff").click(function (event) {
 
 const buildForm = (employee, verb, commit) => {
   $("#verb").html(verb);
-  $("#addOrEditStaff").html(commit);
+  $("#addEditButton").html(`${commit}`);
   $("#employeeid").html(`Employee ID #${employee.id}`);
 
   $("#modalSelectLoc").html(
@@ -280,10 +280,6 @@ $("#modalSelectDept").change(function (e) {
     }
   });
 
-  $("#addOrEditStaff").click(function (e) {
-    e.preventDefault();
-    addOrEditStaff(e);
-  });
 };
 
 //opens modal to add a department
@@ -299,14 +295,14 @@ $("#addDept").click(function (event) {
   });  
   $(".newDepartmentForm").show();
   $("#extraInfo").modal("show");
-
+})
 
 //Add a department action
-  $("#addNewDepartment").on("click", function () {
-    let departmentName = $("#newDepartment").val().toLowerCase().replace(/(\b[a-z](?!\s))/g, function(x){return x.toUpperCase()});    
-    validateField("new department", departmentName, 2, 20, lastDepartmentCheck)
-  })
+$("#addNewDepartment").on("click", function () {
+  let departmentName = $("#newDepartment").val().toLowerCase().replace(/(\b[a-z](?!\s))/g, function(x){return x.toUpperCase()});    
+  validateField("new department", departmentName, 2, 20, lastDepartmentCheck)
 })
+
   //Check that the department added isn't a duplicate
   const lastDepartmentCheck = (departmentName) => {
     let locationID = $("#selectDeptLocation").val();
@@ -329,11 +325,12 @@ $("#addLoc").click(function (event) {
   $("#newLocation").val("")
   $(".newLocationForm").show()
   $("#extraInfo").modal("show");
-  $("#addNewLocation").on("click", function () {
-    let location = $("#newLocation").val().toLowerCase().replace(/(\b[a-z](?!\s))/g, function(x){return x.toUpperCase()});
-    validateField("new location", location, 2, 20, lastLocationCheck);
-  }
-  )})
+})
+
+$("#addNewLocation").on("click", function () {
+  let location = $("#newLocation").val().toLowerCase().replace(/(\b[a-z](?!\s))/g, function(x){return x.toUpperCase()});
+  validateField("new location", location, 2, 20, lastLocationCheck);
+})
 
   const lastLocationCheck = (location) => {
      if (locations.find((office) => office.name === location)) {
@@ -349,7 +346,7 @@ $("#addLoc").click(function (event) {
   const getNewLocConfirmation = (data) => {
     initialiseData();
     closeModal()
-    $("#validation-text").html(`<div class="alert alert-success"><strong>${data.data} has been successfully added to the Company Directory. <br>Please add departments for this location.</strong></div>`)
+    $("#validation-text").html(`<div class="alert alert-success"><strong>${data.data} has successfully been added to the Company Directory. <br>Please add departments for this location.</strong></div>`)
     $("#extraInfo").modal("show");
     }
 
@@ -427,10 +424,12 @@ $("#resetHidingButton").click(function () {
   resetData();
 });
 
-const addOrEditStaff = () => {
+
+$("#addOrEditStaff").click(function () {
   newEmployee.firstName = $("#forename").val().toLowerCase().replace(/(\b[a-z](?!\s))/g, function(x){return x.toUpperCase()})  
   validateField("employee's first name", newEmployee.firstName, 2, 15, lastNameCheck)
-}
+})
+
 const lastNameCheck = (firstName) => {
   newEmployee.lastName = $("#surname").val().toLowerCase().replace(/(\b[a-z](?!\s))/g, function(x){return x.toUpperCase()}) ;
   validateField("employee's last name", newEmployee.lastName, 2, 20, departmentCheck)
@@ -442,8 +441,8 @@ newEmployee.locationID = $("#modalSelectLoc").val();
 if (newEmployee.departmentID !== "reset" && newEmployee.locationID !== "reset") {
     newEmployee.email = $("#email").val().toLowerCase();
 
-    (newEmployee.id !== "not assigned") ? validateField("email", newEmployee.email, 6, 30, updatePersonnel) :
-    validateField("email", newEmployee.email, 6, 30, emailDuplicationCheck);
+    (newEmployee.id !== "not assigned") ? validateField("email", newEmployee.email, 6, 40, updatePersonnel) :
+    validateField("email", newEmployee.email, 6, 40, emailDuplicationCheck);
 } else { 
   validateString = "The employee must be associated with a location and a department"
   validationWarning(validateString);
@@ -454,7 +453,10 @@ const emailDuplicationCheck = () => {
   if (staticResults.find((staff) => staff.email === newEmployee.email)) {
     validateString = "There is already an employee with this email address in the Company Directory. Duplicates are not allowed";
     validationWarning(validateString);
-  } else {callApi("insertEmployee", "POST", getAddConfirmation, newEmployee.firstName, newEmployee.lastName,
+  } else {
+    console.log('submitting data')
+    console.log(newEmployee)
+    callApi("insertEmployee", "POST", getAddConfirmation, newEmployee.firstName, newEmployee.lastName,
     newEmployee.email, newEmployee.departmentID);
 } 
 }

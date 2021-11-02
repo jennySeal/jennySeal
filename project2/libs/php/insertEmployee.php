@@ -32,9 +32,13 @@
 	// SQL statement accepts parameters and so is prepared to avoid SQL injection.
 	// $_REQUEST used for development / debugging. Remember to change to $_POST for production
 
-	$_REQUEST['param5'] = "";
+	$firstName = trim($_REQUEST['param1']);
+	$lastName = trim($_REQUEST['param2']);
+	$email = trim($_REQUEST['param3']);
+	$jobTitle = "";
+
 	$query = $conn->prepare('INSERT INTO personnel (firstName, lastName, email, departmentID, jobTitle) VALUES(?,?,?,?,?)');
-	$query->bind_param("sssis", $_REQUEST['param1'], $_REQUEST['param2'], $_REQUEST['param3'], $_REQUEST['param4'], $_REQUEST['param5']);
+	$query->bind_param("sssis", $firstName, $lastName, $email, $_REQUEST['param4'], $jobTitle);
 
 	$query->execute();
 	

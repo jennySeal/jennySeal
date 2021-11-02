@@ -32,9 +32,10 @@
 	// SQL statement accepts parameters and so is prepared to avoid SQL injection.
 	// $_REQUEST used for development / debugging. Remember to change to $_POST for production
 
-	$_REQUEST['param5'] = "";
+	$locationName = trim($_REQUEST['param1']);
+
 	$query = $conn->prepare('INSERT INTO location (name) VALUES(?)');
-	$query->bind_param("s", $_REQUEST['param1']);
+	$query->bind_param("s", $locationName);
 
 	$query->execute();
 	

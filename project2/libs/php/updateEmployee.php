@@ -1,10 +1,5 @@
 <?php
 
-	// remove next two lines for production
-	
-	ini_set('display_errors', 'On');
-	error_reporting(E_ALL);
-
 	$executionStartTime = microtime(true);
 //this includes the login details
 	include("config.php");
@@ -28,11 +23,13 @@
 		exit;
 
 	}	
-
+	$firstName = trim($_REQUEST['param1']);
+	$lastName = trim($_REQUEST['param2']);
+	$email = trim($_REQUEST['param3']);
 	// SQL statement accepts parameters and so is prepared to avoid SQL injection.
 	// $_REQUEST used for development / debugging. Remember to change to $_POST for production
 	$query = $conn->prepare('UPDATE personnel SET firstName=?, lastName=?, email=?, departmentID=? WHERE id=?');
-	$query->bind_param('sssii', $_REQUEST['param1'], $_REQUEST['param2'], $_REQUEST['param3'], $_REQUEST['param4'], $_REQUEST['param5']);
+	$query->bind_param('sssii', $firstName, $lastName, $email, $_REQUEST['param4'], $_REQUEST['param5']);
 	$query->execute();
 	
 	if (false === $query) {
