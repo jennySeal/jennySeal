@@ -57,7 +57,7 @@
 	$output['status']['name'] = "ok";
 	$output['status']['description'] = "success";
 	$output['status']['returnedIn'] = (microtime(true) - $executionStartTime) / 1000 . " ms";
-	$output['data'] = [$_REQUEST['param1'] . " has successfully been added to the Company Directory."];
+	$output['data'] = [$_REQUEST['param1']];
 	
 	mysqli_close($conn);
 

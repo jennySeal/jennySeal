@@ -205,6 +205,10 @@ p {
   font-size: 1.1rem;
 }
 
+.addEditForm, .viewEmployee, .newDepartmentForm, .newLocationForm {
+  display: none;
+} 
+
 #employeeid {
   font-size: 0.9rem;
 }

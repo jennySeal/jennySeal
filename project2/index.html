@@ -67,7 +67,9 @@
                                   </button>
                            </div>
                            <div id="validation-text"></div>
-                        <div class="modal-body">           <form id="editModal">
+                            <div class="modal-body">
+                            <div class="addEditForm">           
+                            <form id="editModal">
                             <p id="modal-start"><span id="verb">Verb</span> employee details and save.</p>
                             <div class="row-flex">
                             <label for="forename"><p>First Name</p></label>
@@ -102,7 +104,33 @@
                             <button type="submit" class="btn btn-primary" id="addOrEditStaff">Save Changes or Add</button>
                             <p class="right-align" id="employeeid"><sub>Employee Id</sub></p>
                             </form>   
-                            
+                            </div>
+                            <div class="viewEmployee">
+                                <h3 id="wholeName"><strong>First and Last name</strong></h3>
+                                <p id="viewDepartment">Department</p>
+                                <p id="viewLocation">The Office</p>
+                                <p id="emailFont">Email address</p>
+                                <p class="right-align" id="staffid">Staff Id</p>
+                            </div>
+                            <div class="newDepartmentForm">
+                            <label for="newDepartment"><p>Name of new department</p></label><br>
+                            <input type="text" class="form-control" id="newDepartment" minlength="2" maxlength="20" pattern="(^[A-Za-z -]+$)" autocomplete="off" autocapitalize>
+                            <br>
+                            <label for="location"><p>Which office is this department part of? </p></label><br>
+                            <select class="select" id="selectDeptLocation">
+                            <option value="reset" selected>Choose location</option>
+                            </select>
+                            <br><br>
+                            <button type="button" class="close btn btn-outline-dark" aria-label="Close">Cancel</button>
+                            <button type="button" class="btn btn-primary" id="addNewDepartment">Add New Department</button>
+                            </div>
+                            <div class="newLocationForm">
+                              <label for="newLoc"><p>Name of new business location</p></label>
+                              <input type="text" class="form-control" id="newLocation" minlength="2" maxlength="20" required aria-label="add name of new location">
+                                <br>
+                                <button type="button" class="close btn btn-outline-dark" aria-label="Close">Cancel</button>
+                                <button type="button" class="btn btn-primary" id="addNewLocation">Add New Location</button>
+                        </div>
                         </div>
                      </div>
                     </div>

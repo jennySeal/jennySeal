@@ -54,7 +54,7 @@
 	$output['status']['name'] = "ok";
 	$output['status']['description'] = "success";
 	$output['status']['returnedIn'] = (microtime(true) - $executionStartTime) / 1000 . " ms";
-	$output['data'] = [$_REQUEST['param5']];
+	$output['data'] = [$_REQUEST['param1']];
 	
 	mysqli_close($conn);
 
