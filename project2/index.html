@@ -55,8 +55,6 @@
                     </tbody>
                     <tfoot></tfoot>
                 </table>
-                
-                              
                   
                   <section class="modal" tabindex="-1" role="dialog" id="extraInfo">
                     <div class="modal-dialog" role="document">
@@ -69,7 +67,41 @@
                                   </button>
                            </div>
                            <div id="validation-text"></div>
-                        <div class="modal-body">              
+                        <div class="modal-body">           <form id="editModal">
+                            <p id="modal-start"><span id="verb">Verb</span> employee details and save.</p>
+                            <div class="row-flex">
+                            <label for="forename"><p>First Name</p></label>
+                            <input type="text" class="form-control" id="forename" autocomplete="off">
+                            </div><br> 
+                  
+                            <div class="row-flex">
+                            <label for="surname"><p>Surname</p></label>
+                            <input type="text" class="form-control" autocapitalize id="surname" autocomplete="off">
+                            </div><br>
+                  
+                            <div class="row-flex">
+                            <label for="department"><p>Department</p></label>
+                            <select class="select" id="modalSelectDept">
+                            <option value="reset">Choose Department</option>
+                            </select>
+                            </div><br>
+                  
+                            <div class="row-flex">
+                            <label for="location"><p>Location</p></label>
+                            <select class="select" id="modalSelectLoc">
+                            <option value="reset">Choose Location</option>
+                            </select>
+                            </div><br>
+                          
+                            <div class="row-flex">
+                            <label for="email"><p>Email</p></label>
+                            <input type="email" class="form-control" id="email">
+                            </div><br>
+                  
+                  
+                            <button type="submit" class="btn btn-primary" id="addOrEditStaff">Save Changes or Add</button>
+                            <p class="right-align" id="employeeid"><sub>Employee Id</sub></p>
+                            </form>   
                             
                         </div>
                      </div>

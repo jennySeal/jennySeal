@@ -1,40 +1,8 @@
 // Build add/edit employee modal form
 const buildForm = (employee, verb, commit) => {
-  $(".modal-body").html(`<form id="editModal">
-                 <p id="modal-start">${verb} employee details and save.</p>
-                 <div class="row-flex">
-                 <label for="forename"><p>First Name</p></label>
-                 <input type="text" class="form-control" id="forename" autocomplete="off">
-                 </div><br> 
-       
-                 <div class="row-flex">
-                 <label for="surname"><p>Surname</p></label>
-                 <input type="text" class="form-control" autocapitalize id="surname" autocomplete="off">
-                 </div><br>
-       
-                 <div class="row-flex">
-                 <label for="department"><p>Department</p></label>
-                 <select class="select" id="modalSelectDept">
-                 <option value="reset">Choose Department</option>
-                 </select>
-                 </div><br>
-       
-                 <div class="row-flex">
-                 <label for="location"><p>Location</p></label>
-                 <select class="select" id="modalSelectLoc">
-                 <option value="reset">Choose Location</option>
-                 </select>
-                 </div><br>
-               
-                 <div class="row-flex">
-                 <label for="email"><p>Email</p></label>
-                 <input type="email" class="form-control" id="email">
-                 </div><br>
-       
-       
-                 <button type="submit" class="btn btn-primary" id="addOrEditStaff">${commit}</button>
-                 <p class="right-align" id="employeeid"><sub>Employee ID ${employee.id}</sub></p>
-                 </form>`);
+  $("#verb").html(verb);
+  $("#addOrEditStaff").html(commit);
+  $("#employeeid").html(`Employee ID #${employee.id}`);
 
   locations.forEach((location) => {
     $("#modalSelectLoc").append(
