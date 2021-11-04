@@ -107,7 +107,7 @@ select {
   display: inline-flex;
   width: 100%;
   justify-content: space-evenly;
-  margin: 2vh 1vw;
+  margin: 3vh 1vw;
 }
 
 #resetHidingButton {
@@ -126,26 +126,25 @@ select {
   width: 100%;
 }
 
+.tableFixedHead {
+  overflow:auto;
+  height: 80vh;
+}
 
 table {
-  margin: 2vh 5vw;
+  margin: 0vh 5vw;
+  padding: 1vh;
   width: 90vw;
   border: 0.1rem solid var(--lightgray);
-  border-collapse: collapse;
+  border-collapse:collapse;
   background-color: white;
-  table-layout: fixed;
   border-radius: 5px;
+  table-layout: fixed;
 }
 
 thead {
   display: none;
-}
-
-th {
-  border-bottom: 0.1rem solid var(--lightgray);
-}
-
-
+  }
 
 .smaller,
 .bigger {
@@ -166,6 +165,10 @@ tr {
   width: 100%;
   justify-content: space-evenly;
   border-bottom: 0.1rem solid var(--lightgray);
+}
+
+table, th {
+  border-top: 0.25vh solid var(--lightgray);
 }
 
 p {
@@ -189,6 +192,7 @@ p {
   justify-content: flex-end;
   margin-right: 2vw;
   margin-top: 2vh;
+  margin-bottom: 2vh;
 }
 
 .right-align {
@@ -266,7 +270,7 @@ p {
   }
 }
 
-@media screen and (min-width: 600px) {
+@media screen and (min-width: 650px) {
   header {
     justify-content: flex-start;
     align-items: center;
@@ -297,11 +301,29 @@ p {
     display: block;
   }
 
+
+.body {
+   padding-top: 1vh;
+   border: 1vh solid var(--darkgray);
+ }
+
+ .tableFixedHead {
+  height: 75vh;
+}
+
   thead {
-    display: table-header-group;
+    display:table-row-group;
+    position: sticky;
+    top: 0;
     background-color: var(--lightgray);
+    padding: 1vh;
+    z-index: 999;
   }
 
+  table, th {
+    border-top: none;
+  }
+  
   .bigger {
     width: 25.25%;
     text-align: left;
@@ -317,12 +339,14 @@ p {
   }
 
   tr {
-    padding: 0.15rem;
+    padding: 0.25rem;
     display: table-row;
     width: 100%;
     justify-content: space-evenly;
   }
+  
   td {
+    border-top: 0.1rem solid var(--lightgray);
     border-bottom: 0.1rem solid var(--lightgray);
   }
 
