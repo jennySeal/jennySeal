@@ -28,9 +28,18 @@ let departmentOptions = [];
 // used to send validation errors
 let validateString = "";
 
-$(document).ready(function () {
+
+$(window).on('load', function () {
+  //Run pre-loader
   initialiseData();
-});
+  if ($("#preloader").length) {
+     $("#preloader")
+      .delay(1000)
+      .fadeOut('slow', function () {
+        $("#preloader").remove();
+      })
+      }});
+
 
 const initialiseData = () => {
   callApi("getAll", "GET", displayStaffData);
