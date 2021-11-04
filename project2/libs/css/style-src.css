@@ -269,6 +269,11 @@ p {
     box-shadow: 0.2rem 0.2rem 0.2rem var(--darkgray);
   }
 
+  #refreshButton {
+  position:absolute;
+  right: 2vw;
+  }
+
   .circle {
     display: block;
     border-radius: 50%;

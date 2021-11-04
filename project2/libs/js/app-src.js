@@ -429,6 +429,10 @@ const resetData = () => {
   
 };
 
+$("#refreshButton").click(function() {
+  location.reload(true)
+})
+
 $("#resetButton").click(function () {
   resetData();
 });
