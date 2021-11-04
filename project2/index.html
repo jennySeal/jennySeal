@@ -42,15 +42,15 @@
            <thead class="thead-light">
              <tr>
                     <th class="bigger">
-                        <input type="text" class="form-control search" id="searchNames" aria-label="search employee names" placeholder="Search Employees" autocomplete="off">
+                        <input type="search" class="form-control" id="searchNames" aria-label="search employee names" placeholder="Search Employees" autocomplete="off">
                     </th>
                     <th class="bigger">
-                        <select class="form-control search" id="selectDept">
-                            <option selected value="reset">Search Department</option>
+                        <select class="form-select" id="selectDept">
+                        <option selected value="reset">Search Department</option>
                         </select>
                     </th>
                     <th class="bigger">
-                        <select class="form-control search" id="selectLoc"><option value="reset">Search Location</option></select>
+                        <select class="form-select" id="selectLoc"><option value="reset">Search Location</option></select>
                     </th>
                     <th class="smaller">
                         <button class="btn btn-outline-primary" id="resetButton"><i class="fas fa-undo-alt"></i></button>
@@ -77,35 +77,45 @@
                            <div id="validation-text"></div>
                             <div class="modal-body">
                             <div class="addEditForm">
-                            <div id="editModal">           
+                            <form>
                             <p id="modal-start"><span id="verb">Verb</span> employee details and save.</p>
-                            <div class="row-flex">
-                            <label for="forename"><p>First Name</p></label>
+                            <div class="align-items-sm-start">
+                            <label for="forename" class="row-cols-auto form-label"><p>First Name</p></label>
+                            
+                            <div class="row-cols-sm-3">
                             <input type="text" class="form-control" id="forename" autocomplete="off">
+                             </div>   
                             </div><br> 
-                  
-                            <div class="row-flex">
-                            <label for="surname"><p>Surname</p></label>
+                            <div class="align-items-sm-start">
+                            <label for="surname" class="row-cols-auto form-label"><p>Surname</p></label>
+                            
+                            <div class="row-cols-sm-3">
                             <input type="text" class="form-control" autocapitalize id="surname" autocomplete="off">
-                            </div><br>
+                            </div></div><br>
                   
-                            <div class="row-flex">
-                            <label for="department"><p>Department</p></label>
-                            <select class="select" id="modalSelectDept">
+                            <div class="align-items-sm-start">
+                            <label for="department" class="row-cols-auto form-label"><p>Department</p></label>
+                            <div class="row-cols-sm-3">
+                            <select class="form-select" id="modalSelectDept">
                             <option value="reset">Choose Department</option>
                             </select>
+                            </div>
                             </div><br>
                   
-                            <div class="row-flex">
-                            <label for="location"><p>Location</p></label>
-                            <select class="select" id="modalSelectLoc">
+                            <div class="align-items-sm-start">
+                            <label for="location" class="row-cols-auto form-label"><p>Location</p></label>
+                            <div class="row-cols-sm-3">
+                            <select class="form-select" id="modalSelectLoc">
                             <option value="reset">Choose Location</option>
                             </select>
+                            </div>
                             </div><br>
                           
-                            <div class="row-flex">
-                            <label for="email"><p>Email</p></label>
+                            <div class="align-items-sm-start">
+                            <label for="email" class="row-cols-auto form-label"><p>Email</p></label>
+                            <div class="row-cols-sm-3">
                             <input type="email" class="form-control" id="email">
+                            </div>
                             </div><br>
                   
                             <div class="row-flex">
@@ -114,8 +124,8 @@
 
                             <button type="button" class="btn btn-primary" id="addOrEditStaff" ><p id="addEditButton">Save Changes or Add</p></button>
                             </div>
-                            </div>
-
+                            </form> 
+                        
                             </div>
                             </div>
                             <div class="viewEmployee">
@@ -126,16 +136,20 @@
 
                             </div>
                             <div class="newDepartmentForm">
-                            <label for="newDepartment"><p>Name of new department</p></label><br>
+                            <form>
+                            <div class="align-items-sm-start">
+                            <label for="newDepartment" class="row-cols-auto form-label"><p>Name of new department</p></label><br>
                             <input type="text" class="form-control" id="newDepartment" minlength="2" maxlength="20" pattern="(^[A-Za-z -]+$)" autocomplete="off" autocapitalize>
+                            </div>
                             <br>
                             <label for="location"><p>Which office is this department part of? </p></label><br>
-                            <select class="select" id="selectDeptLocation">
+                            <select class="form-select" id="selectDeptLocation">
                             <option value="reset" selected>Choose location</option>
                             </select>
                             <br><br>
                             <button type="button" class="close btn btn-outline-dark" aria-label="Close">Cancel</button>
                             <button type="button" class="btn btn-primary" id="addNewDepartment">Add New Department</button>
+                            </form>
                             </div>
                             <div class="newLocationForm">
                               <label for="newLoc"><p>Name of new business location</p></label>

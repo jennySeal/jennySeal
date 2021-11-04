@@ -206,9 +206,9 @@ p {
 }
 
 #modal-start {
-  margin-bottom: 3vh;
+  margin-bottom: 2vh;
   font-weight: bolder;
-  line-height: 1.5rem;
+  line-height: 1rem;
   font-size: 1.1rem;
 }
 .modal-dialog {
@@ -228,27 +228,21 @@ p {
 } 
 
 
+.viewEmployee, .newDepartmentForm, .newLocationForm {
+  padding: 2vh;
+}
+
+
 #emailFont {
   font-size: 0.9rem;
 }
 
-#editModal {
-  display: flex;
-  flex-direction: column;
-  line-height: 1rem;
-  justify-content: space-between;
-}
 
 .row-flex {
   display: inline-flex;
-  width: 95%;
-  margin-left: 2vw;
   justify-content: space-between;
 }
 
-.form-control, select {
-  width: 48vw;
-}
 
 .form-control.search {
   width: 100%;
@@ -362,12 +356,8 @@ p {
 
 
 .row-flex {
-  width: 90%;
+  width: 100%;
 
-}
-
-.form-control, select {
-  width: 20vw;
 }
 
 
