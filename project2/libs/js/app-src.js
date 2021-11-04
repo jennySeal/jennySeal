@@ -178,7 +178,6 @@ const viewStaff = (id) => {
   $("#viewDepartment").html(`${result[0].department} department`);
   $("#viewLocation").html(`The ${result[0].location} office`);
   $("#emailFont").html(`${result[0].email}`);
-  $("#staffid").html(`Employee ID ${result[0].id}`);
   $("#extraInfo").modal("show");
 };
 
@@ -232,7 +231,6 @@ $("#addStaff").click(function (event) {
   $("#modalSelectLoc").val("reset");
   $("#modalSelectDept").val("reset");
   $("#email").val(" ");
-  $("#staffid").val("Not assigned");
   newEmployee.id = "not assigned";
 
   buildForm(newEmployee, "Add", "Add Employee");
@@ -243,7 +241,7 @@ $("#addStaff").click(function (event) {
 const buildForm = (employee, verb, commit) => {
   $("#verb").html(verb);
   $("#addEditButton").html(`${commit}`);
-  $("#employeeid").html(`Employee ID #${employee.id}`);
+
 
   $("#modalSelectLoc").html(
     `<option value="reset" selected>Choose location</option>`)  
