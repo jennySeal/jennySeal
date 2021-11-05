@@ -83,7 +83,9 @@ const displayStaffData = (data) => {
     });
     $("#firstRow").on("click", `#edit${employee.id}`, function () {
       callApi("getAllLocations", "GET", getLocationData);
-      $(".addEditForm").show(callApi("getPersonnelByID", "GET", editStaff, employee.id)
+      
+      $(".addEditForm").show(
+        callApi("getPersonnelByID", "GET", editStaff, employee.id)
       )
     });
     $("#firstRow").on("click", `#delete${employee.id}`, function () {
