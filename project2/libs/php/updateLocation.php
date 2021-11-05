@@ -1,16 +1,7 @@
 <?php
 
-	// example use from browser
-	// use insertDepartment.php first to create new dummy record and then specify it's id in the command below
-	// http://localhost/companydirectory/libs/php/deleteDepartmentByID.php?id=<id>
-
-	// remove next two lines for production
-	
-	ini_set('display_errors', 'On');
-	error_reporting(E_ALL);
-
 	$executionStartTime = microtime(true);
-
+//this includes the login details
 	include("config.php");
 
 	header('Content-Type: application/json; charset=UTF-8');
@@ -32,14 +23,12 @@
 		exit;
 
 	}	
-
+	$locationName = trim($_REQUEST['param1']);
 	// SQL statement accepts parameters and so is prepared to avoid SQL injection.
 	// $_REQUEST used for development / debugging. Remember to change to $_POST for production
-
-	$query = $conn->prepare('DELETE FROM department WHERE id = ?');
 	
-	$query->bind_param("i", $_REQUEST['param1']);
-
+	$query = $conn->prepare('UPDATE location SET name=? WHERE id=?');
+	$query->bind_param('si', $locationName, $_REQUEST['param2']);
 	$query->execute();
 	
 	if (false === $query) {
@@ -61,7 +50,7 @@
 	$output['status']['name'] = "ok";
 	$output['status']['description'] = "success";
 	$output['status']['returnedIn'] = (microtime(true) - $executionStartTime) / 1000 . " ms";
-	$output['data'] = [];
+	$output['data'] = [$_REQUEST['param1']];
 	
 	mysqli_close($conn);
 

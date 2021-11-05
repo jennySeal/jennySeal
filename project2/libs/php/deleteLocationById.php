@@ -1,14 +1,5 @@
 <?php
 
-	// example use from browser
-	// use insertDepartment.php first to create new dummy record and then specify it's id in the command below
-	// http://localhost/companydirectory/libs/php/deleteDepartmentByID.php?id=<id>
-
-	// remove next two lines for production
-	
-	ini_set('display_errors', 'On');
-	error_reporting(E_ALL);
-
 	$executionStartTime = microtime(true);
 
 	include("config.php");
@@ -33,16 +24,53 @@
 
 	}	
 
-	// SQL statement accepts parameters and so is prepared to avoid SQL injection.
-	// $_REQUEST used for development / debugging. Remember to change to $_POST for production
+	// SQL does not accept parameters and so is not prepared
 
-	$query = $conn->prepare('DELETE FROM department WHERE id = ?');
-	
-	$query->bind_param("i", $_REQUEST['param1']);
+	$query = $conn->prepare('SELECT COUNT(*) FROM department WHERE locationID = ?');
+	$secondquery = $conn->prepare('DELETE FROM location WHERE id = ?');
 
+	$query->bind_param('i', $_REQUEST['param1']);
+	$secondquery->bind_param('i', $_REQUEST['param1']);
 	$query->execute();
+
 	
 	if (false === $query) {
+
+		$output['status']['code'] = "400";
+		$output['status']['name'] = "executed";
+		$output['status']['description'] = "query failed";	
+		$output['data'] = [];
+
+		mysqli_close($conn);
+
+		echo json_encode($output); 
+
+		exit;
+
+	}
+
+	$result = $query->bind_result($count);
+	while ($query->fetch()){
+		$data = $count;
+	};
+
+	if ($count > 0) {
+
+	$output['status']['code'] = "401";
+	$output['status']['name'] = "unauthorised";
+	$output['status']['description'] = "success";
+	$output['status']['returnedIn'] = (microtime(true) - $executionStartTime) / 1000 . " ms";
+	$output['data'] = "This location has " . $data . " departments attached to it. Deletion denied";
+	
+	mysqli_close($conn);
+
+	echo json_encode($output); 
+
+	} else {
+
+	$secondquery->execute();
+	
+	if (false === $secondquery) {
 
 		$output['status']['code'] = "400";
 		$output['status']['name'] = "executed";
@@ -67,4 +95,6 @@
 
 	echo json_encode($output); 
 
+	
+	}
 ?>

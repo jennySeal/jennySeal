@@ -27,13 +27,13 @@
         </header>
         <div id="hidingButton">
             <button class="btn btn-outline-secondary" id="resetHidingButton"><i class="fas fa-undo-alt"></i></button>
-            <button class="btn btn-primary bt-lg hidingButton" id="hidingAddButton"><i class="fas fa-plus"></i></button>
+            <button class="btn btn-primary bt-lg hidingButton" id="hidingAddButton"><i class="fa-solid fa-circle-chevron-down"></i></button>
         <button class="btn btn-secondary bt-lg hidingButton" id="hidingSearchButton"><i class="fas fa-search"></i></button>
         
         </div>
         <form class="addButtons" id="disappearingButtons">
-                <button class="btn btn-secondary" id="addLoc"><i class="fas fa-plus"></i> Location</button>
-                <button class="btn btn-outline-dark" id="addDept"><i class="fas fa-plus"></i>  Department</button>
+                <button class="btn btn-secondary" id="addLoc"><i class="far fa-edit"></i> Location</button>
+                <button class="btn btn-outline-dark" id="addDept"><i class="far fa-edit"></i>  Department</button>
             <button class="btn btn-primary" id="addStaff"><i class="fas fa-plus"></i>  Employee</button>
         </form>
 
@@ -152,6 +152,10 @@
                             </form>
                             </div>
                             <div class="newLocationForm">
+                                <h4>Business Locations</h4>
+                                <section id="listLocations"></section>
+                              <br>
+                              <h5><i class="fas fa-plus"></i> New Location</h5>  
                               <label for="newLoc"><p>Name of new business location</p></label>
                               <input type="text" class="form-control" id="newLocation" minlength="2" maxlength="20" required aria-label="add name of new location">
                                 <br>

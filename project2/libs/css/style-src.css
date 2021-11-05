@@ -114,6 +114,12 @@ select {
   display: none;
 }
 
+#newLocationName {
+  margin-top: 1vh;
+  margin-bottom: 1vh;
+  text-transform: capitalize;
+}
+
 #forename, #surname, #newDepartment, #newLocation {
   text-transform: capitalize;
 }
@@ -221,6 +227,21 @@ p {
 
 .modal-body p {
   font-size: 1.1rem;
+}
+
+.locationflex {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 80%;
+  margin-left: 3vh;
+
+}
+
+#listLocations {
+  background-color: rgb(252, 246, 246);
+  padding: 1vh;
+  border-radius: 10px;
 }
 
 .addEditForm, .viewEmployee, .newDepartmentForm, .newLocationForm {
@@ -349,6 +370,11 @@ p {
   #addStaff, #addLoc, #addDept {
     font-size: 1rem;
 }
+
+.locationFlex {
+  width: 43%;
+}
+
 
 .modal-body p {
   font-size: 1rem;
