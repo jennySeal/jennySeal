@@ -83,9 +83,9 @@ const displayStaffData = (data) => {
     });
     $("#firstRow").on("click", `#edit${employee.id}`, function () {
       callApi("getAllLocations", "GET", getLocationData);
-      
-      $(".addEditForm").show(
-        callApi("getPersonnelByID", "GET", editStaff, employee.id)
+      let empId = employee.id      
+      $(".addEditForm").show( 
+        callApi("getPersonnelByID", "GET", editStaff, empId)
       )
     });
     $("#firstRow").on("click", `#delete${employee.id}`, function () {
@@ -189,16 +189,16 @@ const editStaff = (data) => {
   let result = data.data.personnel;
   departments = data.data.department;
 
-  buildForm(result[0], "Edit", "Save Changes");
+  buildForm(result, "Edit", "Save Changes");
 
-  $("#forename").val(result[0].firstName);
-  $("#surname").val(result[0].lastName);
-  $("#modalSelectDept").val(result[0].departmentID);
-  $("#email").val(result[0].email);
-  newEmployee.id = result[0].id;
-  let employeeLocation = locations.find((location) => location.name === result[0].location);
-  result[0].locationID = employeeLocation.id;
-  $("#modalSelectLoc").val(result[0].locationID);
+  $("#forename").val(result.firstName);
+  $("#surname").val(result.lastName);
+  $("#modalSelectDept").val(result.departmentID);
+  $("#email").val(result.email);
+  newEmployee.id = result.id;
+  let employeeLocation = locations.find((location) => location.name === result.locationName);
+  result.locationID = employeeLocation.id;
+  $("#modalSelectLoc").val(result.locationID);
     
   $("#extraInfo").modal("show");
 };
