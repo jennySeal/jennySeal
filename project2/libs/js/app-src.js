@@ -82,8 +82,8 @@ const displayStaffData = (data) => {
       )
     });
     $("#firstRow").on("click", `#edit${employee.id}`, function () {
-      $(".addEditForm").show(      
-        editStaff(employee.id)
+      callApi("getAllLocations", "GET", getLocationData);
+      $(".addEditForm").show(callApi("getPersonnelByID", "GET", editStaff, employee.id)
       )
     });
     $("#firstRow").on("click", `#delete${employee.id}`, function () {
@@ -182,18 +182,21 @@ const viewStaff = (id) => {
 };
 
 //opens modal to EDIT a staff record. Uses same form as the ADD employee command
-const editStaff = (id) => {
-  let result = results.filter((result) => result.id === id);
-  let employeeLocation = locations.find((location) => location.name === result[0].location);
-  result[0].locationID = employeeLocation.id;
+const editStaff = (data) => {
+  
+  let result = data.data.personnel;
+  departments = data.data.department;
+
   buildForm(result[0], "Edit", "Save Changes");
 
   $("#forename").val(result[0].firstName);
   $("#surname").val(result[0].lastName);
-  $("#modalSelectLoc").val(result[0].locationID);
   $("#modalSelectDept").val(result[0].departmentID);
   $("#email").val(result[0].email);
   newEmployee.id = result[0].id;
+  let employeeLocation = locations.find((location) => location.name === result[0].location);
+  result[0].locationID = employeeLocation.id;
+  $("#modalSelectLoc").val(result[0].locationID);
     
   $("#extraInfo").modal("show");
 };
