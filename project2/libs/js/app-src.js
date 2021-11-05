@@ -327,17 +327,7 @@ const buildForm = (employee, verb, commit) => {
 //opens modal to add a department
 $("#addDept").click(function (event) {
   event.preventDefault();
-  $("#newDepartment").val("");
-  $("#selectDeptLocation").html(
-    `<option value="reset" selected>Choose location</option>`
-  );
-  locations.forEach((location) => {
-    $("#selectDeptLocation").append(
-      `<option value="${location.id}" loc-name="${location.name}">${location.name}</option>`
-    );
-  });
-  $(".newDepartmentForm").show();
-  $("#extraInfo").modal("show");
+  changingDepartmentData()
 });
 
 //Add a department action
@@ -432,6 +422,65 @@ const changingLocationData = () => {
   $("#extraInfo").modal("show");
 }
 
+const changingDepartmentData = () => {
+  callApi("getAllDepartments", "GET", getDepartmentData);
+  $("#newDepartment").val("");
+  $("#listDepartments").html("");
+  departments.forEach((departmentToChange) => {
+    $("#listDepartments").append(
+      `<div class="locationflex" key=${departmentToChange.id}><p>${departmentToChange.name}</p>
+       <div class="buttons">
+       <button class="btn btn-outline-dark" type="button" id="edit${departmentToChange.id}"><i class="far fa-edit"></i></button>
+       <button class="btn btn-primary" type="button" id="delete${departmentToChange.id}" ><i class="far fa-trash-alt"></i></button>
+     </div> `)
+       $("#listDepartments").on("click", `#edit${departmentToChange.id}`, function () {
+        $("#validation-text").html(`<div class="alert alert-warning">
+        <strong>Edit carefully and click confirm to save changes.</strong><br>
+        <label for="newDepartmentName" class="form-control-label">Please type the new name for <strong>${departmentToChange.name}</strong></label>
+        <input type="text" id="newDepartmentName" class="form-control" autocapitalize>
+        <button class="btn btn-primary" id="confirmEdit" data=${departmentToChange.id}>Save</button>
+        <button class="btn btn-outline-dark close">Cancel</button>`);
+        
+        $(".close").on("click", function () {
+          $("#validation-text").html("");
+        });
+        
+        $("#confirmEdit").on("click", function () {
+            
+           let department = $("#newDepartmentName").val().toLowerCase().replace(/(\b[a-z](?!\s))/g, function (x) {
+          return x.toUpperCase();
+        })
+           validateField("new department", department, 2, 30, lastUpdateDepartmentCheck, departmentToChange.id)
+        })
+      });
+       $("#listDepartments").on("click", `#delete${departmentToChange.id}`, function () {
+        $("#validation-text").html(`<div class="alert alert-warning">
+        <strong>Are you sure you want to delete the ${departmentToChange.name} department?</strong><br>
+        <button class="btn btn-primary" id="confirmDelete">Delete</button>
+        <button class="btn btn-outline-dark close">Cancel</button>`);
+        $(".close").on("click", function () {
+          $("#validation-text").html("");
+        });
+        $("#confirmDelete").on("click", function () {
+          
+          callApi("deleteDepartmentById", "GET", deleteConfirmation, departmentToChange.id);
+        });
+      });
+    });
+  
+
+  $("#selectDeptLocation").html(
+    `<option value="reset" selected>Choose location</option>`
+  );
+  locations.forEach((location) => {
+    $("#selectDeptLocation").append(
+      `<option value="${location.id}" loc-name="${location.name}">${location.name}</option>`
+    );
+  });
+  $(".newDepartmentForm").show();
+  $("#extraInfo").modal("show");
+}
+
 $("#addNewLocation").on("click", function () {
   let location = $("#newLocation")
     .val()
@@ -460,6 +509,17 @@ const lastUpdateLocationCheck = (location, locationId) => {
     validationWarning(validateString);
   } else {
     callApi("updateLocation", "GET", getEditConfirmation, location, locationId);
+  }
+};
+
+const lastUpdateDepartmentCheck = (department, departmentId) => {
+  
+  if (departments.find((dept) => dept.name === department)) {
+    validateString = `${department} already exists within Company Directory. Duplicates are not allowed.`;
+    validationWarning(validateString);
+  } else {
+
+    callApi("updateDepartment", "GET", getEditConfirmation, department, departmentId);
   }
 };
 
@@ -683,7 +743,6 @@ const validatePattern = (field, fieldInput, lastCheckCallback, extraField) => {
       validateString = `The ${field} must not contain any unusual characters.`;
       validationWarning(validateString);
     } else {
-      
       lastCheckCallback(fieldInput, extraField);
     }
   }

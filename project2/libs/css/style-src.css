@@ -244,6 +244,14 @@ p {
   border-radius: 10px;
 }
 
+#listDepartments {
+  background-color: rgb(252, 246, 246);
+  padding: 1vh;
+  border-radius: 10px;
+  height: 40vh;
+  overflow-y: auto;
+}
+
 .addEditForm, .viewEmployee, .newDepartmentForm, .newLocationForm {
   display: none;
 } 
