@@ -28,6 +28,8 @@ let departmentOptions = [];
 // used to send validation errors
 let validateString = "";
 
+let locationForEditedDepartment = 0;
+
 $(window).on("load", function () {
   //Run pre-loader
   initialiseData();
@@ -199,7 +201,7 @@ const editStaff = (data) => {
   let result = data.data.personnel;
   departments = data.data.department;
 
-  buildForm(result, "Edit", "Save Changes");
+  buildForm(result, "Edit");
 
   $("#forename").val(result.firstName);
   $("#surname").val(result.lastName);
@@ -220,8 +222,8 @@ const deleteStaff = (id) => {
   viewStaff(id);
   $("#validation-text").html(`<div class="alert alert-warning">
   <strong>Are you sure you want to delete this employee?</strong><br>
-  <button class="btn btn-primary" id="confirmDelete">Delete</button>
-  <button class="btn btn-outline-dark close">Cancel</button>`);
+  <button class="btn btn-primary" id="confirmDelete">Yes</button>
+  <button class="btn btn-outline-dark close">No</button>`);
   $(".close").on("click", function () {
     closeModal();
   });
@@ -232,14 +234,13 @@ const deleteStaff = (id) => {
 };
 
 const deleteConfirmation = (data) => {
-  
-  closeModal()
+  closeModal();
   initialiseData();
   $("#extraInfo").modal("show");
-  if (data.status.code === '200') {
+  if (data.status.code === "200") {
     $("#validation-text").html(`<div class="alert alert-success">
   <strong>Successfully deleted</strong><br>`);
-  } else if (data.status.code === '401') {
+  } else if (data.status.code === "401") {
     $("#validation-text").html(`<div class="alert alert-danger">
     <strong>${data.data}</strong><br>`);
   } else {
@@ -258,14 +259,13 @@ $("#addStaff").click(function (event) {
   $("#email").val(" ");
   newEmployee.id = "not assigned";
 
-  buildForm(newEmployee, "Add", "Add Employee");
+  buildForm(newEmployee, "Add");
   $(".addEditForm").show();
   $("#extraInfo").modal("show");
 });
 
-const buildForm = (employee, verb, commit) => {
+const buildForm = (employee, verb) => {
   $("#verb").html(verb);
-  $("#addEditButton").html(`${commit}`);
 
   $("#modalSelectLoc").html(
     `<option value="reset" selected>Choose location</option>`
@@ -327,7 +327,7 @@ const buildForm = (employee, verb, commit) => {
 //opens modal to add a department
 $("#addDept").click(function (event) {
   event.preventDefault();
-  changingDepartmentData()
+  changingDepartmentData();
 });
 
 //Add a department action
@@ -368,10 +368,10 @@ const lastDepartmentCheck = (departmentName) => {
 
 //opens modal to add a location
 $("#addLoc").click(function (event) {
-  event.preventDefault()
-  changingLocationData()
+  event.preventDefault();
+  changingLocationData();
 });
-
+//----------------------------------------------------------------------------
 const changingLocationData = () => {
   callApi("getAllLocations", "GET", getLocationData);
   $("#newLocation").val("");
@@ -379,96 +379,152 @@ const changingLocationData = () => {
 
   locations.forEach((locationToChange) => {
     $("#listLocations").append(
-      `<div class="locationflex" key=${locationToChange.id}><p>${locationToChange.name}</p>
+      `<div class="locationFlex" key=${locationToChange.id}><p>${locationToChange.name}</p>
        <div class="buttons">
        <button class="btn btn-outline-dark" type="button" id="edit${locationToChange.id}"><i class="far fa-edit"></i></button>
        <button class="btn btn-primary" type="button" id="delete${locationToChange.id}" ><i class="far fa-trash-alt"></i></button>
-     </div> `)
-     $("#listLocations").on("click", `#edit${locationToChange.id}`, function () {
+     </div> `
+    );
+    $("#listLocations").on("click", `#edit${locationToChange.id}`, function () {
       $("#validation-text").html(`<div class="alert alert-warning">
-      <strong>Edit carefully and click confirm to save changes.</strong><br>
-      <label for="newLocationName" class="form-control-label">Please type the new name for <strong>${locationToChange.name}</strong></label>
+      <label for="newLocationName" class="form-control-label">New name for <strong>${locationToChange.name} </strong>office</label>
       <input type="text" id="newLocationName" class="form-control" autocapitalize>
       <button class="btn btn-primary" id="confirmEdit" data=${locationToChange.id}>Save</button>
       <button class="btn btn-outline-dark close">Cancel</button>`);
-      
+
       $(".close").on("click", function () {
         $("#validation-text").html("");
       });
-      
+
       $("#confirmEdit").on("click", function () {
-          
-         let location = $("#newLocationName").val().toLowerCase().replace(/(\b[a-z](?!\s))/g, function (x) {
-        return x.toUpperCase();
-      })
-         validateField("new location", location, 2, 20, lastUpdateLocationCheck, locationToChange.id)
-      })
+        $("#modalSelectLoc").html(
+          `<option value="reset" selected>Choose location</option>`
+        );
+        locations.forEach((location) => {
+          $("#modalSelectLoc").append(
+            `<option value="${location.id}">${location.name}</option>`
+          );
+        });
+        let location = $("#newLocationName")
+          .val()
+          .toLowerCase()
+          .replace(/(\b[a-z](?!\s))/g, function (x) {
+            return x.toUpperCase();
+          });
+        validateField(
+          "new location",
+          location,
+          2,
+          20,
+          lastUpdateLocationCheck,
+          locationToChange.id
+        );
+      });
     });
-     $("#listLocations").on("click", `#delete${locationToChange.id}`, function () {
-      $("#validation-text").html(`<div class="alert alert-warning">
+    $("#listLocations").on(
+      "click",
+      `#delete${locationToChange.id}`,
+      function () {
+        $("#validation-text").html(`<div class="alert alert-warning">
       <strong>Are you sure you want to delete the ${locationToChange.name} office?</strong><br>
-      <button class="btn btn-primary" id="confirmDelete">Delete</button>
-      <button class="btn btn-outline-dark close">Cancel</button>`);
-      $(".close").on("click", function () {
-        $("#validation-text").html("");
-      });
-      $("#confirmDelete").on("click", function () {
-        
-        callApi("deleteLocationById", "GET", deleteConfirmation, locationToChange.id);
-      });
-    });
+      <button class="btn btn-primary" id="confirmDelete">Yes</button>
+      <button class="btn btn-outline-dark close">No</button>`);
+        $(".close").on("click", function () {
+          $("#validation-text").html("");
+        });
+        $("#confirmDelete").on("click", function () {
+          callApi(
+            "deleteLocationById",
+            "GET",
+            deleteConfirmation,
+            locationToChange.id
+          );
+        });
+      }
+    );
   });
   $(".newLocationForm").show();
   $("#extraInfo").modal("show");
-}
+};
 
+//-----------------------------------------------------------------------------------------------------------
 const changingDepartmentData = () => {
   callApi("getAllDepartments", "GET", getDepartmentData);
   $("#newDepartment").val("");
   $("#listDepartments").html("");
   departments.forEach((departmentToChange) => {
     $("#listDepartments").append(
-      `<div class="locationflex" key=${departmentToChange.id}><p>${departmentToChange.name}</p>
+      `<div class="departmentFlex" key=${departmentToChange.id}><p>${departmentToChange.name}</p>
        <div class="buttons">
        <button class="btn btn-outline-dark" type="button" id="edit${departmentToChange.id}"><i class="far fa-edit"></i></button>
        <button class="btn btn-primary" type="button" id="delete${departmentToChange.id}" ><i class="far fa-trash-alt"></i></button>
-     </div> `)
-       $("#listDepartments").on("click", `#edit${departmentToChange.id}`, function () {
+     </div> `
+    );
+    $("#listDepartments").on(
+      "click",
+      `#edit${departmentToChange.id}`,
+      function () {
         $("#validation-text").html(`<div class="alert alert-warning">
-        <strong>Edit carefully and click confirm to save changes.</strong><br>
-        <label for="newDepartmentName" class="form-control-label">Please type the new name for <strong>${departmentToChange.name}</strong></label>
-        <input type="text" id="newDepartmentName" class="form-control" autocapitalize>
-        <button class="btn btn-primary" id="confirmEdit" data=${departmentToChange.id}>Save</button>
+        <label for="newDepartmentName" class="form-control-label"><strong>Edit department</strong></label>
+        <input type="text" id="newDepartmentName" class="form-control" autocapitalize ><br>
+        <label for="locationNew" class="form-control-label">Location</label> 
+        <select class="form-select" id="locationNew"><option value="reset">Choose Location</option></select><br>
+        <button class="btn btn-primary" id="confirmEditDept" data=${departmentToChange.id}>Save</button>
         <button class="btn btn-outline-dark close">Cancel</button>`);
-        
-        $(".close").on("click", function () {
-          $("#validation-text").html("");
+        $("#locationNew").html(
+          `<option value="reset" selected>Choose location</option>`
+        );
+        locations.forEach((location) => {
+          $("#locationNew").append(
+            `<option value="${location.id}">${location.name}</option>`
+          );
         });
-        
-        $("#confirmEdit").on("click", function () {
-            
-           let department = $("#newDepartmentName").val().toLowerCase().replace(/(\b[a-z](?!\s))/g, function (x) {
+        $("#newDepartmentName").val(departmentToChange.name);
+        $("#locationNew").val(departmentToChange.locationID); 
+      
+
+    $(".close").on("click", function () {
+      $("#validation-text").html("");
+    });
+
+    $("#confirmEditDept").on("click", function () {
+      
+      locationForEditedDepartment = $("#locationNew").val()
+      let departmentName = $("#newDepartmentName")
+        .val()
+        .toLowerCase()
+        .replace(/(\b[a-z](?!\s))/g, function (x) {
           return x.toUpperCase();
         })
-           validateField("new department", department, 2, 30, lastUpdateDepartmentCheck, departmentToChange.id)
-        })
-      });
-       $("#listDepartments").on("click", `#delete${departmentToChange.id}`, function () {
+      validateField("new department", departmentName, 2, 30, callUpdateDepartment, departmentToChange.id)
+    })
+
+      
+
+    $("#listDepartments").on(
+      "click",
+      `#delete${departmentToChange.id}`,
+      function () {
         $("#validation-text").html(`<div class="alert alert-warning">
         <strong>Are you sure you want to delete the ${departmentToChange.name} department?</strong><br>
-        <button class="btn btn-primary" id="confirmDelete">Delete</button>
-        <button class="btn btn-outline-dark close">Cancel</button>`);
+        <button class="btn btn-primary" id="confirmDelete">Yes</button>
+        <button class="btn btn-outline-dark close">No</button>`);
         $(".close").on("click", function () {
           $("#validation-text").html("");
         });
         $("#confirmDelete").on("click", function () {
-          
-          callApi("deleteDepartmentById", "GET", deleteConfirmation, departmentToChange.id);
+          callApi(
+            "deleteDepartmentById",
+            "GET",
+            deleteConfirmation,
+            departmentToChange.id
+          );
         });
-      });
-    });
-  
-
+      }
+    );
+  });
+}
+);
   $("#selectDeptLocation").html(
     `<option value="reset" selected>Choose location</option>`
   );
@@ -479,7 +535,7 @@ const changingDepartmentData = () => {
   });
   $(".newDepartmentForm").show();
   $("#extraInfo").modal("show");
-}
+};
 
 $("#addNewLocation").on("click", function () {
   let location = $("#newLocation")
@@ -491,8 +547,6 @@ $("#addNewLocation").on("click", function () {
   validateField("new location", location, 2, 20, lastLocationCheck);
 });
 
-
-
 const lastLocationCheck = (location) => {
   if (locations.find((office) => office.name === location)) {
     validateString = `${location} already exists within Company Directory. Duplicates are not allowed.`;
@@ -503,7 +557,6 @@ const lastLocationCheck = (location) => {
 };
 
 const lastUpdateLocationCheck = (location, locationId) => {
-  
   if (locations.find((office) => office.name === location)) {
     validateString = `${location} already exists within Company Directory. Duplicates are not allowed.`;
     validationWarning(validateString);
@@ -512,16 +565,12 @@ const lastUpdateLocationCheck = (location, locationId) => {
   }
 };
 
-const lastUpdateDepartmentCheck = (department, departmentId) => {
+const callUpdateDepartment = (department, departmentId) => {
   
-  if (departments.find((dept) => dept.name === department)) {
-    validateString = `${department} already exists within Company Directory. Duplicates are not allowed.`;
-    validationWarning(validateString);
-  } else {
-
-    callApi("updateDepartment", "GET", getEditConfirmation, department, departmentId);
+   callApi(
+      "updateDepartment", "GET", getEditConfirmation, department, locationForEditedDepartment, departmentId)
   }
-};
+
 
 const getNewLocConfirmation = (data) => {
   initialiseData();
@@ -701,13 +750,13 @@ const getAddConfirmation = (data) => {
 };
 
 const getEditConfirmation = (data) => {
-  closeModal()
-  initialiseData()
-  
+  closeModal();
+  initialiseData();
+
   $("#validation-text").html(`<div class="alert alert-success">
   <strong>${data.data[0]}'s information has successfully been updated</strong><br></div>`);
   $("#extraInfo").modal("show");
-  }
+};
 
 const validationWarning = (validateString) => {
   $("#validation-text").html("");
@@ -716,9 +765,16 @@ const validationWarning = (validateString) => {
     </div>`);
 };
 
-const validateField = (field, fieldInput, min, max, lastCheckCallback, extraField) => {
+const validateField = (
+  field,
+  fieldInput,
+  min,
+  max,
+  lastCheckCallback,
+  extraField
+) => {
   
-  if (fieldInput.length > max || fieldInput.length < min) {
+    if (fieldInput.length > max || fieldInput.length < min) {
     validateString = `The ${field} must be between ${min} and ${max} characters.`;
     validationWarning(validateString);
   } else {
@@ -726,7 +782,6 @@ const validateField = (field, fieldInput, min, max, lastCheckCallback, extraFiel
   }
 };
 const validatePattern = (field, fieldInput, lastCheckCallback, extraField) => {
-  
   if (field === "email") {
     if (
       !fieldInput.match(
@@ -743,6 +798,7 @@ const validatePattern = (field, fieldInput, lastCheckCallback, extraField) => {
       validateString = `The ${field} must not contain any unusual characters.`;
       validationWarning(validateString);
     } else {
+      
       lastCheckCallback(fieldInput, extraField);
     }
   }

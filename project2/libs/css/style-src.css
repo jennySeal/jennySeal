@@ -44,7 +44,9 @@ input {
 
 button,
 select,
+option,
 input,
+.form-select,
 .form-control,
 .btn {
   font-weight: bold;
@@ -229,27 +231,37 @@ p {
   font-size: 1.1rem;
 }
 
-.locationflex {
+.locationFlex, .departmentFlex {
   display: inline-flex;
   align-items: center;
   justify-content: space-between;
-  width: 80%;
+  width: 90%;
   margin-left: 3vh;
 
 }
 
-#listLocations {
-  background-color: rgb(252, 246, 246);
+.modal {
+  overflow-y: auto;
+  background-color: transparent;
+  border: 0.5vh solid var(--darkgray);
+}
+
+#listLocations, #listDepartments {
+  background-color: white;
   padding: 1vh;
+  border-radius: 10px;
+  max-height: 30vh;
+  overflow-y: auto;
+}
+fieldset {
+  border: 0.25vw solid #fc7b82;
+  background-color: white;
+  padding: 2vw;
   border-radius: 10px;
 }
 
-#listDepartments {
-  background-color: rgb(252, 246, 246);
-  padding: 1vh;
-  border-radius: 10px;
-  height: 40vh;
-  overflow-y: auto;
+#selectDeptLocation {
+  padding-top: 2vh;
 }
 
 .addEditForm, .viewEmployee, .newDepartmentForm, .newLocationForm {
@@ -379,9 +391,6 @@ p {
     font-size: 1rem;
 }
 
-.locationFlex {
-  width: 43%;
-}
 
 
 .modal-body p {
