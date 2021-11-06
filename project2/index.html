@@ -18,8 +18,7 @@
             <div class="spinner-grow text-danger m-3" role="status"></div>
             <div class="spinner-grow text-dark m-3" role="status"></div>
             </div>
-            
-          </div>       
+                 
          <header>
          <i class="fas fa-users-cog fa-2x circle" ></i>
          <h1>Company Directory</h1>
@@ -27,7 +26,7 @@
         </header>
         <div id="hidingButton">
             <button class="btn btn-outline-secondary" id="resetHidingButton"><i class="fas fa-undo-alt"></i></button>
-            <button class="btn btn-primary bt-lg hidingButton" id="hidingAddButton"><i class="fa-solid fa-circle-chevron-down"></i></button>
+            <button class="btn btn-primary bt-lg hidingButton" id="hidingAddButton">. . .</button>
         <button class="btn btn-secondary bt-lg hidingButton" id="hidingSearchButton"><i class="fas fa-search"></i></button>
         
         </div>
@@ -91,7 +90,7 @@
                             <label for="surname" class="row-cols-auto form-label"><p>Surname</p></label>
                             
                             <div class="row-cols-sm-3">
-                            <input type="text" class="form-control" autocapitalize id="surname" autocomplete="off">
+                            <input type="text" class="form-control" autocapitalize="on" id="surname" autocomplete="off">
                             </div></div><br>
                   
                             <div class="row-cols-sm-3">
@@ -140,7 +139,7 @@
                               <form>
                                   <fieldset>
                             <h5><i class="fas fa-plus"></i> New Department</h5>
-                            <input type="text" class="form-control" id="newDepartment" minlength="2" maxlength="20" pattern="(^[A-Za-z -]+$)" autocomplete="off" autocapitalize placeholder="Name of new department" aria-label="name of new department"><br>
+                            <input type="text" class="form-control" id="newDepartment" minlength="2" maxlength="20" pattern="(^[A-Za-z -]+$)" autocomplete="off" autocapitalize="on" placeholder="Name of new department" aria-label="name of new department"><br>
                             <select class="form-select" id="selectDeptLocation">
                             <option value="reset" selected>Choose location</option>
                             </select>
@@ -168,7 +167,7 @@
                      </div>
                      </div>
                     </div>
-                </div>
+                
                 </section>
       
         
@@ -176,6 +175,6 @@
         <script src="./libs/js/jquery-3.6.0.min.js"></script>
         <script src="https://kit.fontawesome.com/8f5f4152e2.js" crossorigin="anonymous"></script>
         <script src="./libs/js/bootstrap.bundle.min.js"></script>
-        <script src="./libs/js/app-src.js" type="module" async defer></script>
+        <script src="./libs/js/app-src.js" async defer></script>
     </body>
 </html>

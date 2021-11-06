@@ -366,12 +366,13 @@ const lastDepartmentCheck = (departmentName) => {
   }
 };
 
-//opens modal to add a location
+//opens modal to add/edit/delete a location
 $("#addLoc").click(function (event) {
   event.preventDefault();
   changingLocationData();
 });
-//----------------------------------------------------------------------------
+
+// 
 const changingLocationData = () => {
   callApi("getAllLocations", "GET", getLocationData);
   $("#newLocation").val("");
@@ -447,7 +448,7 @@ const changingLocationData = () => {
   $("#extraInfo").modal("show");
 };
 
-//-----------------------------------------------------------------------------------------------------------
+// edit and delete departments 
 const changingDepartmentData = () => {
   callApi("getAllDepartments", "GET", getDepartmentData);
   $("#newDepartment").val("");
@@ -462,13 +463,37 @@ const changingDepartmentData = () => {
     );
     $("#listDepartments").on(
       "click",
+      `#delete${departmentToChange.id}`,
+      function () {
+        console.log('hello')
+        $("#validation-text").html(`<div class="alert alert-warning">
+        <strong>Are you sure you want to delete the ${departmentToChange.name} department?</strong><br>
+        <button class="btn btn-primary" id="confirmDelete">Yes</button>
+        <button class="btn btn-outline-dark close">No</button>`);
+        $(".close").on("click", function () {
+          $("#validation-text").html("");
+        });
+        $("#confirmDelete").on("click", function () {
+          callApi(
+            "deleteDepartmentById",
+            "GET",
+            deleteConfirmation,
+            departmentToChange.id
+          );
+        });
+      }
+      );  
+      $("#listDepartments").on(
+      "click",
       `#edit${departmentToChange.id}`,
       function () {
         $("#validation-text").html(`<div class="alert alert-warning">
         <label for="newDepartmentName" class="form-control-label"><strong>Edit department</strong></label>
         <input type="text" id="newDepartmentName" class="form-control" autocapitalize ><br>
+
         <label for="locationNew" class="form-control-label">Location</label> 
         <select class="form-select" id="locationNew"><option value="reset">Choose Location</option></select><br>
+        
         <button class="btn btn-primary" id="confirmEditDept" data=${departmentToChange.id}>Save</button>
         <button class="btn btn-outline-dark close">Cancel</button>`);
         $("#locationNew").html(
@@ -499,29 +524,8 @@ const changingDepartmentData = () => {
       validateField("new department", departmentName, 2, 30, callUpdateDepartment, departmentToChange.id)
     })
 
-      
 
-    $("#listDepartments").on(
-      "click",
-      `#delete${departmentToChange.id}`,
-      function () {
-        $("#validation-text").html(`<div class="alert alert-warning">
-        <strong>Are you sure you want to delete the ${departmentToChange.name} department?</strong><br>
-        <button class="btn btn-primary" id="confirmDelete">Yes</button>
-        <button class="btn btn-outline-dark close">No</button>`);
-        $(".close").on("click", function () {
-          $("#validation-text").html("");
-        });
-        $("#confirmDelete").on("click", function () {
-          callApi(
-            "deleteDepartmentById",
-            "GET",
-            deleteConfirmation,
-            departmentToChange.id
-          );
-        });
-      }
-    );
+        
   });
 }
 );

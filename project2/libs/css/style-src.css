@@ -9,11 +9,6 @@
   src: url(./Mukta-Regular.ttf);
 }
 
-@font-face {
-  font-family: "Mukta";
-  src: url(./Mukta-Light.ttf);
-  font-weight: light;
-}
 
 @font-face {
   font-family: "Mukta";
