@@ -410,7 +410,7 @@ const changingLocationData = () => {
 
 //edit Location 
 const editLocationForm = (data) => {
-let locationToChange = data.data[0];
+let locationToChange = data.data;
 $("#validation-text").html(`<div class="alert alert-warning">
 <label for="newLocationName" class="form-control-label">New name for <strong>${locationToChange.name} </strong>office</label>
 <input type="text" id="newLocationName" class="form-control" autocapitalize>
@@ -501,7 +501,7 @@ const changingDepartmentData = () => {
 
 
 const editDepartmentForm = (data) => {
-let departmentToChange = data.data[0];
+let departmentToChange = data.data;
 $("#validation-text").html(`<div class="alert alert-warning">
 <label for="newDepartmentName" class="form-control-label"><strong>Edit department</strong></label>
 <input type="text" id="newDepartmentName" class="form-control" autocapitalize ><br>

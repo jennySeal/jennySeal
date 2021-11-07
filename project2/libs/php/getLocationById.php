@@ -1,9 +1,5 @@
 <?php
 
-	// example use from browser
-	// http://localhost/companydirectory/libs/php/getDepartmentByID.php?id=<id>
-
-
 	$executionStartTime = microtime(true);
 
 	include("config.php");
@@ -31,7 +27,7 @@
 	// SQL statement accepts parameters and so is prepared to avoid SQL injection.
 	// $_REQUEST used for development / debugging. Remember to change to $_POST for production
 
-	$query = $conn->prepare('SELECT * FROM location WHERE id =  ?');
+	$query = $conn->prepare('SELECT id, name FROM location WHERE id =  ?');
 
 	$query->bind_param("i", $_REQUEST['param1']);
 
@@ -51,14 +47,13 @@
 
 	}
 
-	$result = $query->get_result();
+	$result = $query->bind_result($id, $name); 
+	class locationResult {};
+	$data = new locationResult;
 
-   	$data = [];
-
-	while ($row = mysqli_fetch_assoc($result)) {
-
-		array_push($data, $row);
-
+	while ($query->fetch()){
+		$data->id = $id;
+		$data->name = $name;
 	}
 
 	$output['status']['code'] = "200";
