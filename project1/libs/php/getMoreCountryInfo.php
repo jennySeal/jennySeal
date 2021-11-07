@@ -20,6 +20,7 @@ $output['currencies'] = $decode['0']['currencies'][$_REQUEST['param2']];
 $output['languages'] = $decode['0']['languages'];
 $output['demonym'] = $decode['0']['demonyms']['eng']['f'];
 $output['landlocked'] = $decode['0']['landlocked'];
+$output['flag'] = $decode['0']['flags']['png']; 
 
 header('Content-Type: application/json; charset=UTF-8');
 

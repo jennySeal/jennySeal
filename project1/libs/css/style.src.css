@@ -159,6 +159,12 @@ select {
   font-family: "NotoSans-Regular";
 }
 
+#flag2 {
+  max-height: 5vh ;
+  border: 0.1rem solid var(--dark);
+  border-radius: 5px;
+}
+
 .marker-cluster-small div {
   background-color: var(--blue);
 }

@@ -61,12 +61,10 @@ let wikiMarkerLayer;
 let earthquakeMarkerLayer;
 let regionMarkerLayer;
 let capitalMarker;
-let youAreHereMarker;
-let circleMarker;
 let mapOptions;
 let centerOnLat;
 let centerOnLong;
-let errorLocation = false;
+
 
 let screenCheck = window.matchMedia("(min-width: 400px)");
 let geoJsonFeature = {type: "loading"};
@@ -74,7 +72,7 @@ const earthquakeMarkers = L.markerClusterGroup();
 const wikiMarkers = L.markerClusterGroup();
 const regionMarkers = L.markerClusterGroup();
 //Run pre-loader
-$(document).ready(function () {
+$(window).on("load", function () {
   if ($(".spinner-wrapper").length) {
     $(".spinner-wrapper")
       .delay(3000)
@@ -241,17 +239,11 @@ const getBasicData = (data) => {
   country.capital = results.capital;
   country.iso3 = results.isoAlpha3;
 
-  
-  if (screenCheck.matches) {
-    country.flag = `https://www.countryflags.io/${country.iso2}/shiny/64.png`;
-  } else {
-    country.flag = `https://www.countryflags.io/${country.iso2}/shiny/48.png`;
-  }
   //add commas into the area number
   country.area = Math.round(results.areaInSqKm).toLocaleString("en-US");
 
   $("#titleCountry").html(country.countryName);
-  $("#flag").attr("src", country.flag);
+
 
   callApi("getMoreCountryInfo", country.iso2, country.currency, saveMoreBasicData);
 
@@ -273,7 +265,8 @@ const saveMoreBasicData = (data) => {
   country.currencyName = data.currencies.name;
   country.currencySymbol = data.currencies.symbol;
   country.languages = data.languages;
-  
+  country.flag = data.flag;
+  $("#flag2").html(`<img src="${country.flag}" alt="Flag of ${country.countryName}">`);  
   callApi("getWhoData", country.iso3, "", saveWhoData);
  };
 
