@@ -237,7 +237,7 @@ const deleteConfirmation = (data) => {
   closeModal();
   initialiseData();
   $("#extraInfo").modal("show");
-  $("#validation-text").html(`<div class="alert alert-danger">
+  $("#validation-text").html(`<div class="alert alert-info">
     <strong>${data.data}</strong><br>`);
   
 };
@@ -502,6 +502,7 @@ const changingDepartmentData = () => {
 
 const editDepartmentForm = (data) => {
 let departmentToChange = data.data;
+console.log(departmentToChange)
 $("#validation-text").html(`<div class="alert alert-warning">
 <label for="newDepartmentName" class="form-control-label"><strong>Edit department</strong></label>
 <input type="text" id="newDepartmentName" class="form-control" autocapitalize ><br>
