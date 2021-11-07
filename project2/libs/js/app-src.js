@@ -237,16 +237,9 @@ const deleteConfirmation = (data) => {
   closeModal();
   initialiseData();
   $("#extraInfo").modal("show");
-  if (data.status.code === "200") {
-    $("#validation-text").html(`<div class="alert alert-success">
-  <strong>Successfully deleted</strong><br>`);
-  } else if (data.status.code === "401") {
-    $("#validation-text").html(`<div class="alert alert-danger">
+  $("#validation-text").html(`<div class="alert alert-danger">
     <strong>${data.data}</strong><br>`);
-  } else {
-    $("#validation-text").html(`<div class="alert alert-danger">
-    <strong>Deletion unsuccessful</strong><br>`);
-  }
+  
 };
 
 //opens modal to add a staff record - same form as edit employee
@@ -387,40 +380,7 @@ const changingLocationData = () => {
      </div> `
     );
     $("#listLocations").on("click", `#edit${locationToChange.id}`, function () {
-      $("#validation-text").html(`<div class="alert alert-warning">
-      <label for="newLocationName" class="form-control-label">New name for <strong>${locationToChange.name} </strong>office</label>
-      <input type="text" id="newLocationName" class="form-control" autocapitalize>
-      <button class="btn btn-primary" id="confirmEdit" data=${locationToChange.id}>Save</button>
-      <button class="btn btn-outline-dark close">Cancel</button>`);
-
-      $(".close").on("click", function () {
-        $("#validation-text").html("");
-      });
-
-      $("#confirmEdit").on("click", function () {
-        $("#modalSelectLoc").html(
-          `<option value="reset" selected>Choose location</option>`
-        );
-        locations.forEach((location) => {
-          $("#modalSelectLoc").append(
-            `<option value="${location.id}">${location.name}</option>`
-          );
-        });
-        let location = $("#newLocationName")
-          .val()
-          .toLowerCase()
-          .replace(/(\b[a-z](?!\s))/g, function (x) {
-            return x.toUpperCase();
-          });
-        validateField(
-          "new location",
-          location,
-          2,
-          20,
-          lastUpdateLocationCheck,
-          locationToChange.id
-        );
-      });
+      callApi("getLocationById", "GET", editLocationForm, locationToChange.id)
     });
     $("#listLocations").on(
       "click",
@@ -428,12 +388,13 @@ const changingLocationData = () => {
       function () {
         $("#validation-text").html(`<div class="alert alert-warning">
       <strong>Are you sure you want to delete the ${locationToChange.name} office?</strong><br>
-      <button class="btn btn-primary" id="confirmDelete">Yes</button>
+      <button class="btn btn-primary" id="confirmLocDelete">Yes</button>
       <button class="btn btn-outline-dark close">No</button>`);
         $(".close").on("click", function () {
           $("#validation-text").html("");
         });
-        $("#confirmDelete").on("click", function () {
+        $("#confirmLocDelete").on("click", function () {
+          
           callApi(
             "deleteLocationById",
             "GET",
@@ -441,12 +402,52 @@ const changingLocationData = () => {
             locationToChange.id
           );
         });
-      }
-    );
+      });
   });
   $(".newLocationForm").show();
   $("#extraInfo").modal("show");
 };
+
+//edit Location 
+const editLocationForm = (data) => {
+let locationToChange = data.data[0];
+$("#validation-text").html(`<div class="alert alert-warning">
+<label for="newLocationName" class="form-control-label">New name for <strong>${locationToChange.name} </strong>office</label>
+<input type="text" id="newLocationName" class="form-control" autocapitalize>
+<button class="btn btn-primary" id="confirmEdit" data=${locationToChange.id}>Save</button>
+<button class="btn btn-outline-dark close">Cancel</button>`);
+
+$(".close").on("click", function () {
+  $("#validation-text").html("");
+});
+
+$("#confirmEdit").on("click", function () {
+  $("#modalSelectLoc").html(
+    `<option value="reset" selected>Choose location</option>`
+  );
+  locations.forEach((location) => {
+    $("#modalSelectLoc").append(
+      `<option value="${location.id}">${location.name}</option>`
+    );
+  });
+  let location = $("#newLocationName")
+    .val()
+    .toLowerCase()
+    .replace(/(\b[a-z](?!\s))/g, function (x) {
+      return x.toUpperCase();
+    });
+  validateField(
+    "new location",
+    location,
+    2,
+    20,
+    lastUpdateLocationCheck,
+    locationToChange.id
+  );
+});
+}
+
+
 
 // edit and delete departments 
 const changingDepartmentData = () => {
@@ -465,15 +466,14 @@ const changingDepartmentData = () => {
       "click",
       `#delete${departmentToChange.id}`,
       function () {
-        console.log('hello')
         $("#validation-text").html(`<div class="alert alert-warning">
         <strong>Are you sure you want to delete the ${departmentToChange.name} department?</strong><br>
-        <button class="btn btn-primary" id="confirmDelete">Yes</button>
+        <button class="btn btn-primary" id="confirmDeptDelete">Yes</button>
         <button class="btn btn-outline-dark close">No</button>`);
         $(".close").on("click", function () {
           $("#validation-text").html("");
         });
-        $("#confirmDelete").on("click", function () {
+        $("#confirmDeptDelete").on("click", function () {
           callApi(
             "deleteDepartmentById",
             "GET",
@@ -483,52 +483,10 @@ const changingDepartmentData = () => {
         });
       }
       );  
-      $("#listDepartments").on(
-      "click",
-      `#edit${departmentToChange.id}`,
-      function () {
-        $("#validation-text").html(`<div class="alert alert-warning">
-        <label for="newDepartmentName" class="form-control-label"><strong>Edit department</strong></label>
-        <input type="text" id="newDepartmentName" class="form-control" autocapitalize ><br>
-
-        <label for="locationNew" class="form-control-label">Location</label> 
-        <select class="form-select" id="locationNew"><option value="reset">Choose Location</option></select><br>
-        
-        <button class="btn btn-primary" id="confirmEditDept" data=${departmentToChange.id}>Save</button>
-        <button class="btn btn-outline-dark close">Cancel</button>`);
-        $("#locationNew").html(
-          `<option value="reset" selected>Choose location</option>`
-        );
-        locations.forEach((location) => {
-          $("#locationNew").append(
-            `<option value="${location.id}">${location.name}</option>`
-          );
-        });
-        $("#newDepartmentName").val(departmentToChange.name);
-        $("#locationNew").val(departmentToChange.locationID); 
-      
-
-    $(".close").on("click", function () {
-      $("#validation-text").html("");
-    });
-
-    $("#confirmEditDept").on("click", function () {
-      
-      locationForEditedDepartment = $("#locationNew").val()
-      let departmentName = $("#newDepartmentName")
-        .val()
-        .toLowerCase()
-        .replace(/(\b[a-z](?!\s))/g, function (x) {
-          return x.toUpperCase();
-        })
-      validateField("new department", departmentName, 2, 30, callUpdateDepartment, departmentToChange.id)
-    })
-
-
-        
-  });
-}
-);
+      $("#listDepartments").on("click", `#edit${departmentToChange.id}`, function () {
+        callApi("getDepartmentById", "GET", editDepartmentForm, departmentToChange.id)
+      })
+});
   $("#selectDeptLocation").html(
     `<option value="reset" selected>Choose location</option>`
   );
@@ -540,6 +498,46 @@ const changingDepartmentData = () => {
   $(".newDepartmentForm").show();
   $("#extraInfo").modal("show");
 };
+
+
+const editDepartmentForm = (data) => {
+let departmentToChange = data.data[0];
+$("#validation-text").html(`<div class="alert alert-warning">
+<label for="newDepartmentName" class="form-control-label"><strong>Edit department</strong></label>
+<input type="text" id="newDepartmentName" class="form-control" autocapitalize ><br>
+
+<label for="locationNew" class="form-control-label">Location</label> 
+<select class="form-select" id="locationNew"><option value="reset">Choose Location</option></select><br>
+
+<button class="btn btn-primary" id="confirmEditDept" data=${departmentToChange.id}>Save</button>
+<button class="btn btn-outline-dark close">Cancel</button>`);
+$("#locationNew").html(
+  `<option value="reset" selected>Choose location</option>`
+);
+locations.forEach((location) => {
+  $("#locationNew").append(
+    `<option value="${location.id}">${location.name}</option>`
+  );
+});
+$("#newDepartmentName").val(departmentToChange.name);
+$("#locationNew").val(departmentToChange.locationID); 
+
+$(".close").on("click", function () {
+$("#validation-text").html("");
+});
+
+$("#confirmEditDept").on("click", function () {
+
+locationForEditedDepartment = $("#locationNew").val()
+let departmentName = $("#newDepartmentName")
+.val()
+.toLowerCase()
+.replace(/(\b[a-z](?!\s))/g, function (x) {
+  return x.toUpperCase();
+})
+validateField("new department", departmentName, 2, 30, callUpdateDepartment, departmentToChange.id)
+})
+}
 
 $("#addNewLocation").on("click", function () {
   let location = $("#newLocation")
@@ -698,19 +696,18 @@ const lastNameCheck = (firstName) => {
 const departmentCheck = () => {
   newEmployee.departmentID = $("#modalSelectDept").val();
   newEmployee.locationID = $("#modalSelectLoc").val();
-
   if (
-    newEmployee.departmentID !== "reset" &&
-    newEmployee.locationID !== "reset"
+    newEmployee.departmentID === "reset" || newEmployee.departmentID === "resetSubset" || 
+    newEmployee.locationID === "reset"
   ) {
+    validateString =
+      "The employee must be associated with a location and a department";
+    validationWarning(validateString);
+  } else {
     newEmployee.email = $("#email").val().toLowerCase();
     newEmployee.id !== "not assigned"
       ? validateField("email", newEmployee.email, 6, 40, updatePersonnel)
       : validateField("email", newEmployee.email, 6, 40, emailDuplicationCheck);
-  } else {
-    validateString =
-      "The employee must be associated with a location and a department";
-    validationWarning(validateString);
   }
 };
 
