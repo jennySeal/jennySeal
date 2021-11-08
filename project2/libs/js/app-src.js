@@ -506,10 +506,8 @@ let departmentToChange = data.data;
 $("#validation-text").html(`<div class="alert alert-warning">
 <label for="newDepartmentName" class="form-control-label"><strong>Edit department</strong></label>
 <input type="text" id="newDepartmentName" class="form-control" autocapitalize ><br>
-
 <label for="locationNew" class="form-control-label">Location</label> 
 <select class="form-select" id="locationNew"><option value="reset">Choose Location</option></select><br>
-
 <button class="btn btn-primary" id="confirmEditDept" data=${departmentToChange.id}>Save</button>
 <button class="btn btn-outline-dark close">Cancel</button>`);
 $("#locationNew").html(
@@ -597,7 +595,7 @@ const getNewDeptConfirmation = (data) => {
 // On whole name
 
 $("#searchNames").on("input", function (e) {
-  let lettersToSearch = e.currentTarget.value.toLowerCase();
+  let lettersToSearch = e.currentTarget.value.toLowerCase().trim();
   let searchData =
     $("#selectDept").val() === "reset" && $("#selectLoc").val() === "reset"
       ? staticResults
@@ -605,7 +603,7 @@ $("#searchNames").on("input", function (e) {
 
   results = searchData.filter((result) => {
     result.wholeName =
-      result.firstName.toLowerCase() + result.lastName.toLowerCase();
+      result.firstName.toLowerCase() + " " + result.lastName.toLowerCase();
     return result.wholeName.includes(lettersToSearch);
   });
   displayStaffData(results);

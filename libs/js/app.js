@@ -1,4 +1,10 @@
 
+$("#hamburgerMain").on("click", function() {
+    $("#nav-links").toggle()
+})
+
+
+
 const projects = [
     {projectName: 'The Gazetteer',
     projectSrc: './libs/css/images/gazetteer.png',

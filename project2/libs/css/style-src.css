@@ -224,9 +224,9 @@ p {
 }
 
 .modal {
-  overflow-y: auto;
   background-color: transparent;
-  border: 0.5vh solid var(--darkgray);
+  height: fit-content;
+  max-height: 100%;
 }
 
 #listLocations, #listDepartments {

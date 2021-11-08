@@ -190,8 +190,10 @@ L.easyButton('fas fa-money-bill-alt', function () {
 
 L.easyButton('far fa-newspaper', function () {
   resetModal()
-  displayNews()
-  $(".modal").modal('show');}, function() {}).addTo(map);
+    displayNews()  
+  $(".modal").modal('show');}, function() {
+
+  }).addTo(map);
 
 L.easyButton('fas fa-search-minus', function() {
   map.setView([centerOnLat, centerOnLong], 5)
