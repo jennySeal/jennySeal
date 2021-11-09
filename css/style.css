@@ -244,7 +244,7 @@ h3 {
 
 h6 {
     font-size: 16px;
-    color: #888888;
+    color: #fff;
     font-family: 'Open Sans', sans-serif;
     font-weight: 400;
     text-align: center;
@@ -407,6 +407,9 @@ p {
     transform: rotate(360deg);
   }
   
+  #jennyPhoto {
+      border-radius: 10px;
+  }
   @keyframes stretch {
     0% {
         transform: scale(.5);
@@ -481,7 +484,7 @@ p {
 .top_left_cont p {
 font-size: 18px;
 color: #FFFFFF;
-margin: 0 0 30px 0;
+margin: 0 0 0px 0;
 line-height: 33px;
 text-align: center;
 font-weight: normal;
@@ -680,7 +683,7 @@ a.contact_btn:hover {
 }
 
 .input-text {
-    background: transparent;
+    background: white;
 }
 
 
@@ -841,6 +844,21 @@ img {
     height: 100%;
 }
 
+.experience-list li {
+    list-style: none;
+    text-indent: 2vw;
+}
+
+ .experience-list:before{
+	content: "\f005";
+	position: absolute;
+	font-family: FontAwesome;
+	font-size: 1.125em;
+	color: var(--highlight);
+	left: 0px;
+	top: 0px;
+}
+
 /* About Us
 --------------------------- */
  
@@ -872,12 +890,12 @@ background-position-y: 70px;
 .about-us h3{
 	font-size:28px;
 }
-.points{ 
+.points, .experience-list{ 
 	margin-bottom: 1vh;
 	font-size:1.2rem;
 	padding-left:0px;
 }
-.about-us p{
+.about-us p {
 	/*font-size: 0.9375em;*/
 	line-height: 1.625em;
 	padding: 15px 0;
@@ -888,7 +906,7 @@ background-position-y: 70px;
 	padding-left:0px;
 }
 
-.about-us .points{
+.about-us .points, .experience-list{
 	position: relative;
 	list-style-type: none;
 	padding: 5px 0 5px 30px;
@@ -1918,7 +1936,9 @@ width: auto;
 text-align: center;
 }
 
-
+.navbar-nav {
+    flex-direction: column;
+}
 .aboutUs-container{
 	background-image:none;
 }
@@ -2036,7 +2056,7 @@ text-align: left;
 border: 0px solid #fff;
 min-height: 40px;
 margin-bottom: 0px;
-float: initial;
+float: right;
 width: 100%;
 }
 .team_area {
