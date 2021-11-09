@@ -130,51 +130,57 @@ wow = new WOW({
     offset: 100
 });
 wow.init();
-document.getElementById('').onclick = function() {
+/*document.getElementById('').onclick = function() {
     var section = document.createElement('section');
     section.className = 'wow fadeInDown';
     section.className = 'wow shake';
     section.className = 'wow zoomIn';
     section.className = 'wow lightSpeedIn';
     this.parentNode.insertBefore(section, this);
-};
+};*/
 
 const projects = [
-    {projectName: 'The Gazetteer',
-    projectSrc: './libs/css/images/gazetteer.png',
-    projectAlt: 'The Gazetteer - a map based app providing world wide information',
-    projectDesc: "An IT Career Switch project to create a single page web app based around  Leaflet's interactive mapping library. By clicking on the map or selecting a country the user can discover a wealth of information presented in an attractive mobile-first design.",
-    projectTech: 'Technologies used include HTML, CSS, Javascript, PHP and the Leaflet library.',
-    projectLink: 'https://jennyseal.com/project1',
-    projectGit: 'https://github.com/jennySeal/jennySeal/',
-    objectID: 0
+    
+{projectName: 'Company Directory',
+projectSrc: './img/company_directory.png',
+projectAlt: 'Company Directory application',
+projectDesc: 'An IT Career Switch project to create a user interface for a personnel database with CRUD functionality. Built to allow users to add, edit and delete employees, departments and locations with suitable checks and validation.',
+projectTech: 'HTML, CSS, jQuery, PHP and MySQL. ',
+projectLink: 'https://jennyseal.com/project2/',
+objectID: 0
 },
  {projectName: 'Sunshine Stores E-Commerce Site',
-    projectSrc: './libs/css/images/sunshineSells.png',
+    projectSrc: './img/sunshineSells.png',
     projectAlt: 'Sunshine Stores ECO E-commerce Site',
     projectDesc: 'A Codecademy project to create a fully-functioning e-commerce application with secure user registration and login, a reviewable cart, complete purchasing and order history.',
-    projectTech: 'Technologies used include React, Redux, Stripe, Passport, Express, Node JS and PostgreSQL. Hosted on Heroku and Netlify.',
+    projectTech: 'React, Redux, Stripe, Passport, Express, Node JS and PostgreSQL. Hosted on Heroku and Netlify.',
     projectLink: 'https://sunshine-store.netlify.app/',
-    projectGit: 'https://github.com/jennySeal/sunshine-sell/',
     objectID: 1
 },
     {projectName: 'Reddit Sublime App',
-    projectSrc: './libs/css/images/Reddit-Sublime.gif',
+    projectSrc: './img/Reddit-Sublime.gif',
     projectAlt: 'Reddit Sublime project',
     projectDesc: 'Create an application that will allow users to view and search posts and comments provided by the Reddit API.',
-    projectTech: 'Technologies used include React, Redux and Sass. Hosted on Netlify.',
+    projectTech: 'React, Redux and Sass. Hosted on Netlify.',
     projectLink: 'https://reddit-sublime.netlify.app/',
-    projectGit: 'https://github.com/jennySeal/sunshine-sell/',
     objectID: 2},
 
     {projectName: 'Birthday Countdown App',
-    projectSrc: './libs/css/images/BirthdayCountdown.png',
+    projectSrc: './img/BirthdayCountdown.png',
     projectAlt: 'Birthday Countdown project',
     projectDesc: 'An app that provides information about your birthday and a real-time countdown until the big day',
     projectTech: 'A React app hosted on Netlify.',
     projectLink: 'https://birthday-countdown-calculator.netlify.app/',
     projectGit: 'https://github.com/jennySeal/birthday-countdown',
-    objectID: 3}
+    objectID: 3},
+    {projectName: 'The Gazetteer',
+    projectSrc: './img/gazetteer.png',
+    projectAlt: 'The Gazetteer - a map based app providing world wide information',
+    projectDesc: "An IT Career Switch project to create a single page web app based around  Leaflet's interactive mapping library. By clicking on the map or selecting a country the user can discover a wealth of information presented in an attractive mobile-first design.",
+    projectTech: 'HTML, CSS, Javascript, PHP and Leaflet JS.',
+    projectLink: 'https://jennyseal.com/project1',
+    objectID: 4
+},
 ]
 
 let objectId = 0;
@@ -196,16 +202,27 @@ let objectId = 0;
     projectTech.textContent=projects[objectId].projectTech;
 
     document.getElementById('projectLink').href = projects[objectId].projectLink;
-    document.getElementById('gitHubLink').href = projects[objectId].projectGit;
 }
 
+$("#scrollOther").click(function() {
+    console.log('hello')
+    scrollOther()
+})
+
+$("#scrollRight").click(function() {
+    $("#projectContainer").fadeOut('fast')    
+    scrollRight()
+    $("#projectContainer").fadeIn('slow')    
+})
 
 const scrollOther = () => {
     if (objectId < 1) {
         objectId = projects.length
     }
     objectId--;
+    
     changeProject(objectId);
+    
 }
 
 

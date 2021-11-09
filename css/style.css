@@ -205,10 +205,10 @@ figure.effect-oscar:hover img {
 ---------------------------------*/
 body {
     background: #fff;
-    font-family: 'Open Sans', sans-serif;
-    font-size: 14px;
+    font-family: 'Signika', sans-serif;
+    font-size: 16px;
     font-weight: normal;
-    color: #888888;
+    color: var(--black);
     margin: 0;
 }
 
@@ -506,6 +506,11 @@ letter-spacing: 1px;
     color: whitesmoke;
 	margin:0 auto;
 }
+
+#projectTech {
+    color: var(--black);
+    font-size: 0.9rem;
+}
 a.read_more{
 	 color: #3C3C3C;
 	 border: 1px solid #3C3C3C;
@@ -696,6 +701,12 @@ a.contact_btn:hover {
     height: 45vh;
     margin: 0vh 2vw;
   }
+
+  .projectText {
+      width: 70vw;
+      margin-right: auto;
+      margin-left: auto;
+  }
   
   #scrollLeft,
   #scrollRight {
@@ -826,95 +837,8 @@ img {
 }
 
 
-/* Happy Clients
----------------------------------*/
-
-
-
-#clients {
-    padding: 60px 0px;
-}
-
-.client_area {
-    width: 960px;
-    margin: 0px auto;
-}
-
-.client_section {
-    padding: 35px 0 0 0;
-}
-
-.client_section.btm {
-    padding: 20px 0 0 0;
-}
-
-.client_profile {
-    float: left;
-    text-align: center;
-}
-
-.client_profile.flt {
-    float: right;
-}
-
-.client_profile_pic {
-    border-radius: 50%;
-    border: 2px solid #f5f5f5;
-    margin: 0 0 15px 0;
-    width: 220px;
-    height: 220px;
-}
-
-.client_profile_pic img {
-    border-radius: 50%;
-    border: 3px solid #f5f5f5;
-}
-
-.client_profile h3 {
-    font-size: 18px;
-    color: #49b5e7;
-    margin: 0 0 0 0;
-}
-
-.client_profile span {
-    display: block;
-    font-size: 16px;
-    color: #888888;
-}
-
-/* Clients
----------------------------------*/
-
-
-.client_logos {
-    background: var(--highlight);
-    padding: 60px 0;
-    margin-top: 60px;
-}
-
-.client_logos ul {
-    padding: 0;
-    margin: 0;
-    list-style: none;
-    text-align: center;
-}
-
-.client_logos ul li {
-    display: inline;
-    margin: 0 25px;
-}
-
-.client_logos ul a {
-    display: inline-block;
-    margin: 0 20px;
-}
-
-.page_section.team {
-    padding: 60px 0;
-}
-
-.page_section.team h6 {
-    margin-bottom: 40px;
+#jennySealCutout {
+    height: 100%;
 }
 
 /* About Us
@@ -1339,8 +1263,8 @@ border: 1px solid var(--highlight);
 /* Footer
 ---------------------------------*/
 
-.footer_wrapper {
-    background: #232323;
+.contact_wrapper {
+    background: var(--highlight);
 }
 
 .footer_bottom {
