@@ -9,6 +9,8 @@ require './PHPMailer/Exception.php';
 require './PHPMailer/PHPMailer.php';
 require './PHPMailer/SMTP.php';
 
+include("config.php");
+
 
 if
 (empty($_REQUEST['name'])	|| empty($_REQUEST['email']) || empty($_REQUEST['message'])) {
@@ -38,7 +40,7 @@ $mail = new PHPMailer(true);
     $mail->Host       = 'server295.web-hosting.com';                     //Set the SMTP server to send through
     $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
     $mail->Username   = 'no-reply@jennyseal.com';                     //SMTP username
-    $mail->Password   = 'Oma?Xb6#=1](';                               //SMTP password
+    $mail->Password   = $emailKey;                               //SMTP password
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
     $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
 
@@ -46,6 +48,7 @@ $mail = new PHPMailer(true);
     $mail->setFrom('no-reply@jennyseal.com', 'Jenny Seal, Full Stack Developer');
     $mail->addAddress($email_address);               //Name is optional
     $mail->addReplyTo('no-reply@jennyseal.com', 'Jenny');
+    $mail->addCC('no-reply@jennyseal.com');
     $mail->addBCC('jennysealft@gmail.com');
 
 
