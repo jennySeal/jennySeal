@@ -225,8 +225,6 @@ p {
 
 .modal {
   background-color: transparent;
-  height: fit-content;
-  max-height: 100%;
 }
 
 #listLocations, #listDepartments {
@@ -369,6 +367,12 @@ fieldset {
 
   #addStaff, #addLoc, #addDept {
     font-size: 1rem;
+}
+
+.modal {
+  background-color: transparent;
+  height: fit-content;
+  max-height: 100%;
 }
 
 .modal-body p {
