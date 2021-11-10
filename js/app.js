@@ -145,7 +145,8 @@ const projects = [
     projectAlt: 'The Gazetteer - a map based app providing world wide information',
     projectDesc: "An IT Career Switch project to create a single page web app based around  Leaflet's interactive mapping library. By clicking on the map or selecting a country the user can discover a wealth of information presented in an attractive mobile-first design.",
     projectTech: 'HTML, CSS, Javascript, PHP and Leaflet JS.',
-    projectLink: '/project1',
+    projectLink1: '/project1',
+    projectLink2: '/project1',
     objectID: 0
 },   
 {projectName: 'Company Directory',
@@ -153,7 +154,8 @@ projectSrc: './img/company_directory.png',
 projectAlt: 'Company Directory application',
 projectDesc: 'An IT Career Switch project to create a user interface for a personnel database with CRUD functionality. Built to allow users to add, edit and delete employees, departments and locations with suitable checks and validation.',
 projectTech: 'HTML, CSS, jQuery, PHP and MySQL. ',
-projectLink: '/project2/',
+projectLink1: '/project2/',
+projectLink2: '/project2/',
 objectID: 1
 },
  
@@ -170,7 +172,8 @@ objectID: 1
     projectAlt: 'Sunshine Stores ECO E-commerce Site',
     projectDesc: 'A Codecademy project to create a fully-functioning e-commerce application with secure user registration and login, a reviewable cart, complete purchasing and order history.',
     projectTech: 'React, Redux, Stripe, Passport, Express, Node JS and PostgreSQL. Hosted on Heroku and Netlify.',
-    projectLink: 'https://sunshine-store.netlify.app/',
+    projectLink1: 'https://sunshine-store.netlify.app/',
+    projectLink2: 'https://sunshine-store.netlify.app/',
     objectID: 2},
     {
     projectName: 'Birthday Countdown App',
@@ -178,7 +181,8 @@ objectID: 1
     projectAlt: 'Birthday Countdown project',
     projectDesc: 'An app that provides information about your birthday and a real-time countdown until the big day',
     projectTech: 'A React app hosted on Netlify.',
-    projectLink: 'https://birthday-countdown-calculator.netlify.app/',
+    projectLink1: 'https://birthday-countdown-calculator.netlify.app/',
+    projectLink2: 'https://birthday-countdown-calculator.netlify.app/',
     projectGit: 'https://github.com/jennySeal/birthday-countdown',
     objectID: 3},
 
@@ -202,7 +206,8 @@ let objectId = 0;
     let projectTech = document.getElementById('projectTech');
     projectTech.textContent=projects[objectId].projectTech;
 
-    document.getElementById('projectLink').href = projects[objectId].projectLink;
+    document.getElementById('projectLink1').href = projects[objectId].projectLink1;
+    document.getElementById('projectLink2').href = projects[objectId].projectLink2;
 }
 
 $("#scrollOther").click(function() {
