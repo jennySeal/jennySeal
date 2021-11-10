@@ -140,47 +140,48 @@ wow.init();
 };*/
 
 const projects = [
-    
+    {projectName: 'The Gazetteer',
+    projectSrc: './img/gazetteer.png',
+    projectAlt: 'The Gazetteer - a map based app providing world wide information',
+    projectDesc: "An IT Career Switch project to create a single page web app based around  Leaflet's interactive mapping library. By clicking on the map or selecting a country the user can discover a wealth of information presented in an attractive mobile-first design.",
+    projectTech: 'HTML, CSS, Javascript, PHP and Leaflet JS.',
+    projectLink: '/project1',
+    objectID: 0
+},   
 {projectName: 'Company Directory',
 projectSrc: './img/company_directory.png',
 projectAlt: 'Company Directory application',
 projectDesc: 'An IT Career Switch project to create a user interface for a personnel database with CRUD functionality. Built to allow users to add, edit and delete employees, departments and locations with suitable checks and validation.',
 projectTech: 'HTML, CSS, jQuery, PHP and MySQL. ',
-projectLink: 'https://jennyseal.com/project2/',
+projectLink: '/project2/',
 objectID: 1
 },
- {projectName: 'Sunshine Stores E-Commerce Site',
-    projectSrc: './img/sunshineSells.png',
-    projectAlt: 'Sunshine Stores ECO E-commerce Site',
-    projectDesc: 'A Codecademy project to create a fully-functioning e-commerce application with secure user registration and login, a reviewable cart, complete purchasing and order history.',
-    projectTech: 'React, Redux, Stripe, Passport, Express, Node JS and PostgreSQL. Hosted on Heroku and Netlify.',
-    projectLink: 'https://sunshine-store.netlify.app/',
-    objectID: 2
-},
-    {projectName: 'Reddit Sublime App',
+ 
+   /* {projectName: 'Reddit Sublime App',
     projectSrc: './img/Reddit-Sublime.gif',
     projectAlt: 'Reddit Sublime project',
     projectDesc: 'Create an application that will allow users to view and search posts and comments provided by the Reddit API.',
     projectTech: 'React, Redux and Sass. Hosted on Netlify.',
     projectLink: 'https://reddit-sublime.netlify.app/',
-    objectID: 3},
-
-    {projectName: 'Birthday Countdown App',
+    objectID: 4},
+*/
+    {projectName: 'Sunshine Stores E-Commerce Site',
+    projectSrc: './img/sunshineSells.png',
+    projectAlt: 'Sunshine Stores ECO E-commerce Site',
+    projectDesc: 'A Codecademy project to create a fully-functioning e-commerce application with secure user registration and login, a reviewable cart, complete purchasing and order history.',
+    projectTech: 'React, Redux, Stripe, Passport, Express, Node JS and PostgreSQL. Hosted on Heroku and Netlify.',
+    projectLink: 'https://sunshine-store.netlify.app/',
+    objectID: 2},
+    {
+    projectName: 'Birthday Countdown App',
     projectSrc: './img/BirthdayCountdown.png',
     projectAlt: 'Birthday Countdown project',
     projectDesc: 'An app that provides information about your birthday and a real-time countdown until the big day',
     projectTech: 'A React app hosted on Netlify.',
     projectLink: 'https://birthday-countdown-calculator.netlify.app/',
     projectGit: 'https://github.com/jennySeal/birthday-countdown',
-    objectID: 4},
-    {projectName: 'The Gazetteer',
-    projectSrc: './img/gazetteer.png',
-    projectAlt: 'The Gazetteer - a map based app providing world wide information',
-    projectDesc: "An IT Career Switch project to create a single page web app based around  Leaflet's interactive mapping library. By clicking on the map or selecting a country the user can discover a wealth of information presented in an attractive mobile-first design.",
-    projectTech: 'HTML, CSS, Javascript, PHP and Leaflet JS.',
-    projectLink: 'https://jennyseal.com/project1',
-    objectID: 5
-},
+    objectID: 3},
+
 ]
 
 let objectId = 0;
@@ -205,14 +206,15 @@ let objectId = 0;
 }
 
 $("#scrollOther").click(function() {
-    console.log('hello')
+
     scrollOther()
 })
 
 $("#scrollRight").click(function() {
-    $("#projectContainer").fadeOut('fast')    
+    
+    $("#projectImage").fadeIn()
+    
     scrollRight()
-    $("#projectContainer").fadeIn('slow')    
 })
 
 const scrollOther = () => {
