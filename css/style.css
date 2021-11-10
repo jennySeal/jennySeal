@@ -1,6 +1,6 @@
 @charset "utf-8";
-@import url(http://fonts.googleapis.com/css?family=Raleway:800,700,400);
-@import url(http://fonts.googleapis.com/css?family=Signika:400,600);
+@import url(https://fonts.googleapis.com/css?family=Raleway:800,700,400);
+@import url(https://fonts.googleapis.com/css?family=Signika:400,600);
 
 :root {
     --highlight: #08a6c2;
@@ -262,14 +262,15 @@ p {
 #header_wrapper {
     background: #ffffff;
     padding: 20px 0px;
-	
-    border-top: whitesmoke;
+	border-top: whitesmoke;
 	box-shadow: 1px 1px 4px rgba(60, 60, 60, 0.44);
     border-bottom: 1px solid #D2D2D2;
 }
 
 .header_box {
     position: relative;
+    display: flex;
+    justify-content: space-between;
 }
 
 .logo {
@@ -279,10 +280,11 @@ p {
     border-radius: 10px;
     padding: 0.25rem;
 	z-index: 2;
+    max-height: 9vh;
 }
 
 .logo img {
-    height: 7vh;
+    max-height: 7vh;
 }
 
 .res-nav_click {
@@ -406,6 +408,11 @@ p {
   #sealIconMain:hover {
     transform: rotate(360deg);
   }
+
+ .about-us h6, #Portfolio h6 {
+    color: var(--black);
+}
+
   
   #jennyPhoto {
       border-radius: 10px;
@@ -558,6 +565,7 @@ a.read_more:hover {
     justify-content: flex-end;
     align-items: flex-end;
     height: 100px;
+    margin: 2vh;
 
 }
 
@@ -700,16 +708,22 @@ a.contact_btn:hover {
     background-color: transparent;
 }
   
-  #projectImage {
-    height: 45vh;
-    margin: 0vh 2vw;
+  #projectImage img {
+    
+    max-height: 45%;
+    margin: 0vh 0vw;
   }
 
   .projectText {
-      width: 70vw;
+      width: 70%;
       margin-right: auto;
       margin-left: auto;
   }
+
+  #projectTech {
+      padding-bottom: 2vh;
+  }
+
   
   #scrollLeft,
   #scrollRight {
@@ -722,6 +736,11 @@ a.contact_btn:hover {
   
   #projectLink {
     height: 15vh;
+    
+  }
+
+  #projectLink .btn-light {
+    color: var(--highlight);
   }
   
   #portfolioLink {
@@ -742,13 +761,13 @@ a.contact_btn:hover {
     text-align: center;
     
   }
-  
+/*  
 .arrowProject {
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
-}
+}*/
 .Portfolio-nav {
     padding: 0;
     margin: 0 0 45px 0;
@@ -866,7 +885,6 @@ img {
 background-repeat: no-repeat;
 background-position: right;
 background-size: auto 100%;
-background-position-y: 70px;
 }
 #about-us .read-more{
 	border: 1px solid var(--highlight);
@@ -895,11 +913,8 @@ background-position-y: 70px;
 	font-size:1.2rem;
 	padding-left:0px;
 }
-.about-us p {
-	/*font-size: 0.9375em;*/
-	line-height: 1.625em;
-	padding: 15px 0;
-}
+
+
 .about-us .about-us-list{
 	list-style: none;
 	margin-bottom: 20px;
@@ -1094,6 +1109,15 @@ border: 1px solid var(--highlight);
     text-align: center;
 }
 
+#contact h3 {
+    color: white;
+}
+
+.help-block {
+    background-color: bisque;
+    border-radius: 5px;
+}
+
 .contact_block_icon {
     border-radius: 50%;
     height: 85px;
@@ -1267,7 +1291,7 @@ border: 1px solid var(--highlight);
     font-size: 16px;
     text-transform: uppercase;
     font-weight: 600;
-    border: 0px;
+    border: 0.25vw solid #fff;
     transition: all 0.3s ease-in-out;
     -moz-transition: all 0.3s ease-in-out;
     -webkit-transition: all 0.3s ease-in-out;
@@ -1275,7 +1299,7 @@ border: 1px solid var(--highlight);
 
 .input-btn:hover {
     background: #fff;
-    color: #222;
+    color: var(--black)
 }
 
 /* Footer
@@ -1928,16 +1952,22 @@ background-position: right;
 background-size: auto 59%;
 background-position-y: 150px;
 }
+
+.logo {border: none;}
 }
 @media (max-width: 768px) {
+
 .navStyle {
-float: right;
-width: auto; 
+width: 100vw; 
 text-align: center;
 }
 
 .navbar-nav {
     flex-direction: column;
+}
+
+.logo {
+    border: none;
 }
 .aboutUs-container{
 	background-image:none;
@@ -1946,7 +1976,8 @@ p{
 font-size:14px;
 }
 .top_cont_outer { 
-height: 335px;
+height: fit-content;
+width: 100vw;
 }
 .hero_section {
 position: relative;
@@ -2000,6 +2031,9 @@ display: inline-block;
 .social_links li {
 float: left; 
 }
+
+
+
 .contact_section{
 margin:0;
 }
@@ -2010,7 +2044,7 @@ font-size: 30px;
 padding: 60px 0 50px;
 } 
 .navbar-inverse .navbar-toggle .icon-bar{
-background:#ED5441;
+background:var(--highlight);
 }
 .navbar-inverse .navbar-toggle {
 border-color: transparent;
@@ -2021,11 +2055,6 @@ outline: none;
 }
 .navStyle ul li {
 display: block;
-}
-.navStyle {
-float: right;
-width: 100%;
-text-align:center;
 }
 .navbar {
 border: 0px solid #fff;
@@ -2065,10 +2094,12 @@ width: 99%;
 .read_more2{
 display:none;
 }
+
 }
+
 .rt-box {
 float: left;
-width: 70%;
+width: 100%;
 text-align: left;
 margin-left: 10px;
 }
