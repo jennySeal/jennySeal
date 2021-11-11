@@ -13,6 +13,7 @@
     --padding: 1vw;
     color: var(--black);
     font-size: 16px;
+
   }
   
 
@@ -42,7 +43,6 @@
   }
   
   
-
 
 
 /* Reset
@@ -290,9 +290,9 @@ p {
 
 #header_wrapper {
     background: #ffffff;
-    padding: 20px 0px;
+    padding: 5px 0px;
 	border-top: whitesmoke;
-	box-shadow: 1px 1px 4px rgba(60, 60, 60, 0.44);
+	box-shadow: 10px 1px 4px var(--highlight);
     border-bottom: 1px solid #D2D2D2;
 }
 
@@ -945,7 +945,7 @@ background-size: auto 100%;
 	background-size: auto 100%;
 }
 .about-us{
-	margin-top: 70px;
+	margin-top: 30px;
 	margin-bottom: 50px;
 }
 .about-us h3{
@@ -994,17 +994,17 @@ background-size: auto 100%;
 /* Contact
 ---------------------------------*/
 .page_section.contact {
-    padding: 90px 0 100px;
+    padding: 40px 0 20px;
 }
  
 .contact_section {
-    margin: 0 0 60px 0;
+    margin: 0 0 20px 0;
 }
 
 .contact_section h2 {
     font-size: 40px;
     color: #ffffff;
-    margin: 0 0 50px 0;
+    margin: 0 0 10px 0;
     text-transform: uppercase;
 }
 
@@ -1861,7 +1861,7 @@ background-position-y: 150px;
 @media (max-width: 768px) {
 
 .navStyle {
-width: 100vw; 
+width: 90vw; 
 text-align: center;
 }
 
@@ -1888,7 +1888,7 @@ position: relative;
 padding-top: 10px;
 }
 .top_left_cont {
-padding: 38px 0;
+padding: 100px 0;
 }
 .top_left_cont h2 {
 font-size: 2rem;
@@ -1897,7 +1897,7 @@ line-height: 2rem;
 margin: 0 0 9px 0;
 }
 .inner_section {
-padding: 20px 0 20px;
+padding: 10px 0 10px;
 }
 #aboutUs img{
 margin-bottom:20px;
@@ -1923,7 +1923,8 @@ margin: 0 18px;
 .page_section.team{
 padding: 40px 0;
 }
-, #clients {
+
+#experience {
 padding: 40px 0;
 }
 .client_logos ul li {
@@ -1984,18 +1985,25 @@ padding: 10px 11px;
 
 } 
 @media (max-width: 480px){ 
-/*.navStyle {
+
+    #header_wrapper {
+        padding-top: 0px;
+        padding-bottom: 0px;
+        
+    }
+.navStyle {
 float: left;
-width: 100%; 
-text-align: left;
+width: 90vw;
+height: fit-content; 
+text-align: center;
 }
 .navbar {
 border: 0px solid #fff;
 min-height: 40px;
 margin-bottom: 0px;
 float: right;
-width: 100%;
-}*/
+width: fit-content;
+}
 .team_area {
 width: 99%;
 }
