@@ -197,9 +197,9 @@ let objectId = 0;
     projectName.textContent=projects[objectId].projectName;
 
     let projectImage = document.getElementById('projectImage');
-    
+    projectImage.src='sealiconload.jpeg'
     projectImage.src=projects[objectId].projectSrc;
-    projectImage.src='<i class="fa fa-circle-o-notch fa-spin"></i>';
+    ;
     
     /*let projectAlt = document.getElementById('projectImage').alt = projects[objectId].projectAlt;*/
 
