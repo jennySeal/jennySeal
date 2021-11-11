@@ -16,6 +16,35 @@
   }
   
 
+  #preloader:before 
+    
+
+  .spinner-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--hi);
+    text-align: left;
+    z-index: 999999;
+  }
+  .spinner {
+    position: absolute;
+    top: 48%;
+    left: 48%;
+    width: 40px;
+    height: 40px;
+    text-align: left;
+  
+    -webkit-animation: sk-rotate 4s infinite linear;
+    animation: sk-rotate 4s infinite linear;
+  }
+  
+  
+
+
+
 /* Reset
 ---------------------------------*/
 ul {

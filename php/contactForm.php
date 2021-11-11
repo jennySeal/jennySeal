@@ -55,7 +55,7 @@ $mail = new PHPMailer(true);
     //Content
     $mail->isHTML(true);                                  //Set email format to HTML
     $mail->From = $email_address;
-    $mail->Body    = '<h3>Hello</h3><p>Thank you very much for your message.</p><p>I will get back to you if appropriate at ' .  $email_address . '.<p>Your message read<br><b>' . $message .'</b>';
+    $mail->Body    = '<h3>Hello ' . $name . '</h3><p>Thank you very much for your message.</p><p>I will get back to you if appropriate at ' .  $email_address . '.<p>Your message read<br><b>' . $message .'</b>';
     $mail->AltBody = 'Hello. Thank you very much for your message. I will get back to you if appropriate at ' .  $email_address . '.Your message read' . $message;
 
     $mail->send();

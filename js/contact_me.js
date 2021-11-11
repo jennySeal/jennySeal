@@ -2,7 +2,11 @@
   Jquery Validation using jqBootstrapValidation
    example is taken from jqBootstrapValidation docs 
   */
+
+
 $(function() {
+
+      
 
  $("input,textarea").jqBootstrapValidation(
     {
@@ -12,8 +16,12 @@ $(function() {
       // Not decided if I need it yet
      },
      submitSuccess: function($form, event) {
+      $("#btnFetch").html(
+        '<i class="fa fa-circle-o-notch fa-spin"></i> Sending...'
+        );       
+    
       event.preventDefault(); // prevent default submit behaviour
-       // get values from FORM
+         // get values from FORM
        var name = $("input#name").val();  
        var email = $("input#email").val(); 
        var message = $("textarea#message").val();
@@ -34,6 +42,9 @@ $(function() {
             		.append( "</button>");
             	  $('#success > .alert-success')
             		.append("<strong>Your message has been sent. </strong>");
+                $("#btnFetch").html(
+                  'Send'
+                  );
  		  $('#success > .alert-success')
  			.append('</div>');
  						    

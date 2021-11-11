@@ -21,6 +21,9 @@
 <link href="css/animate.css" rel="stylesheet" type="text/css">
 </head>
 <body>
+  <div class="spinner-wrapper">          
+    <div class="spinner"><img src="./sealicon.png" alt="spinning seal"></div>
+  </div>
 
 <!---Hero_Section-->
 <section id="hero_section" class="top_cont_outer">
@@ -34,8 +37,8 @@
               <a href="#top"><img src='./sealicon.png' id="sealIconMain" alt="Seal icon"></a>
               <h1>Jenny Seal</h1>
               <h2>Full Stack Developer</h2>
-               <div class="underline"></div>            
-              <p class="capSmall">Take a look</p><br><a href="#aboutUs" class="read_more2"><i class="fa fa-arrow-circle-o-down fa-2x"></i></a></div>
+               </div>            
+              <p class="capSmall ">Take a look</p><br><a href="#aboutUs" class="read_more2"><i class="fa fa-arrow-circle-o-down fa-2x "></i></a></div>
           </div> 
         </div>
       </div>
@@ -233,7 +236,7 @@
       
 <div class="row-flex">
         <button id="scrollOther"><i class="fa fa-arrow-circle-left fa-2x"></i></button>      
-        <a href="https:/jennyseal.com/project1" target="_blank"  id="projectLink1"><div class="arrowProject">
+        <a href="/project1" target="_blank"  id="projectLink1"><div class="arrowProject">
 
         <img src="./img/gazetteer.png" alt="The Gazatteer - a map based app providing world wide information" id="projectImage" class="fadeInLeft animated wow"></div></a>
       <button id="scrollRight"><i class="fa fa-arrow-circle-right fa-2x"></i></button>
@@ -243,7 +246,7 @@
     <h4 id="projectName">The Gazetteer</h4>
       <p id="projectDescription">An IT Career Switch project to create a single page web app based around  Leaflet's interactive mapping library. By clicking on the map or selecting a country the user can discover a wealth of information presented in an attractive mobile-first design.</p>
       <p id="projectTech" class="capSmall">HTML, CSS, Javascript, PHP and Leaflet JS</p>
-      <a href="https:/jennyseal.com/project1" target="_blank"  id="projectLink2"><button class="btn btn-light">Click to open app</button></a>
+      <a href="/project1" target="_blank"  id="projectLink2"><button class="btn btn-light">Click to open app</button></a>
     </div>
     </div>
   
@@ -311,7 +314,7 @@
             
 				
 		<form name="sentMessage" id="contactForm"  novalidate>
-		<h3>Contact Form</h3>
+		
 		<div class="control-group">
 		<div class="controls">
 		<input type="text" class="form-control input-text" 
@@ -338,7 +341,11 @@
 		</div>
 		</div> 		 
 		<div id="success"> </div> <!-- For success/fail messages -->
-		<button type="submit" class="btn btn-primary input-btn pull-right">Send</button><br />
+    <div class="buttonbox">  
+      <button class="spinner-button btn btn-light input-btn pull-right mb-2" type="submit" id="btnFetch" >
+      Send</button>
+      </div>
+    
 		</form>
 		
           </div>

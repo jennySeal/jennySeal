@@ -5,18 +5,27 @@ Licence under Creative Commons Attribution 3.0
 Do not remove the back-link in this web template 
 -------------------------------------------------------*/
 
-$(window).load(function() {
-    jQuery('#all').click();
-    return false;
-});
-
+$(window).on('load', function () {
+    if ($(".spinner-wrapper").length) {
+      $(".spinner-wrapper")
+        .delay(13000)
+        .fadeOut(3000, function () {
+          $(".spinner-wrapper").remove();
+          jQuery('#all').click();
+          return false;       
+      
+              });
+    }
+  });
+    
+   
+    
 $(document).ready(function() {
     $('#header_wrapper').scrollToFixed();
     $('.res-nav_click').click(function() {
         $('.main-nav').slideToggle();
         return false
-
-    });
+    })
 	
     function resizeText() {
         var preferredWidth = 767;
@@ -32,7 +41,7 @@ $(document).ready(function() {
     $('#mainNav').onePageNav({
         currentClass: 'active',
         changeHash: false,
-        scrollSpeed: 950,
+        scrollSpeed: 650,
         scrollThreshold: 0.2,
         filter: '',
         easing: 'swing',
@@ -130,14 +139,6 @@ wow = new WOW({
     offset: 100
 });
 wow.init();
-/*document.getElementById('').onclick = function() {
-    var section = document.createElement('section');
-    section.className = 'wow fadeInDown';
-    section.className = 'wow shake';
-    section.className = 'wow zoomIn';
-    section.className = 'wow lightSpeedIn';
-    this.parentNode.insertBefore(section, this);
-};*/
 
 const projects = [
     {projectName: 'The Gazetteer',
@@ -196,9 +197,11 @@ let objectId = 0;
     projectName.textContent=projects[objectId].projectName;
 
     let projectImage = document.getElementById('projectImage');
+    
     projectImage.src=projects[objectId].projectSrc;
-   
-    let projectAlt = document.getElementById('projectImage').alt = projects[objectId].projectAlt;
+    projectImage.src='<i class="fa fa-circle-o-notch fa-spin"></i>';
+    
+    /*let projectAlt = document.getElementById('projectImage').alt = projects[objectId].projectAlt;*/
 
     let projectDesc = document.getElementById('projectDescription');
     projectDesc.textContent=projects[objectId].projectDesc;
