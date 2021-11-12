@@ -17,33 +17,7 @@
   }
   
 
-  #preloader:before 
-    
-
-  .spinner-wrapper {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: var(--hi);
-    text-align: left;
-    z-index: 999999;
-  }
-  .spinner {
-    position: absolute;
-    top: 48%;
-    left: 48%;
-    width: 40px;
-    height: 40px;
-    text-align: left;
   
-    -webkit-animation: sk-rotate 4s infinite linear;
-    animation: sk-rotate 4s infinite linear;
-  }
-  
-  
-
 
 /* Reset
 ---------------------------------*/
@@ -51,6 +25,8 @@ ul {
     list-style: none;
 }
 
+    
+}
 .figure {
     margin: 0px;
 }
@@ -300,6 +276,7 @@ p {
     position: relative;
     display: flex;
     justify-content: space-between;
+    align-items: center;
 }
 
 .logo {
@@ -470,12 +447,12 @@ p {
     position: relative;
 	
     background: var(--highlight);
-	height:650px;
+	height:100vh;
 }
 
 .hero_section {
     position: relative;
-    padding-top: 72px;
+    padding-top: 10px;
 }
 
 .white_pad {
@@ -1847,32 +1824,37 @@ div.mc-image {
 /*
    Media Queries
 --------------------------- */
-@media (min-width: 768px) and (max-width: 1200px) {
+@media (min-width: 768px) and (max-width: 1024px) {
+    .col-lg-8 {
+        width: 100%;
+    }
+    .row>* {
+        padding-right: calc(var(--bs-gutter-x) * 2);
+}}
 
-.aboutUs-container {
-background-repeat: no-repeat;
-background-position: right;
-background-size: auto 59%;
-background-position-y: 150px;
+@media (min-width: 768px) and (max-width: 900px) {
+    .col-md-6, .col-md-5, .col-lg-8 {
+        width: 100%;
+    }
+
 }
-
+@media (min-width: 768px) and (max-width: 1200px) {
+    
 .logo {border: none;}
 }
+
+
 @media (max-width: 768px) {
 
-.navStyle {
-width: 90vw; 
-text-align: center;
-}
+    .navStyle {
+        width: 75vw; 
+        text-align: center;
+        }
 
 .navbar-nav {
-    flex-direction: column;
+    flex-direction: row;
 }
 
-.logo {
-    border: none;
-    display: none;
-}
 .aboutUs-container{
 	background-image:none;
 }
@@ -1888,7 +1870,7 @@ position: relative;
 padding-top: 10px;
 }
 .top_left_cont {
-padding: 100px 0;
+padding: 130px 0;
 }
 .top_left_cont h2 {
 font-size: 2rem;
@@ -1924,6 +1906,10 @@ margin: 0 18px;
 padding: 40px 0;
 }
 
+.logo 
+{border: none;
+}
+}
 #experience {
 padding: 40px 0;
 }
@@ -1991,6 +1977,11 @@ padding: 10px 11px;
         padding-bottom: 0px;
         
     }
+
+    .top_left_cont {
+        padding: 100px 0;
+        }
+
 .navStyle {
 float: left;
 width: 90vw;

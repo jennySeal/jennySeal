@@ -6,17 +6,11 @@ Do not remove the back-link in this web template
 -------------------------------------------------------*/
 
 $(window).on('load', function () {
-    if ($(".spinner-wrapper").length) {
-      $(".spinner-wrapper")
-        .delay(13000)
-        .fadeOut(3000, function () {
-          $(".spinner-wrapper").remove();
           jQuery('#all').click();
           return false;       
       
-              });
     }
-  });
+  );
     
    
     
