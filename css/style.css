@@ -1846,7 +1846,7 @@ div.mc-image {
 
 @media (max-width: 768px) {
 
-    .navStyle {
+.navStyle {
         width: 75vw; 
         text-align: center;
         }
@@ -1909,7 +1909,7 @@ padding: 40px 0;
 .logo 
 {border: none;
 }
-}
+
 #experience {
 padding: 40px 0;
 }
@@ -1969,8 +1969,14 @@ padding: 10px 11px;
     height: 50vh; 
 }
 
-} 
-@media (max-width: 480px){ 
+}
+
+@media (max-width: 480px){
+    
+    .navbar-nav {
+        flex-direction: column;
+    }
+    
 
     #header_wrapper {
         padding-top: 0px;
@@ -1995,6 +2001,7 @@ margin-bottom: 0px;
 float: right;
 width: fit-content;
 }
+
 .team_area {
 width: 99%;
 }
