@@ -36,7 +36,7 @@ $(window).on("load", function () {
     $('#mainNav').onePageNav({
         currentClass: 'active',
         changeHash: false,
-        scrollSpeed: 650,
+        scrollSpeed: 250,
         scrollThreshold: 0.2,
         filter: '',
         easing: 'swing',
