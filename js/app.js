@@ -5,16 +5,17 @@ Licence under Creative Commons Attribution 3.0
 Do not remove the back-link in this web template 
 -------------------------------------------------------*/
 
-$(window).on('load', function () {
-          jQuery('#all').click();
-          return false;       
-      
+$(window).on("load", function () {
+    //Run pre-loader
+    jQuery('#all').click();
+    if ($("#preloader").length) {
+      $("#preloader")
+        .delay(1000)
+        .fadeOut("slow", function () {
+          $("#preloader").remove();
+        });
     }
-  );
-    
-   
-    
-$(document).ready(function() {
+
     $('#header_wrapper').scrollToFixed();
     $('.res-nav_click').click(function() {
         $('.main-nav').slideToggle();
