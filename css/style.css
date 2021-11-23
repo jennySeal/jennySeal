@@ -300,7 +300,10 @@ p {
     padding: 0.25rem;
 	z-index: 2;
     max-height: 9vh;
+    transition: transform 2s;
 }
+
+.logo:hover {transform: rotate(360deg);}
 
 .logo img {
     max-height: 7vh;
