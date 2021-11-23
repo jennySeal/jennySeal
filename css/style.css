@@ -46,6 +46,7 @@ ul {
 
 img {
     max-width: 100%;
+    filter: saturate(130%);
 }
 
 a, a:hover, a:active {
